@@ -1,10 +1,10 @@
 /* Eco Rangers — the 5-Day Recycling Challenge
- * Vanilla JS: no frameworks, no build step. Shared by all three pages
- * (cover, challenge, log-in): every element lookup is optional, so the
- * same file works on any page.
+ * Vanilla JS: no frameworks, no build step. Shared by both pages
+ * (cover, challenge): every element lookup is optional, so the same
+ * file works on any page.
  *
  * 1. Loads community stats from the Rust server (where the chips are).
- * 2. On the log-in page: sends the report (name, email, bin photo,
+ * 2. In the log-in band: sends the report (name, email, bin photo,
  *    plastic count) to /api/report.
  * 3. Fetches the personalised badge SVG and offers SVG/PNG downloads.
  */
@@ -83,26 +83,35 @@
     if (reduceMotion) return;
     var colors = ["#66bb6a", "#ffc107", "#29b6f6", "#f06292", "#9ccc65"];
     var frag = document.createDocumentFragment();
-    for (var i = 0; i < 26; i++) {
+    for (var i = 0; i < 46; i++) {
       var piece = document.createElement("i");
       piece.className = "confetti-piece";
       piece.style.left = (Math.random() * 100) + "vw";
       piece.style.background = colors[i % colors.length];
-      piece.style.animationDelay = (Math.random() * 0.6) + "s";
-      piece.style.animationDuration = (1.6 + Math.random() * 1.2) + "s";
+      piece.style.width = (6 + Math.random() * 7) + "px";
+      piece.style.height = (8 + Math.random() * 9) + "px";
+      piece.style.borderRadius = Math.random() < 0.4 ? "50%" : "2px";
+      piece.style.animationDelay = (Math.random() * 0.7) + "s";
+      piece.style.animationDuration = (1.5 + Math.random() * 1.4) + "s";
       frag.appendChild(piece);
     }
     document.body.appendChild(frag);
     setTimeout(function () {
       var pieces = document.querySelectorAll(".confetti-piece");
       for (var j = 0; j < pieces.length; j++) pieces[j].remove();
-    }, 3200);
+    }, 3600);
   }
 
-  // ----------------------------------------------------- report (log-in page)
+  // ----------------------------------------------------- report (log-in band)
 
   if (els.form) {
     var photoData = null; // { base64, mime }
+
+    // The camera icon lives inside #photo-cta, whose innerHTML the photo
+    // handler rewrites — so keep one copy of it here and re-use it.
+    var camSvg = '<svg class="photo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 4.8a4.2 4.2 0 1 1 0 8.4 4.2 4.2 0 0 1 0-8.4zm0 2a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4z"/></svg>';
+    var photoDrop = document.querySelector(".photo-drop");
+    var submitLabel = els.submit.querySelector("span") || els.submit;
 
     function setStatus(msg, kind) {
       els.status.textContent = msg;
@@ -115,7 +124,8 @@
       if (!file) {
         els.photoPreview.hidden = true;
         els.photoPreview.removeAttribute("src");
-        els.photoCta.innerHTML = "<b>Take or choose a photo</b><small>JPG, PNG or WebP \u00b7 up to 4 MB — it's your proof!</small>";
+        els.photoCta.innerHTML = camSvg + "<b>Take or choose a photo</b><small>JPG, PNG or WebP \u00b7 up to 4 MB — it's your proof!</small>";
+        if (photoDrop) photoDrop.classList.remove("got-it");
         return;
       }
       if (file.size > 4 * 1024 * 1024) {
@@ -134,7 +144,8 @@
         photoData = { mime: match[1], base64: match[2] };
         els.photoPreview.src = dataUrl;
         els.photoPreview.hidden = false;
-        els.photoCta.innerHTML = "<b>Photo ready!</b><small>Tap to change it</small>";
+        els.photoCta.innerHTML = camSvg + "<b>Photo ready!</b><small>Tap to change it</small>";
+        if (photoDrop) photoDrop.classList.add("got-it");
         setStatus("", "");
       };
       reader.onerror = function () { setStatus("Could not read that photo. Try again.", "error"); };
@@ -150,11 +161,18 @@
       els.plastics.value = String(v);
       return v;
     }
+    function bumpStepper() {
+      if (reduceMotion) return;
+      var s = els.stepUp.parentNode; // .stepper
+      s.classList.remove("bump");
+      void s.offsetWidth;            // restart the keyframe
+      s.classList.add("bump");
+    }
     els.stepUp.addEventListener("click", function () {
-      els.plastics.value = String(clampPlastics() + 1); clampPlastics();
+      els.plastics.value = String(clampPlastics() + 1); clampPlastics(); bumpStepper();
     });
     els.stepDown.addEventListener("click", function () {
-      els.plastics.value = String(clampPlastics() - 1); clampPlastics();
+      els.plastics.value = String(clampPlastics() - 1); clampPlastics(); bumpStepper();
     });
     els.plastics.addEventListener("change", clampPlastics);
 
@@ -176,6 +194,7 @@
           currentBadge.name = "sample";
           els.dlSvg.disabled = false;
           els.dlPng.disabled = false;
+          els.panel.classList.add("ready"); // gentle pulse on the PNG button
         })
         .catch(function () { /* downloads stay report-gated */ });
     }
@@ -202,7 +221,7 @@
       body.set("photo_mime", photoData.mime);
 
       els.submit.disabled = true;
-      els.submit.textContent = "Sending…";
+      submitLabel.textContent = "Sending…";
       setStatus("Sending your report to the Eco Rangers camp…", "");
 
       fetch("/api/report", {
@@ -217,13 +236,17 @@
           setStatus("Report saved — badge " + data.code + " issued! 🌿", "ok");
           countUpAll(statItems, data.totals.items);
           countUpAll(statRangers, data.totals.rangers);
+          if (!reduceMotion) { // happy little wiggle on the submit button
+            els.submit.classList.add("yay");
+            setTimeout(function () { els.submit.classList.remove("yay"); }, 700);
+          }
         })
         .catch(function (err) {
           setStatus(err.message || "Could not reach the server. Please try again.", "error");
         })
         .then(function () {
           els.submit.disabled = false;
-          els.submit.textContent = "Send My Report";
+          submitLabel.textContent = "Send My Report";
         });
     });
 
@@ -239,8 +262,13 @@
         .then(function (svg) {
           currentBadge.svg = svg;
           els.badgeHolder.innerHTML = svg;
+          // stamp the badge in, then let it swing (replays on re-submits)
+          els.badgeHolder.classList.remove("stamped");
+          void els.badgeHolder.offsetWidth;
+          els.badgeHolder.classList.add("stamped");
           els.dlSvg.disabled = false;
           els.dlPng.disabled = false;
+          els.panel.classList.add("ready");
           confetti();
           els.panel.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
         })

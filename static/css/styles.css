@@ -23,7 +23,7 @@
   --pink: #f06292;
   --line: #e6dfc9;
   --radius: 22px;
-  --shadow: 0 12px 32px rgba(27, 94, 32, 0.12);
+  --shadow: 0 12px 32px rgba(27, 94, 32, 0.12), 0 2px 6px rgba(27, 94, 32, 0.07);
   --shadow-lift: 0 20px 44px rgba(27, 94, 32, 0.18);
   --font-head: "Baloo 2", "Segoe UI", system-ui, sans-serif;
   --font-script: "Caveat", "Segoe Script", cursive;
@@ -430,8 +430,9 @@ input::placeholder { color: #b3bfa6; }
   position: relative; display: inline-block;
   max-width: 235px; width: 100%;
   transform: rotate(2deg);
+  transform-origin: 50% -6%;   /* swings from its ribbon tips */
   filter: drop-shadow(0 14px 22px rgba(27, 94, 32, 0.25));
-  animation: badgeFloat 5.5s ease-in-out infinite;
+  animation: badgeSwing 5.5s ease-in-out infinite;
 }
 .badge-holder img, .badge-holder svg { width: 100%; height: auto; display: block; }
 .sample-tag {
@@ -664,7 +665,7 @@ input::placeholder { color: #b3bfa6; }
 
 .missions { padding-top: 42px; }
 .day-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 30px;
 }
 .day-card {
   position: relative;
@@ -917,7 +918,11 @@ input::placeholder { color: #b3bfa6; }
 
 /* ------------------------------------------------- page-specific tune */
 
-.log-section { padding-top: 12px; }
+.log-section {
+  padding-top: 12px;
+  background-image: radial-gradient(rgba(27, 94, 32, 0.08) 1.6px, transparent 1.6px);
+  background-size: 26px 26px;
+}
 
 /* ---------------------------------------------------- responsive (3pg) */
 
@@ -954,4 +959,189 @@ input::placeholder { color: #b3bfa6; }
     transition: none !important;
   }
   .quiz[open] summary::after { rotate: 45deg; }
+}
+
+/* ==========================================================================
+   Fun pass: treasure trail, logbook paper, swinging badge, sparkles,
+   photo sticker, bouncy stepper. Same rotate/translate/scale property
+   style as above, so it composes with the reveal transforms.
+   ========================================================================== */
+
+/* --- treasure trail behind the five day cards (5-across only) --- */
+
+.day-grid { position: relative; }
+.day-card { z-index: 1; }
+.trail-path {
+  position: absolute; top: 18%; left: -34px;
+  width: calc(100% + 68px); height: auto;
+  z-index: 0; pointer-events: none;
+}
+
+/* --- logbook paper for the whole log-in band --- */
+
+#log-in {
+  border-top: 3px dashed rgba(199, 145, 0, 0.4);
+  background-image: radial-gradient(rgba(27, 94, 32, 0.08) 1.6px, transparent 1.6px);
+  background-size: 26px 26px;
+}
+
+/* sticker doodles in the log-in hero (kept before .wrap so text wins) */
+.log-doodle { position: absolute; z-index: 0; pointer-events: none; }
+.log-doodle svg { width: 100%; height: auto; display: block; }
+.log-doodle.d1 {
+  width: 86px; top: 15%; left: 2.5%;
+  color: var(--green); opacity: 0.42;
+  animation: spinSlow 26s linear infinite;
+}
+.log-doodle.d2 {
+  width: 52px; bottom: 11%; right: 3%;
+  color: var(--gold-deep); opacity: 0.6;
+  animation: doorBob 4.6s ease-in-out infinite;
+}
+
+/* hand-drawn gold swash under the badge phrase */
+.swash {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M3 10 Q 13 3 23 9 T 43 9 T 63 9 T 83 9 T 103 9 T 117 8' fill='none' stroke='%23f9a825' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E") left bottom / 100% 0.3em no-repeat;
+  padding-bottom: 0.14em;
+}
+
+/* --- badge panel: sparkles + stamp-in + ready pulse --- */
+
+.badge-holder::before,
+.badge-holder::after {
+  content: "✦"; position: absolute; z-index: 2;
+  color: var(--gold-deep); font-size: 1.35rem; line-height: 1;
+  pointer-events: none;
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+.badge-holder::before { top: 1%; right: -10%; }
+.badge-holder::after {
+  bottom: 15%; left: -12%;
+  font-size: 0.95rem; color: var(--pink);
+  animation-delay: 1.2s;
+}
+
+/* the personalised badge lands with a stamp, then swings from its ribbon */
+.badge-holder.stamped {
+  animation: stampIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             badgeSwing 5.5s ease-in-out 0.65s infinite;
+}
+
+/* gentle live pulse on the gold PNG button once downloads are ready */
+.badge-panel.ready #dl-png:not(:disabled) { animation: btnPulse 2.4s ease-in-out infinite; }
+
+/* icon-in-button layout (download + submit buttons) */
+.badge-actions .btn, .btn-submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.badge-actions .btn svg { width: 17px; height: 17px; }
+.btn-submit svg { width: 18px; height: 18px; }
+
+/* the two log cards sit like a slightly scattered paper pile */
+.form-card { rotate: -0.35deg; }
+.badge-panel { rotate: 0.45deg; }
+
+/* --- photo drop: camera icon + "Nice shot!" sticker --- */
+
+.photo-drop { position: relative; }
+.photo-icon {
+  width: 36px; height: 36px; margin: 0 auto 7px; display: block;
+  color: var(--green);
+}
+.photo-drop:hover .photo-icon,
+.photo-drop:focus-within .photo-icon { animation: quickWiggle 0.45s ease; }
+.photo-drop.got-it::after {
+  content: "Nice shot!";
+  position: absolute; top: -13px; right: 14px; z-index: 2;
+  font-family: var(--font-script); font-weight: 700; font-size: 1.1rem;
+  color: #fff; background: var(--green);
+  padding: 1px 14px; border-radius: 999px;
+  rotate: 5deg;
+  box-shadow: 0 4px 10px rgba(27, 94, 32, 0.35);
+  animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* --- bouncy stepper + happy submit --- */
+
+.stepper.bump input { animation: numBump 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.btn-submit.yay { animation: quickWiggle 0.6s ease; }
+
+/* --- little hover delights --- */
+
+.brand:hover img { animation: quickWiggle 0.5s ease; }
+.rules-strip li { transition: translate 0.2s ease, box-shadow 0.2s ease; }
+.rules-strip li:hover { translate: 0 -4px; box-shadow: var(--shadow-lift); }
+.rules-strip li:hover .r-icon { animation: quickWiggle 0.45s ease; }
+
+/* --- keyframes (fun pass) --- */
+
+@keyframes badgeSwing {
+  0%, 100% { transform: rotate(-2.6deg) translateY(0); }
+  50% { transform: rotate(3.4deg) translateY(3px); }
+}
+
+@keyframes stampIn {
+  0% { transform: scale(1.7) rotate(-13deg); opacity: 0; }
+  55% { transform: scale(0.94) rotate(4deg); opacity: 1; }
+  78% { transform: scale(1.05) rotate(0.5deg); }
+  100% { transform: scale(1) rotate(2deg); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; scale: 0.7; rotate: 0deg; }
+  50% { opacity: 1; scale: 1.18; rotate: 22deg; }
+}
+
+@keyframes btnPulse {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.045; }
+}
+
+@keyframes numBump {
+  40% { scale: 1.16; }
+  100% { scale: 1; }
+}
+
+@keyframes popIn {
+  from { scale: 0.2; opacity: 0; }
+  to { scale: 1; opacity: 1; }
+}
+
+@keyframes quickWiggle {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -7deg; }
+  55% { rotate: 6deg; }
+  80% { rotate: -3deg; }
+}
+
+/* --- responsive (fun pass) --- */
+
+@media (max-width: 1020px) {
+  .trail-path { display: none; }  /* the trail only reads on the 5-across grid */
+}
+
+@media (max-width: 760px) {
+  .log-doodle { display: none; }
+}
+
+@media (max-width: 480px) {
+  /* stacked day cards get dotted trail markers between them instead */
+  .day-card + .day-card::before {
+    content: "✦";
+    position: absolute; top: -22px; left: 50%;
+    translate: -50% 0; z-index: 1;
+    color: var(--gold-deep); font-size: 0.95rem; line-height: 1;
+  }
+}
+
+/* --- reduced motion (fun pass) --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .trail-path, .log-doodle, .badge-holder, .badge-holder::before, .badge-holder::after,
+  .badge-holder.stamped, .badge-panel.ready #dl-png, .photo-icon, .photo-drop.got-it::after,
+  .stepper.bump input, .btn-submit, .btn-submit.yay, .brand img, .rules-strip li,
+  .rules-strip li:hover .r-icon, .badge-actions .btn {
+    animation: none !important;
+    transition: none !important;
+  }
 }
