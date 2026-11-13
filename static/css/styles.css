@@ -648,12 +648,17 @@ input::placeholder { color: #b3bfa6; }
   text-align: center;
 }
 .page-hero .hero-leaf { z-index: 0; }
-.page-hero h1 {
+.page-hero h1,
+.page-hero h2 {
   font-size: clamp(2rem, 4.5vw, 2.9rem); font-weight: 800;
   color: var(--forest); line-height: 1.1; margin: 0 0 10px;
   position: relative;
 }
 .page-hero .lead { position: relative; }
+
+/* The log-in band lives at the bottom of the challenge page; keep the
+   sticky header from covering it on anchor jumps. */
+#log-in { scroll-margin-top: 90px; }
 
 /* --------------------------------------------------------- day cards */
 

@@ -17,9 +17,11 @@ pub fn handle(req: &Request) -> Response {
             r.cache_control = "no-cache".to_string();
             r
         }
-        // The three pages of the campaign site (pretty, extensionless URLs).
+        // The two pages of the campaign site (pretty, extensionless URLs).
         ("GET", "/challenge") => static_file("challenge.html"),
-        ("GET", "/login") => static_file("login.html"),
+        // The log-in section lives on the challenge page now; old links and
+        // QR codes keep working via a redirect.
+        ("GET", "/login") | ("GET", "/login.html") => redirect("/challenge#log-in"),
         ("GET", "/api/stats") => api_stats(),
         ("GET", "/api/badge") => api_badge(req),
         ("POST", "/api/report") => api_report(req),
@@ -34,6 +36,13 @@ pub fn handle(req: &Request) -> Response {
 // ---------------------------------------------------------------------------
 // Static files
 // ---------------------------------------------------------------------------
+
+/// 302 redirect (Location header, empty body).
+fn redirect(to: &str) -> Response {
+    let mut r = Response::new(302, "text/html; charset=utf-8", Vec::new());
+    r.location = to.to_string();
+    r
+}
 
 fn static_file(rel: &str) -> Response {
     let mut path = PathBuf::from("static");

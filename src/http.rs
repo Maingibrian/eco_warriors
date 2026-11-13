@@ -119,6 +119,8 @@ pub struct Response {
     pub status: u16,
     pub content_type: String,
     pub cache_control: String,
+    /// Non-empty on redirects: emitted as the `Location` header.
+    pub location: String,
     /// HEAD requests get the same headers as GET but no body.
     pub head: bool,
     pub body: Vec<u8>,
@@ -130,6 +132,7 @@ impl Response {
             status,
             content_type: content_type.to_string(),
             cache_control: "no-store".to_string(),
+            location: String::new(),
             head: false,
             body,
         }
@@ -148,6 +151,8 @@ impl Response {
 pub fn reason(status: u16) -> &'static str {
     match status {
         200 => "OK",
+        301 => "Moved Permanently",
+        302 => "Found",
         400 => "Bad Request",
         404 => "Not Found",
         405 => "Method Not Allowed",
@@ -160,14 +165,20 @@ pub fn reason(status: u16) -> &'static str {
 
 /// Serialize and send a response, then close the connection.
 pub fn write_response(stream: &mut TcpStream, resp: &Response) {
-    let head = format!(
-        "HTTP/1.1 {} {}\r\nContent-Type: {}\r\nContent-Length: {}\r\nCache-Control: {}\r\nX-Content-Type-Options: nosniff\r\nConnection: close\r\n\r\n",
+    let mut head = format!(
+        "HTTP/1.1 {} {}\r\nContent-Type: {}\r\nContent-Length: {}\r\nCache-Control: {}\r\nX-Content-Type-Options: nosniff\r\n",
         resp.status,
         reason(resp.status),
         resp.content_type,
         resp.body.len(),
         resp.cache_control
     );
+    if !resp.location.is_empty() {
+        head.push_str("Location: ");
+        head.push_str(&resp.location);
+        head.push_str("\r\n");
+    }
+    head.push_str("Connection: close\r\n\r\n");
     let _ = stream.write_all(head.as_bytes());
     if !resp.head {
         let _ = stream.write_all(&resp.body);

@@ -27,8 +27,8 @@ Then open <http://localhost:8000>. (Port can be changed with an argument:
 | Route | Method | Description |
 | --- | --- | --- |
 | `/` | GET | Page 1 — the cover (`static/index.html`) |
-| `/challenge` | GET | Page 2 — the 5-day challenge (`static/challenge.html`) |
-| `/login` | GET | Page 3 — ranger log-in: report form + downloadable badge (`static/login.html`) |
+| `/challenge` | GET | Page 2 — the 5-day challenge, ending in the ranger log-in band + badge (`static/challenge.html`) |
+| `/login` | GET | 302 → `/challenge#log-in` (the log-in band lives on the challenge page; old links keep working) |
 | `/img/…`, `/css/…`, `/js/…` | GET | Static assets served from `static/` (traversal-proof) |
 | `/api/stats` | GET | Community totals: `{"ok":true,"rangers":N,"items":M}` |
 | `/api/report` | POST | Receives `name`, `email`, `plastics`, `photo` (base64) + `photo_mime`. Saves the photo, appends the report, returns the badge URL and updated totals |
@@ -43,11 +43,12 @@ Nothing else is stored; there is no tracking of any kind.
 
 ### About “send the badge”
 
-Per the challenge flow, the badge is *issued digitally*: the last page offers
-the sample **Climate Champion badge as an immediate SVG/PNG download**, and the
-server generates a unique, personalised SVG (name, plastic count, date,
-official code such as `ER-2026-0042`) once a report is sent — displayed on the
-page and downloadable as **SVG** or **PNG**. If you later want the badge
+Per the challenge flow, the badge is *issued digitally*: the log-in band on
+the challenge page offers the sample **Climate Champion badge as an immediate
+SVG/PNG download**, and the server generates a unique, personalised SVG
+(name, plastic count, date, official code such as `ER-2026-0042`) once a
+report is sent — displayed on the page and downloadable as **SVG** or
+**PNG**. If you later want the badge
 emailed, plug an SMTP call into `api_report` in `src/web.rs` right after
 `append_report(...)` succeeds — the email address is already validated and
 stored.
@@ -66,9 +67,9 @@ eco-rangers/
 └── static/
     ├── index.html      # page 1: the cover (poster + two doors)
     ├── challenge.html  # page 2: the 5-day challenge + board game corner
-    ├── login.html      # page 3: ranger log-in (report form + badge)
+    │                   #   + the ranger log-in band (#log-in: report form + badge)
     ├── css/styles.css
-    ├── js/app.js       # shared by all three pages (element lookups optional)
+    ├── js/app.js       # shared by both pages (element lookups optional)
     └── img/            # hero artwork, right-looking game logo,
                         # favicon, QR code, sample badge, game cover
 ```

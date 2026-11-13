@@ -25,9 +25,9 @@
     <nav class="site-nav" aria-label="Main">
       <a href="index.html">Cover</a>
       <a href="challenge.html" class="active" aria-current="page">The Challenge</a>
-      <a href="login.html">Log In</a>
+      <a href="#log-in">Log In</a>
     </nav>
-    <a class="btn btn-gold btn-nav" href="login.html">Get Your Badge</a>
+    <a class="btn btn-gold btn-nav" href="#log-in">Get Your Badge</a>
   </header>
 
   <main id="main">
@@ -198,7 +198,95 @@
           <span class="starburst s1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.6 6.2L21 4l-2.2 6.4L24 12l-5.2 1.6L21 20l-6.4-2.2L12 24l-2.6-6.2L3 20l2.2-6.4L0 12l5.2-1.6L3 4l6.4 2.2z"/></svg></span>
           <h2>All five missions done?</h2>
           <p>Excellent work, Ranger! Time to log your win and collect your Climate Champion badge.</p>
-          <a class="btn btn-gold btn-lg" href="login.html">Log Your Win →</a>
+          <a class="btn btn-gold btn-lg" href="#log-in">Log Your Win →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RANGER LOG-IN ================= -->
+    <section class="page-hero" id="log-in">
+      <span class="hero-leaf l1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg></span>
+      <span class="hero-leaf l2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg></span>
+      <div class="wrap">
+        <p class="eyebrow">Ranger log-in · sign your win into the log book</p>
+        <h2 class="reveal">Log Your Win &amp; Get Your Badge</h2>
+        <p class="lead reveal">
+          All five missions done? Take a photo of the bin you built, count the
+          plastic items you segregated, and send your report — your personalised
+          Climate Champion badge is issued instantly, ready to download, share
+          and show off.
+        </p>
+
+        <ol class="steps-pills reveal" aria-label="The five steps">
+          <li>Build</li><li class="dot" aria-hidden="true">›</li>
+          <li>Place</li><li class="dot" aria-hidden="true">›</li>
+          <li>Label</li><li class="dot" aria-hidden="true">›</li>
+          <li>Check</li><li class="dot" aria-hidden="true">›</li>
+          <li class="now">Scan — log it!</li>
+        </ol>
+
+        <div class="live-row reveal">
+          <p class="live-chip"><span class="live-dot" aria-hidden="true"></span><span class="live-num" id="stat-items">0</span> plastic items segregated</p>
+          <p class="live-chip"><span class="live-dot" aria-hidden="true"></span><span class="live-num" id="stat-rangers">0</span> Eco Rangers on board</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REPORT + BADGE ================= -->
+    <section class="section log-section">
+      <div class="wrap">
+        <div class="log-layout">
+          <form id="report-form" class="card form-card reveal" novalidate>
+            <h3>My recycling report</h3>
+
+            <div class="field">
+              <label for="f-name">Eco Ranger name</label>
+              <input id="f-name" name="name" type="text" maxlength="40" placeholder="e.g. Amina" autocomplete="name" required/>
+            </div>
+
+            <div class="field">
+              <label for="f-email">Email <span class="hint">(we send your badge here)</span></label>
+              <input id="f-email" name="email" type="email" maxlength="80" placeholder="you@example.com" autocomplete="email" required/>
+            </div>
+
+            <div class="field">
+              <span class="label-text" id="photo-label">Photo of your bin</span>
+              <label class="photo-drop" for="f-photo">
+                <input id="f-photo" type="file" accept="image/*" capture="environment" hidden aria-labelledby="photo-label"/>
+                <img id="photo-preview" class="photo-preview" alt="Preview of your bin photo" hidden/>
+                <span class="photo-cta" id="photo-cta"><b>Take or choose a photo</b><small>JPG, PNG or WebP · up to 4 MB — it's your proof!</small></span>
+              </label>
+            </div>
+
+            <div class="field field-row">
+              <div class="field-col">
+                <label for="f-plastics">Plastic items segregated</label>
+                <div class="stepper">
+                  <button type="button" id="step-down" aria-label="Decrease by one">−</button>
+                  <input id="f-plastics" type="number" min="1" max="100000" step="1" value="10" inputmode="numeric" required/>
+                  <button type="button" id="step-up" aria-label="Increase by one">+</button>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-submit" id="submit-btn" type="submit">Send My Report</button>
+            </div>
+
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            <p class="fine">We save your report on the Eco Rangers server and issue a personalised digital badge — nothing else, no spam.</p>
+          </form>
+
+          <aside class="card badge-panel reveal" id="badge-panel" aria-live="polite">
+            <h3>Climate Champion!</h3>
+            <p id="badge-text">Your badge is ready to download right now — and once you send your report it turns personal, with your name and plastic count on it!</p>
+            <div class="badge-holder" id="badge-holder">
+              <span class="sample-tag" aria-hidden="true">Sample</span>
+              <img src="/img/badge-sample.svg" alt="Sample Climate Champion badge: a gold seal on a green ribbon reading Eco Rangers" loading="lazy"/>
+            </div>
+            <div class="badge-actions" id="badge-actions">
+              <button class="btn btn-primary" id="dl-svg" type="button" disabled>Download SVG</button>
+              <button class="btn btn-gold" id="dl-png" type="button" disabled>Download PNG</button>
+            </div>
+            <p class="fine" id="badge-fine">Grab the sample badge now, free — or send your report to make it officially yours: your name, your count, your own badge code.</p>
+          </aside>
         </div>
       </div>
     </section>
@@ -214,7 +302,7 @@
         <h4>Explore</h4>
         <a href="index.html">Cover</a>
         <a href="challenge.html">The Challenge</a>
-        <a href="login.html">Log Your Win</a>
+        <a href="#log-in">Log Your Win</a>
         <a href="/">Campaign portal</a>
       </nav>
       <div class="footer-note">
