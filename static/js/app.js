@@ -162,6 +162,24 @@
 
     var currentBadge = { svg: "", name: "eco-ranger" };
 
+    // The badge is downloadable straight away: the sample SVG is pulled from
+    // the preview image (works with its data-URI form in the static preview
+    // too), so the download buttons live before any report is sent. A
+    // submitted report later swaps in the personalised one.
+    var sampleImg = els.badgeHolder ? els.badgeHolder.querySelector("img") : null;
+    if (sampleImg) {
+      fetch(sampleImg.src)
+        .then(function (r) { return r.text(); })
+        .then(function (svg) {
+          if (currentBadge.svg) return; // a personalised badge already arrived
+          currentBadge.svg = svg;
+          currentBadge.name = "sample";
+          els.dlSvg.disabled = false;
+          els.dlPng.disabled = false;
+        })
+        .catch(function () { /* downloads stay report-gated */ });
+    }
+
     els.form.addEventListener("submit", function (e) {
       e.preventDefault();
 

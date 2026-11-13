@@ -28,7 +28,7 @@ Then open <http://localhost:8000>. (Port can be changed with an argument:
 | --- | --- | --- |
 | `/` | GET | Page 1 — the cover (`static/index.html`) |
 | `/challenge` | GET | Page 2 — the 5-day challenge (`static/challenge.html`) |
-| `/login` | GET | Page 3 — ranger log-in / report form (`static/login.html`) |
+| `/login` | GET | Page 3 — ranger log-in: report form + downloadable badge (`static/login.html`) |
 | `/img/…`, `/css/…`, `/js/…` | GET | Static assets served from `static/` (traversal-proof) |
 | `/api/stats` | GET | Community totals: `{"ok":true,"rangers":N,"items":M}` |
 | `/api/report` | POST | Receives `name`, `email`, `plastics`, `photo` (base64) + `photo_mime`. Saves the photo, appends the report, returns the badge URL and updated totals |
@@ -43,12 +43,14 @@ Nothing else is stored; there is no tracking of any kind.
 
 ### About “send the badge”
 
-Per the challenge flow, the badge is *issued digitally*: the server generates a
-unique, personalised SVG (name, plastic count, date, official code such as
-`ER-2026-0042`), which the page displays and lets the user download as **SVG**
-or **PNG**. If you later want the badge emailed, plug an SMTP call into
-`api_report` in `src/web.rs` right after `append_report(...)` succeeds — the
-email address is already validated and stored.
+Per the challenge flow, the badge is *issued digitally*: the last page offers
+the sample **Climate Champion badge as an immediate SVG/PNG download**, and the
+server generates a unique, personalised SVG (name, plastic count, date,
+official code such as `ER-2026-0042`) once a report is sent — displayed on the
+page and downloadable as **SVG** or **PNG**. If you later want the badge
+emailed, plug an SMTP call into `api_report` in `src/web.rs` right after
+`append_report(...)` succeeds — the email address is already validated and
+stored.
 
 ## Project layout
 
