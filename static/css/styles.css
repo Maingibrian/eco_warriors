@@ -26,7 +26,8 @@
   --shadow: 0 12px 32px rgba(27, 94, 32, 0.12), 0 2px 6px rgba(27, 94, 32, 0.07);
   --shadow-lift: 0 20px 44px rgba(27, 94, 32, 0.18);
   --font-head: "Baloo 2", "Segoe UI", system-ui, sans-serif;
-  --wave-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 26' preserveAspectRatio='none'%3E%3Cpath fill='%231b5e20' d='M0 26h1440V14c-180-12-360-14-540-6s-420 16-600 10S120 8 0 16v10z'/%3E%3C/svg%3E");
+  --wave-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 26' preserveAspectRatio='none'%3E%3Cpath fill='%231b5e20' d='M0 26h1440V13c-170-6-340-3-520 3s-390 12-560 8S150 10 0 18v8z'/%3E%3C/svg%3E");
+  --wave-back: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 36' preserveAspectRatio='none'%3E%3Cpath fill='%232e7d32' d='M0 36h1440V6c-170-3-350-4-530-1s-380 5-550 3S170 3 0 7v29z'/%3E%3C/svg%3E");
 }
 
 * { box-sizing: border-box; }
@@ -865,6 +866,8 @@ input::placeholder { color: #a9b598; }
   margin-top: 58px;
   padding: 64px 0 30px;
 }
+/* the recycling river: a brighter wave rolls slowly behind while the dark
+   front wave rolls the other way — depth, not just motion */
 .site-footer::before {
   content: ""; position: absolute; left: 0; right: 0; top: -25px; height: 26px;
   background-image: var(--wave-up);
@@ -872,12 +875,45 @@ input::placeholder { color: #a9b598; }
   background-repeat: repeat-x;
   animation: waveRoll 16s linear infinite;
   pointer-events: none;
+  z-index: 2;
+}
+.site-footer::after {
+  content: ""; position: absolute; left: 0; right: 0; top: -34px; height: 36px;
+  background-image: var(--wave-back);
+  background-size: 1440px 36px;
+  background-repeat: repeat-x;
+  animation: waveRoll 34s linear infinite reverse;
+  pointer-events: none;
+  z-index: 1;
 }
 .footer-grid {
+  position: relative; z-index: 4;
   display: grid; grid-template-columns: 1.2fr 0.8fr 1fr; gap: 40px;
   align-items: start;
 }
-.footer-logo { height: 92px; width: auto; margin-bottom: 10px; }
+/* the bottle rides the crest: drifts across with the current, bobbing and
+   tipping as the waves pass (left base = where it parks without motion) */
+.footer-boat {
+  position: absolute; top: -47px; left: 12%; z-index: 3;
+  width: 30px; pointer-events: none;
+  animation: boatDrift 26s linear infinite;
+}
+.boat-bob { display: block; animation: boatBob 2.3s ease-in-out infinite; }
+.boat-bob svg {
+  display: block; width: 30px; height: 39px;
+  filter: drop-shadow(0 3px 3px rgba(8, 34, 12, 0.35));
+}
+@keyframes boatDrift { from { left: -6%; } to { left: 103%; } }
+@keyframes boatBob {
+  0%, 100% { translate: 0 3px; rotate: -5deg; }
+  50% { translate: 0 -4px; rotate: 6deg; }
+}
+/* lazy doodles drifting behind the footer, like the log band's */
+.footer-doodle { position: absolute; color: #fff; opacity: 0.05; pointer-events: none; }
+.footer-doodle.f1 { width: 120px; left: 4%; bottom: 12%; animation: doodleDrift 17s ease-in-out infinite; }
+.footer-doodle.f2 { width: 140px; right: 5%; top: 18%; animation: doodleDrift 21s ease-in-out -9s infinite reverse; }
+
+.footer-logo { height: 92px; width: auto; margin-bottom: 10px; animation: floatBob 7s ease-in-out infinite; }
 .footer-tag {
   font-family: var(--font-head); font-size: 1.12rem; font-weight: 700;
   color: #fff; margin: 0; line-height: 1.45;
@@ -889,7 +925,17 @@ input::placeholder { color: #a9b598; }
   padding: 7px 0; font-weight: 600; font-size: 1.02rem;
   transition: color 0.15s ease, transform 0.15s ease;
 }
-.footer-links a:hover { color: var(--gold); transform: translateX(4px); }
+/* a gold leaf sprouts before the link as it slides */
+.footer-links a::before {
+  content: ""; display: inline-block; vertical-align: -1px;
+  width: 11px; height: 11px; margin-right: 0;
+  background: var(--gold);
+  border-radius: 0 100% 0 100%;
+  scale: 0; rotate: -45deg;
+  transition: scale 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), margin-right 0.22s ease;
+}
+.footer-links a:hover, .footer-links a:focus-visible { color: var(--gold); transform: translateX(4px); }
+.footer-links a:hover::before, .footer-links a:focus-visible::before { scale: 1; margin-right: 9px; }
 .footer-note p { color: rgba(244, 249, 239, 0.82); font-size: 0.95rem; margin: 0 0 10px; }
 .footer-copy { color: rgba(244, 249, 239, 0.55); font-size: 0.82rem; }
 
@@ -1168,6 +1214,9 @@ input::placeholder { color: #a9b598; }
   .footer-logo { margin-left: auto; margin-right: auto; }
   .footer-links { align-items: center; }
   .footer-links a { padding: 12px 4px; }
+  .footer-doodle { display: none; }        /* phones keep the river, drop the haze */
+  .footer-boat { top: -42px; width: 24px; }
+  .boat-bob svg { width: 24px; height: 31px; }
   .scroll-cue { display: none; }
 
   /* the trail becomes compact rows: number, small art, words beside it —
@@ -1264,6 +1313,7 @@ input::placeholder { color: #a9b598; }
   .mascot-flash, .step-panel, .game-shot,
   .steps-trail li.now, .live-dot, .badge-holder, .badge-holder.stamped,
   .badge-holder::before, .badge-holder::after, .sample-tag, .site-footer::before,
+  .site-footer::after, .footer-boat, .boat-bob, .footer-doodle, .footer-logo,
   .btn-gold::after, .photo-drop.got-it::after, .stepper.bump input,
   .bub, .bub.now::before, .trail-line, .steps-trail::before, .doodle, .toss-bottle, .toss-bin,
   .bin-lid, .spark, .toss-check,
