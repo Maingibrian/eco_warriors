@@ -183,6 +183,91 @@
       submitLabel.textContent = "Send It!";
     }
 
+    // ------------------------------------------------------------- wizard
+    // The report is a 3-step guided trail and the mascot kid walks it with
+    // you: waves hello, watches you type, snaps a photo when you do, and
+    // jumps up with a thumbs up when the report lands.
+    var form = els.form;
+    var bubble = $("#mascot-bubble");
+    var mascotStage = form.querySelector(".mascot-stage");
+    var poses = [].slice.call(form.querySelectorAll(".pose"));
+    var trailItems = [].slice.call(form.querySelectorAll(".wiz-trail .wt"));
+    var panels = [].slice.call(form.querySelectorAll(".step-panel"));
+    var wizStep = 1;
+
+    function say(text) {
+      if (!bubble) return;
+      bubble.textContent = text;
+      bubble.classList.remove("pop");
+      void bubble.offsetWidth;            // restart the pop
+      bubble.classList.add("pop");
+    }
+    function setPose(name) {
+      form.dataset.pose = name;
+      poses.forEach(function (img) {
+        img.classList.toggle("on", img.classList.contains("pose-" + name));
+      });
+    }
+    function watch(on) { form.classList.toggle("bubble-down", !!on); }
+
+    function goStep(n) {
+      wizStep = n;
+      panels.forEach(function (p) { p.hidden = Number(p.dataset.panel) !== n; });
+      trailItems.forEach(function (li, i) {
+        li.classList.toggle("current", i === n - 1);
+        li.classList.toggle("done", i < n - 1);
+        if (i === n - 1) li.setAttribute("aria-current", "step");
+        else li.removeAttribute("aria-current");
+      });
+      watch(false);
+      if (n === 1) { setPose("hi"); say("Hi, Ranger! I'm Eco! 👋"); }
+      if (n === 2) {
+        setPose("snap");
+        say(photoData ? "KACHUNK! Got it! ⭐" : "Say cheese! I'll snap one too! 📸");
+      }
+      if (n === 3) { setPose("look"); say("How many did you rescue? 🔢"); }
+      setStatus("", "");
+    }
+
+    // the kid leans in and the bubble drops beside the text bar you're on
+    function watchField(input, text) {
+      input.addEventListener("focus", function () {
+        if (wizStep !== 1) return;
+        setPose("look"); watch(true); say(text);
+      });
+      input.addEventListener("blur", function () {
+        if (wizStep !== 1) return;
+        watch(false);
+      });
+    }
+    watchField(els.name, "Ooh, a cool Ranger name!");
+    watchField(els.email, "Your badge flies to your email! ✉️");
+
+    [].forEach.call(form.querySelectorAll(".wiz-next"), function (btn) {
+      btn.addEventListener("click", function () {
+        var n = Number(btn.dataset.next);
+        if (n === 2) {
+          var vname = els.name.value.trim();
+          var vemail = els.email.value.trim();
+          if (!vname) { setStatus("Please tell us your Eco Ranger name.", "error"); els.name.focus(); return; }
+          if (!vemail || vemail.indexOf("@") < 1 || vemail.indexOf(".") < 0) {
+            setStatus("Please enter a valid email address so we can send your badge.", "error");
+            els.email.focus(); return;
+          }
+        }
+        if (n === 3 && !photoData) {
+          setStatus("Please add a photo of your bin — it is your proof!", "error");
+          return;
+        }
+        goStep(n);
+      });
+    });
+    [].forEach.call(form.querySelectorAll(".wiz-back"), function (btn) {
+      btn.addEventListener("click", function () { goStep(Number(btn.dataset.back)); });
+    });
+
+    goStep(1);
+
     els.photo.addEventListener("change", function () {
       var file = els.photo.files && els.photo.files[0];
       photoData = null;
@@ -191,6 +276,7 @@
         els.photoPreview.removeAttribute("src");
         els.photoCta.innerHTML = camSvg + "<b>Tap to take a picture of your bin!</b><small>It's your proof!</small>";
         if (photoDrop) photoDrop.classList.remove("got-it");
+        if (wizStep === 2) say("Let's try again! 📸");
         return;
       }
       if (file.size > 4 * 1024 * 1024) {
@@ -212,6 +298,16 @@
         els.photoCta.innerHTML = camSvg + "<b>Tap to change it</b><small>Not happy? Pick another!</small>";
         if (photoDrop) photoDrop.classList.add("got-it");
         setStatus("", "");
+        // the kid takes its photo at the very same moment: flash + caption
+        if (mascotStage) {
+          mascotStage.classList.remove("flash");
+          void mascotStage.offsetWidth;
+          mascotStage.classList.add("flash");
+        }
+        say("KACHUNK! Got it! ⭐");
+        setTimeout(function () {
+          if (wizStep === 2) say("Nice shot! Tap the gold button →");
+        }, 1800);
       };
       reader.onerror = function () { setStatus("Could not read that photo. Try again.", "error"); };
       reader.readAsDataURL(file);
@@ -280,12 +376,16 @@
       var email = els.email.value.trim();
       var plastics = clampPlastics();
 
-      if (!name) { setStatus("Please tell us your Eco Ranger name.", "error"); els.name.focus(); return; }
+      // a late server reply for an old report never wins (and the wizard
+      // jumps back to the step that needs fixing)
+      if (!name) { setStatus("Please tell us your Eco Ranger name.", "error"); goStep(1); els.name.focus(); return; }
       if (!email || email.indexOf("@") < 1 || email.indexOf(".") < 0) {
         setStatus("Please enter a valid email address so we can send your badge.", "error");
-        els.email.focus(); return;
+        goStep(1); els.email.focus(); return;
       }
-      if (!photoData) { setStatus("Please add a photo of your bin — it is your proof!", "error"); return; }
+      if (!photoData) { setStatus("Please add a photo of your bin — it is your proof!", "error"); goStep(2); return; }
+
+      form.classList.remove("cheered");   // so a second win can jump again
 
       // open the audio context inside this tap so the success fanfare can
       // ring the moment the badge lands
@@ -339,6 +439,12 @@
           showBadge(data, name, plastics);
           setStatus("Report logged — badge " + code + " issued! \uD83C\uDF3F", "ok");
           submitState("scored"); // the bin ate it — check pops over the lid
+          // the kid celebrates too: thumbs up, a jump and a proud bubble
+          setPose("thumbs");
+          say("You did it, Ranger! 🌟");
+          watch(false);
+          form.classList.add("cheered");
+          trailItems.forEach(function (li) { li.classList.add("done"); li.classList.remove("current"); });
           if (window.EcoTune) EcoTune.success(); // the victory fanfare
           submitLabel.textContent = "Logged! 🌿";
           clearTimeout(resetTimer);

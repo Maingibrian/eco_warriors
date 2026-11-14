@@ -187,42 +187,75 @@
 
         <div class="log-layout">
 
-          <form id="report-form" class="card form-card reveal" novalidate>
-            <div class="mascot-sticker" aria-hidden="true">
-              <img src="/img/mascot.webp" width="640" height="640" alt=""/>
+          <form id="report-form" class="card form-card reveal" novalidate data-pose="hi">
+            <div class="mascot-col" aria-hidden="true">
+              <div class="mascot-stage">
+                <div class="mascot-poses">
+                  <img class="pose pose-hi on" src="/img/mascot.webp" width="640" height="640" alt=""/>
+                  <img class="pose pose-look" src="/img/mascot-look.webp" width="640" height="640" alt="" loading="lazy"/>
+                  <img class="pose pose-snap" src="/img/mascot-snap.webp" width="640" height="640" alt="" loading="lazy"/>
+                  <img class="pose pose-thumbs" src="/img/mascot-thumbs.webp" width="640" height="640" alt="" loading="lazy"/>
+                </div>
+                <span class="mascot-flash"></span>
+              </div>
+              <div class="mascot-bubble" id="mascot-bubble">Hi, Ranger! I'm Eco! 👋</div>
             </div>
 
+            <div class="form-main">
             <h3>My Ranger Report ✨</h3>
 
-            <div class="field">
-              <label for="f-name">Your Ranger name</label>
-              <input id="f-name" name="name" type="text" maxlength="40" placeholder="e.g. Amina" autocomplete="name" required/>
-            </div>
+            <ol class="wiz-trail" id="wiz-trail">
+              <li class="wt wt-1 current"><span class="wt-dot" aria-hidden="true">1</span><span class="wt-name">Check in</span></li>
+              <li class="wt wt-2"><span class="wt-dot" aria-hidden="true">2</span><span class="wt-name">Snap it</span></li>
+              <li class="wt wt-3"><span class="wt-dot" aria-hidden="true">3</span><span class="wt-name">Log it</span></li>
+            </ol>
 
-            <div class="field">
-              <label for="f-email">Email <span class="hint">(we send your badge here)</span></label>
-              <input id="f-email" name="email" type="email" maxlength="80" placeholder="you@example.com" autocomplete="email" required/>
-            </div>
+            <div class="step-panel" data-panel="1">
+              <p class="step-lead">First — who are you, brave Ranger?</p>
+              <div class="field">
+                <label for="f-name">Your Ranger name</label>
+                <input id="f-name" name="name" type="text" maxlength="40" placeholder="e.g. Amina" autocomplete="name" required/>
+              </div>
 
-            <div class="field">
-              <span class="label-text" id="photo-label">Photo of your bin 📸</span>
-              <label class="photo-drop" for="f-photo">
-                <input id="f-photo" type="file" accept="image/*" capture="environment" hidden aria-labelledby="photo-label"/>
-                <img id="photo-preview" class="photo-preview" alt="Preview of your bin photo" hidden/>
-                <span class="photo-cta" id="photo-cta"><svg class="photo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 4.8a4.2 4.2 0 1 1 0 8.4 4.2 4.2 0 0 1 0-8.4zm0 2a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4z"/></svg><b>Tap to take a picture of your bin!</b><small>It's your proof!</small></span>
-              </label>
-            </div>
+              <div class="field">
+                <label for="f-email">Email <span class="hint">(we send your badge here)</span></label>
+                <input id="f-email" name="email" type="email" maxlength="80" placeholder="you@example.com" autocomplete="email" required/>
+              </div>
 
-            <div class="field">
-              <label for="f-plastics">How many bottles and tubs did you sort?</label>
-              <div class="stepper">
-                <button type="button" id="step-down" aria-label="One less">−</button>
-                <input id="f-plastics" type="number" min="1" max="100000" step="1" value="10" inputmode="numeric" required/>
-                <button type="button" id="step-up" aria-label="One more">+</button>
+              <div class="wiz-nav">
+                <button type="button" class="btn btn-gold wiz-next" data-next="2">Let's snap it! 📸</button>
               </div>
             </div>
 
-            <button class="btn btn-gold btn-submit" id="submit-btn" type="submit">
+            <div class="step-panel" data-panel="2">
+              <p class="step-lead">Show me your bin — I'll snap one too!</p>
+              <div class="field">
+                <span class="label-text" id="photo-label">Photo of your bin 📸</span>
+                <label class="photo-drop" for="f-photo">
+                  <input id="f-photo" type="file" accept="image/*" capture="environment" hidden aria-labelledby="photo-label"/>
+                  <img id="photo-preview" class="photo-preview" alt="Preview of your bin photo" hidden/>
+                  <span class="photo-cta" id="photo-cta"><svg class="photo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 4.8a4.2 4.2 0 1 1 0 8.4 4.2 4.2 0 0 1 0-8.4zm0 2a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4z"/></svg><b>Tap to take a picture of your bin!</b><small>It's your proof!</small></span>
+                </label>
+              </div>
+
+              <div class="wiz-nav">
+                <button type="button" class="btn btn-gold wiz-next" data-next="3">Great shot! Log it →</button>
+                <button type="button" class="wiz-back" data-back="1">← back</button>
+              </div>
+            </div>
+
+            <div class="step-panel" data-panel="3">
+              <p class="step-lead">Last one — the big count!</p>
+              <div class="field">
+                <label for="f-plastics">How many bottles and tubs did you sort?</label>
+                <div class="stepper">
+                  <button type="button" id="step-down" aria-label="One less">−</button>
+                  <input id="f-plastics" type="number" min="1" max="100000" step="1" value="10" inputmode="numeric" required/>
+                  <button type="button" id="step-up" aria-label="One more">+</button>
+                </div>
+              </div>
+
+              <button class="btn btn-gold btn-submit" id="submit-btn" type="submit">
               <span class="submit-txt">Send It!</span>
               <span class="toss-stage" aria-hidden="true">
                 <!-- the report is a bottle: rest → toss → the bin eats it.
@@ -253,10 +286,16 @@
                   <path d="M-3 .2l2 2.3 3.4-4" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
-            </button>
+              </button>
+
+              <div class="wiz-nav">
+                <button type="button" class="wiz-back" data-back="2">← back</button>
+              </div>
+            </div>
 
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
             <p class="fine">🛡️ We save your report and make your badge — nothing else. No spam, ever.</p>
+            </div>
           </form>
 
           <aside class="card badge-panel reveal" id="badge-panel" aria-live="polite">

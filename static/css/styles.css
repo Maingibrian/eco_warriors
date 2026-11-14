@@ -370,20 +370,122 @@ a { color: var(--green); }
 .form-card { border-top: 8px solid var(--gold); }
 .badge-panel { border-top: 8px solid var(--gold); text-align: center; }
 
-/* mascot sticker cheering from the corner of the form */
-.mascot-sticker {
-  position: absolute; top: -24px; right: 20px;
-  width: 116px; z-index: 3;
+/* --- the report wizard: the kid guides you through 3 steps -------------
+   left column = the mascot (poses swap per step) + its speech bubble;
+   right column = title, step pills, one step panel at a time. */
+.form-card {
+  display: grid; grid-template-columns: 170px 1fr;
+  gap: 8px 24px; align-items: start;
+}
+.form-main { min-width: 0; }
+.form-card h3 { margin-bottom: 16px; }
+
+.mascot-col { position: relative; text-align: center; }
+.mascot-stage { position: relative; width: 134px; margin: 0 auto; }
+.mascot-poses {
+  position: relative; width: 134px; height: 134px;
   animation: floatBob 4s ease-in-out infinite;
+  transition: rotate 0.4s ease;
 }
-.mascot-sticker img {
-  width: 116px; height: 116px; object-fit: cover;
-  border-radius: 50%;
-  border: 5px solid #fff;
+.form-card[data-pose="look"] .mascot-poses { rotate: 8deg; }  /* leans toward the fields */
+.pose {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; border-radius: 50%; border: 5px solid #fff;
   box-shadow: var(--shadow-lift);
+  opacity: 0; transform: scale(0.82);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.form-card { padding-top: 44px; }
-.form-card h3 { margin-bottom: 20px; }
+.pose.on { opacity: 1; transform: scale(1); }
+.pose-look { transform: scaleX(-1) scale(0.82); }   /* mirrored: kid looks down toward the form */
+.pose-look.on { transform: scaleX(-1) scale(1); }
+
+/* the camera flash when the kid takes its photo too */
+.mascot-flash {
+  position: absolute; inset: -10px; border-radius: 50%;
+  pointer-events: none; opacity: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%,
+              rgba(255,255,255,0.5) 45%, rgba(255,255,255,0) 72%);
+}
+.mascot-stage.flash .mascot-flash { animation: camFlash 0.6s ease-out both; }
+@keyframes camFlash {
+  0% { opacity: 0; transform: scale(0.5); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* the speech bubble — sits under the mascot, drops toward the fields
+   while the kid watches you type */
+.mascot-bubble {
+  position: relative; margin: 14px auto 0; max-width: 170px;
+  background: #fff; border: 2.5px solid var(--line); border-radius: 14px;
+  padding: 9px 12px; font-family: var(--font-head); font-weight: 700;
+  font-size: 0.95rem; line-height: 1.32; color: var(--ink);
+  box-shadow: var(--shadow);
+  transition: translate 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+.mascot-bubble::before, .mascot-bubble::after {
+  content: ""; position: absolute; left: 50%; translate: -50% 0;
+  border: 6px solid transparent;
+}
+.mascot-bubble::before { top: -13px; border-bottom: 8px solid var(--line); }
+.mascot-bubble::after  { top: -10px; border-bottom: 7px solid #fff; }
+.form-card.bubble-down .mascot-bubble { translate: 0 58px; }
+.mascot-bubble.pop { animation: bubblePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+@keyframes bubblePop { from { scale: 0.6; } to { scale: 1; } }
+
+/* the win: the kid jumps for joy */
+.form-card.cheered .mascot-poses {
+  animation: floatBob 4s ease-in-out infinite,
+             cheerJump 0.8s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes cheerJump {
+  0%, 100% { translate: 0 0; scale: 1 1; }
+  35% { translate: 0 -16%; }
+  65% { translate: 0 0; scale: 1.07 0.9; }
+  84% { scale: 0.97 1.04; }
+}
+
+/* step pills: 1 Check in · 2 Snap it · 3 Log it */
+.wiz-trail {
+  list-style: none; display: flex; gap: 6px;
+  margin: 0 0 20px; padding: 0;
+}
+.wt {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 7px 6px; border-radius: 999px;
+  background: #f4efdd; border: 2px solid var(--line);
+  font-weight: 800; font-size: 0.9rem; color: #93a487;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.wt-dot {
+  display: grid; place-items: center; flex: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; border: 2px solid #d9d2ba; font-size: 0.8rem;
+}
+.wt.current { background: var(--gold); border-color: #e59c00; color: var(--ink); }
+.wt.current .wt-dot { border-color: var(--ink); }
+.wt.done { background: #e7f3df; border-color: var(--green); color: var(--forest); }
+.wt.done .wt-dot { background: var(--green); border-color: var(--green); color: #fff; font-size: 0; }
+.wt.done .wt-dot::before { content: "✓"; font-size: 0.8rem; }
+
+/* one step panel at a time */
+.step-panel[hidden] { display: none; }
+.step-panel:not([hidden]) { animation: panelIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes panelIn {
+  from { opacity: 0; translate: 0 10px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+.step-lead { margin: 0 0 16px; font-weight: 700; font-size: 1.02rem; color: var(--ink-soft); }
+
+.wiz-nav { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
+.wiz-nav .wiz-next { flex: 1; }
+.wiz-back {
+  border: none; background: none; padding: 6px 2px; cursor: pointer;
+  font: inherit; font-weight: 700; font-size: 0.95rem; color: #7d8f70;
+  text-decoration: underline dotted; white-space: nowrap;
+}
+.wiz-back:hover { color: var(--forest); }
+.btn-submit { width: 100%; }
 
 .field { position: relative; margin-bottom: 22px; }
 .field label, .field .label-text {
@@ -1031,8 +1133,25 @@ input::placeholder { color: #a9b598; }
     justify-content: center; text-align: center;
     padding: 9px 20px 9px 10px;
   }
-  .mascot-sticker { width: 96px; top: -38px; }
-  .mascot-sticker img { width: 96px; height: 96px; }
+  /* the wizard stacks: mascot + bubble row on top, steps below */
+  .form-card { display: block; }
+  .mascot-col {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 8px; padding-bottom: 18px; text-align: left;
+  }
+  .mascot-stage { width: 104px; margin: 0; flex: none; }
+  .mascot-poses { width: 104px; height: 104px; }
+  .mascot-bubble { margin: 6px 0 0; max-width: none; flex: 1; }
+  .mascot-bubble::before {
+    top: 50%; left: -14px; translate: 0 -50%;
+    border: 6px solid transparent; border-right: 8px solid var(--line);
+  }
+  .mascot-bubble::after {
+    top: 50%; left: -11px; translate: 0 -50%;
+    border: 5px solid transparent; border-right: 7px solid #fff;
+  }
+  .form-card.bubble-down .mascot-bubble { translate: 0 16px; }
+  .form-card h3 { margin-bottom: 12px; }
   .friend-grid { grid-template-columns: repeat(2, 1fr); }
   .game-cols { grid-template-columns: 1fr; }
   .game-shot { max-width: 360px; margin: 0 auto; }
@@ -1116,8 +1235,12 @@ input::placeholder { color: #a9b598; }
     z-index: -1;
   }
   .hero-bottom { padding: 0 20px calc(22px + env(safe-area-inset-bottom, 0px)); }
-  .mascot-sticker { width: 84px; top: -32px; right: 14px; }
-  .mascot-sticker img { width: 84px; height: 84px; }
+  .mascot-stage { width: 90px; }
+  .mascot-poses { width: 90px; height: 90px; }
+  .mascot-col { gap: 11px; padding-bottom: 14px; }
+  .mascot-bubble { font-size: 0.9rem; padding: 8px 10px; }
+  .wt { padding: 6px 4px; gap: 5px; font-size: 0.82rem; }
+  .wt-name { font-size: 0.78rem; }
 }
 
 @media (max-width: 480px) {
@@ -1137,7 +1260,8 @@ input::placeholder { color: #a9b598; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .hero-bg, .btn-play, .btn-play:hover, .scroll-cue, .stop, .stop:hover,
   .stop:hover .stop-num, .stop:hover .stop-art, .stop-art, .friend-card,
-  .friend-card:hover, .friend-card img, .mascot-sticker, .game-shot,
+  .friend-card:hover, .friend-card img, .mascot-poses, .pose, .mascot-bubble,
+  .mascot-flash, .step-panel, .game-shot,
   .steps-trail li.now, .live-dot, .badge-holder, .badge-holder.stamped,
   .badge-holder::before, .badge-holder::after, .sample-tag, .site-footer::before,
   .btn-gold::after, .photo-drop.got-it::after, .stepper.bump input,
