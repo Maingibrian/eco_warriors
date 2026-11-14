@@ -148,9 +148,9 @@
       if (egg.classList.contains("playing")) return; // one gag at a time
       egg.classList.add("playing");
       // the landing "boop-beep… plop!" rings as the bottle meets the bin
-      if (window.EcoTune) setTimeout(function () { EcoTune.egg(); }, 850);
+      if (window.EcoTune) setTimeout(function () { EcoTune.egg(); }, 1350);
       clearTimeout(settle);
-      settle = setTimeout(function () { egg.classList.remove("playing"); }, 2500);
+      settle = setTimeout(function () { egg.classList.remove("playing"); }, 3500);
     }
   });
 

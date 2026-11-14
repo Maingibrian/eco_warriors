@@ -1238,13 +1238,12 @@ input::placeholder { color: #a9b598; }
   position: absolute; right: 2%; bottom: 40%;   /* floats above the bin mouth */
   width: 17%; max-width: 84px; opacity: 0;
 }
-/* two blurred ghosts chase the bottle along its arc */
+/* one soft ghost trails the bottle along its arc */
 .egg-trail {
   position: absolute; left: 3%; top: 5%;
   width: 17%; max-width: 84px; aspect-ratio: 28 / 36; border-radius: 45%;
-  background: #1d4f77; filter: blur(3px); opacity: 0;
+  background: #1d4f77; filter: blur(4px); opacity: 0;
 }
-.egg-trail.t2 { filter: blur(5px); }
 /* a shockwave ring bursts out of the bin mouth on impact */
 .egg-ring {
   position: absolute; right: 15%; bottom: 24%;
@@ -1253,51 +1252,45 @@ input::placeholder { color: #a9b598; }
   box-shadow: 0 0 12px 3px rgba(255, 213, 79, 0.4); opacity: 0;
 }
 
-/* the whole gag, one timeline: startled exit (0–0.5s) → toss with trail
-   (0.15–0.95s) → chomp, ring, sparks & gulp-hop (0.8–1.6s) → burp & check
-   (1.2–1.8s) → scene exits (1.6–1.9s) → back in with a squash (2.0–2.5s) */
+/* the gag, one beat at a time: logo out (0–0.4s) → the bottle waits,
+   winds up and flies (0.55–1.4s) → ONE impact beat: chomp + ring +
+   sparks (1.38–2.2s) → the reward: hop + check (1.7–2.4s) → scene exits
+   (2.4–2.8s) → logo springs back (2.9–3.4s) */
 .logo-egg.playing .hero-logo {
-  animation: eggLogoOut 0.5s cubic-bezier(0.4, 0, 0.6, 1) both,
-             eggLogoIn 0.5s 2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: eggLogoOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) both,
+             eggLogoIn 0.5s 2.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-.logo-egg.playing .egg-stage { animation: eggStage 2.5s linear both; }
-.logo-egg.playing .egg-bottle { animation: eggToss 0.8s 0.15s cubic-bezier(0.35, 0, 0.65, 1) both; }
-.logo-egg.playing .egg-trail.t1 { animation: eggGhost 0.8s 0.27s cubic-bezier(0.35, 0, 0.65, 1) both; }
-.logo-egg.playing .egg-trail.t2 { animation: eggGhost 0.8s 0.36s cubic-bezier(0.35, 0, 0.65, 1) both; }
-.logo-egg.playing .egg-lid {
-  animation: eggLid 0.8s 0.15s ease-in-out both,
-             eggLidBurp 0.45s 1.38s ease-in-out both;
-}
+.logo-egg.playing .egg-stage { animation: eggStage 3.5s linear both; }
+.logo-egg.playing .egg-bottle { animation: eggToss 0.85s 0.55s cubic-bezier(0.35, 0, 0.65, 1) both; }
+.logo-egg.playing .egg-trail { animation: eggGhost 0.85s 0.68s cubic-bezier(0.35, 0, 0.65, 1) both; }
+.logo-egg.playing .egg-lid { animation: eggLid 0.85s 0.55s ease-in-out both; }
 .logo-egg.playing .egg-bin {
-  animation: eggChomp 0.3s 0.82s cubic-bezier(0.34, 1.56, 0.64, 1) both,
-             eggHop 0.6s 1.02s ease-in-out;
+  animation: eggChomp 0.3s 1.38s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             eggHop 0.55s 1.72s ease-in-out;
 }
-.logo-egg.playing .egg-ring { animation: eggRing 0.65s 0.85s cubic-bezier(0.2, 0.7, 0.4, 1) forwards; }
-.logo-egg.playing .egg-spark { animation: sparkPop 0.7s ease-out both; }
-.logo-egg.playing .egg-spark.s1 { animation-delay: 0.86s; --sx: -420%; --sy: -520%; }
-.logo-egg.playing .egg-spark.s2 { animation-delay: 0.91s; --sx: 120%;  --sy: -750%; }
-.logo-egg.playing .egg-spark.s3 { animation-delay: 0.96s; --sx: 560%;  --sy: -360%; }
-.logo-egg.playing .egg-spark.s4 { animation-delay: 1.01s; --sx: -180%; --sy: -210%; }
-.logo-egg.playing .egg-spark.s5 { animation-delay: 1.06s; --sx: 500%;  --sy: 110%; }
-.logo-egg.playing .egg-spark.s6 { animation-delay: 1.11s; --sx: 760%;  --sy: -520%; }
-.logo-egg.playing .egg-check { animation: eggCheck 0.45s 1.16s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.logo-egg.playing .egg-ring { animation: eggRing 0.5s 1.42s cubic-bezier(0.2, 0.7, 0.4, 1) forwards; }
+.logo-egg.playing .egg-spark { animation: sparkPop 0.65s ease-out both; }
+.logo-egg.playing .egg-spark.s1 { animation-delay: 1.45s; --sx: -420%; --sy: -520%; }
+.logo-egg.playing .egg-spark.s2 { animation-delay: 1.50s; --sx: 120%;  --sy: -750%; }
+.logo-egg.playing .egg-spark.s3 { animation-delay: 1.55s; --sx: 560%;  --sy: -360%; }
+.logo-egg.playing .egg-spark.s4 { animation-delay: 1.60s; --sx: -180%; --sy: -210%; }
+.logo-egg.playing .egg-spark.s5 { animation-delay: 1.65s; --sx: 500%;  --sy: 110%; }
+.logo-egg.playing .egg-spark.s6 { animation-delay: 1.70s; --sx: 760%;  --sy: -520%; }
+.logo-egg.playing .egg-check { animation: eggCheck 0.45s 1.95s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 
 @keyframes eggLogoOut {
   0% { transform: scale(1) translate(0, 0) rotate(0deg); opacity: 1; }
-  30% { transform: scale(1.05) translate(2%, -5%) rotate(2deg); opacity: 1; }  /* startled! */
   100% { transform: scale(0.68) translate(-10%, 9%) rotate(-8deg); opacity: 0; }
 }
 @keyframes eggLogoIn {
   0% { transform: scale(0.68) translate(-10%, 9%) rotate(-8deg); opacity: 0; }
-  60% { transform: scale(1.06) translate(0, 0) rotate(1.5deg); opacity: 1; }
-  78% { transform: scale(0.96, 1.05) translate(0, 0) rotate(-1deg); }         /* squash */
   100% { transform: scale(1) translate(0, 0) rotate(0deg); opacity: 1; }
 }
 @keyframes eggStage {
   0% { opacity: 0; }
-  6% { opacity: 1; }
-  64% { opacity: 1; }
-  76% { opacity: 0; }   /* the scene is gone before the logo returns */
+  5% { opacity: 1; }
+  68% { opacity: 1; }
+  80% { opacity: 0; }   /* the scene is gone before the logo returns */
   100% { opacity: 0; }
 }
 @keyframes eggToss {
@@ -1309,9 +1302,9 @@ input::placeholder { color: #a9b598; }
 }
 @keyframes eggGhost {
   0% { transform: translate(0, 0) rotate(10deg) scale(1); opacity: 0; }
-  18% { opacity: 0.5; }
-  55% { transform: translate(200%, -50%) rotate(340deg) scale(0.92); opacity: 0.42; }
-  85% { transform: translate(390%, 210%) rotate(540deg) scale(0.5); opacity: 0.22; }
+  18% { transform: translate(-35%, 8%) rotate(-28deg) scale(1.03); opacity: 0.35; }
+  55% { transform: translate(200%, -50%) rotate(340deg) scale(0.92); opacity: 0.3; }
+  85% { transform: translate(390%, 210%) rotate(540deg) scale(0.5); opacity: 0.18; }
   100% { transform: translate(420%, 295%) rotate(615deg) scale(0.1); opacity: 0; }
 }
 @keyframes eggRing {
@@ -1320,19 +1313,14 @@ input::placeholder { color: #a9b598; }
   100% { transform: scale(2); opacity: 0; }
 }
 @keyframes eggCheck {
-  0% { opacity: 0; transform: scale(0.3) rotate(-16deg); }
-  60% { opacity: 1; transform: scale(1.18) rotate(4deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  0% { opacity: 0; transform: scale(0.3); }
+  70% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
 }
 @keyframes eggLid {
   0%, 28% { transform: rotate(0deg); }
   42%, 76% { transform: rotate(-50deg); }
   100% { transform: rotate(0deg); }
-}
-@keyframes eggLidBurp {
-  0%, 100% { transform: rotate(0deg); }
-  35% { transform: rotate(-26deg); }
-  70% { transform: rotate(6deg); }
 }
 @keyframes eggChomp {
   0% { transform: scale(1, 1); }
@@ -1341,11 +1329,10 @@ input::placeholder { color: #a9b598; }
   100% { transform: scale(1, 1); }
 }
 @keyframes eggHop {
-  0%, 100% { translate: 0 0; rotate: 0deg; scale: 1 1; }
-  20% { scale: 1.18 0.88; }                    /* gulp! */
-  45% { translate: 0 -7%; rotate: -5deg; scale: 1 1; }
-  70% { translate: 0 -2%; rotate: 4.5deg; }
-  88% { rotate: -2deg; }
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  30% { translate: 0 -6%; rotate: -5deg; }
+  60% { translate: 0 -2%; rotate: 4deg; }
+  85% { rotate: -2deg; }
 }
 @media (prefers-reduced-motion: reduce) {
   .logo-egg .hero-logo, .egg-stage, .egg-bottle, .egg-bin, .egg-lid,
