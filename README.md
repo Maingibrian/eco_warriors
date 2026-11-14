@@ -11,6 +11,11 @@ The backend is written in **Rust using the standard library only** — no framew
 no external crates, no database. The frontend is plain **HTML + CSS + JS** with
 no build step.
 
+> **Just want it online?** The `static/` folder deploys to **Netlify** as-is —
+> see **[DEPLOY.md](DEPLOY.md)**. Without a server the form runs in demo mode
+> (badges and counts happen in the visitor's browser); the Rust server below
+> adds live report collection.
+
 ## Run it
 
 ```bash

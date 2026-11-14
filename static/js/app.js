@@ -7,6 +7,8 @@
  * 2. In the log-in band: sends the report (name, email, bin photo,
  *    plastic count) to /api/report.
  * 3. Fetches the personalised badge SVG and offers SVG/PNG downloads.
+ * 4. Demo mode: with no /api (static hosts like Netlify), reports are
+ *    personalised in the browser and counted on the device only.
  */
 
 (function () {
@@ -45,6 +47,19 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // ------------------------------------------------- server or demo mode?
+  // On a static host (e.g. Netlify) there is no /api — reports and badges
+  // are then generated in the visitor's browser and counted on their
+  // device only. The Rust server remains the live system of record.
+  var apiOnline = null; // null = not probed yet, false = static host
+  var probeApi = fetch("/api/stats", { method: "HEAD" })
+    .then(function (r) { apiOnline = r.ok; })
+    .catch(function () { apiOnline = false; });
+  var demo = {
+    get: function (k) { try { return parseInt(localStorage.getItem("er-demo-" + k) || "0", 10) || 0; } catch (e) { return 0; } },
+    set: function (k, v) { try { localStorage.setItem("er-demo-" + k, String(v)); } catch (e) {} },
+  };
+
   // ------------------------------------------------------------- stats
 
   function countUp(el, target) {
@@ -74,7 +89,12 @@
           countUpAll(statRangers, data.rangers);
         }
       })
-      .catch(function () { /* server offline stats stay at 0 */ });
+      .catch(function () {
+        // Static host: show this device's demo-mode tally instead.
+        apiOnline = false;
+        countUpAll(statItems, demo.get("items"));
+        countUpAll(statRangers, demo.get("rangers"));
+      });
   }
 
   // ------------------------------------------------------------- confetti
@@ -184,11 +204,13 @@
     // the preview image (works with its data-URI form in the static preview
     // too), so the download buttons live before any report is sent. A
     // submitted report later swaps in the personalised one.
+    var sampleSvg = "";
     var sampleImg = els.badgeHolder ? els.badgeHolder.querySelector("img") : null;
     if (sampleImg) {
       fetch(sampleImg.src)
         .then(function (r) { return r.text(); })
         .then(function (svg) {
+          sampleSvg = svg;
           if (currentBadge.svg) return; // a personalised badge already arrived
           currentBadge.svg = svg;
           currentBadge.name = "sample";
@@ -197,6 +219,11 @@
           els.panel.classList.add("ready"); // gentle pulse on the PNG button
         })
         .catch(function () { /* downloads stay report-gated */ });
+    }
+    function getSampleSvg() {
+      if (sampleSvg) return Promise.resolve(sampleSvg);
+      return fetch(sampleImg ? sampleImg.src : "/img/badge-sample.svg")
+        .then(function (r) { return r.text(); });
     }
 
     els.form.addEventListener("submit", function (e) {
@@ -224,30 +251,92 @@
       submitLabel.textContent = "Sending…";
       setStatus("Sending your report to the Eco Rangers camp…", "");
 
-      fetch("/api/report", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
-      })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (!data.ok) throw new Error(data.error || "Something went wrong.");
+      // Demo mode (static host, no /api): personalise the sample badge in the
+      // browser and count the report on this device only.
+      function xmlEscape(s) {
+        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").
+          replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      }
+      function truncateChars(s, max) {
+        var chars = Array.from(s);
+        return chars.length > max ? chars.slice(0, max - 1).join("") + "\u2026" : s;
+      }
+      function utcToday() {
+        var M = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var d = new Date();
+        return d.getUTCDate() + " " + M[d.getUTCMonth()] + " " + d.getUTCFullYear();
+      }
+      function personalizeBadge(svg) {
+        return svg.
+          replace("Your Name", xmlEscape(truncateChars(name, 15))).
+          replace('fill="#FFF8E1">25</text>', 'fill="#FFF8E1">' + plastics + "</text>").
+          replace("13 Nov 2026", utcToday()).
+          replace("ER-2026-0001", code);
+      }
+      var code = "";
+      function finishLocal() {
+        getSampleSvg().then(function (svg) {
+          var n = demo.get("count") + 1;
+          demo.set("count", n);
+          var items = demo.get("items") + plastics;
+          var rangers = demo.get("rangers") + 1;
+          demo.set("items", items);
+          demo.set("rangers", rangers);
+          code = "ER-" + new Date().getUTCFullYear() + "-" + ("000" + n).slice(-4);
+          var data = {
+            ok: true,
+            code: code,
+            demo: true,
+            badge_svg: personalizeBadge(svg),
+            totals: { items: items, rangers: rangers },
+          };
           showBadge(data, name, plastics);
-          setStatus("Report saved — badge " + data.code + " issued! 🌿", "ok");
-          countUpAll(statItems, data.totals.items);
-          countUpAll(statRangers, data.totals.rangers);
+          setStatus("Badge " + code + " issued — saved on this device (demo mode, no campaign server). \uD83C\uDF3F", "ok");
+          countUpAll(statItems, items);
+          countUpAll(statRangers, rangers);
           if (!reduceMotion) { // happy little wiggle on the submit button
             els.submit.classList.add("yay");
             setTimeout(function () { els.submit.classList.remove("yay"); }, 700);
           }
-        })
-        .catch(function (err) {
-          setStatus(err.message || "Could not reach the server. Please try again.", "error");
-        })
-        .then(function () {
+        }).catch(function () {
+          setStatus("Could not prepare your badge — please try again.", "error");
+        }).then(function () {
           els.submit.disabled = false;
           submitLabel.textContent = "Send My Report";
         });
+      }
+
+      probeApi.then(function () {
+        if (apiOnline === false) { finishLocal(); return; }
+        fetch("/api/report", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body.toString(),
+        })
+          .then(function (r) {
+            if (!r.ok) throw new TypeError("API not available"); // static host
+            return r.json();
+          })
+          .then(function (data) {
+            if (!data.ok) throw new Error(data.error || "Something went wrong.");
+            showBadge(data, name, plastics);
+            setStatus("Report saved — badge " + data.code + " issued! 🌿", "ok");
+            countUpAll(statItems, data.totals.items);
+            countUpAll(statRangers, data.totals.rangers);
+            if (!reduceMotion) { // happy little wiggle on the submit button
+              els.submit.classList.add("yay");
+              setTimeout(function () { els.submit.classList.remove("yay"); }, 700);
+            }
+          })
+          .catch(function (err) {
+            if (err instanceof TypeError) finishLocal(); // no API → demo mode
+            else setStatus(err.message || "Could not reach the server. Please try again.", "error");
+          })
+          .then(function () {
+            els.submit.disabled = false;
+            submitLabel.textContent = "Send My Report";
+          });
+      });
     });
 
     // ------------------------------------------------------------- badge
@@ -257,8 +346,10 @@
       els.badgeText.textContent =
         "Way to go, " + name + "! You kept " + plastics +
         " plastic item" + (plastics === 1 ? "" : "s") + " out of nature. Here is your badge:";
-      fetch(data.badge_url)
-        .then(function (r) { return r.text(); })
+      var svgPromise = data.badge_svg
+        ? Promise.resolve(data.badge_svg) // demo mode: personalised locally
+        : fetch(data.badge_url).then(function (r) { return r.text(); });
+      svgPromise
         .then(function (svg) {
           currentBadge.svg = svg;
           els.badgeHolder.innerHTML = svg;

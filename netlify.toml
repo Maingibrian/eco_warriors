@@ -1,0 +1,43 @@
+# Eco Rangers on Netlify — plain static hosting, no build step.
+# The Rust server (src/) is not needed for this: see DEPLOY.md for what
+# runs here versus on the live campaign server.
+
+[build]
+  publish = "static"
+  command = "echo 'Static site: no build step required'"
+
+# Same redirect the Rust server (src/web.rs) serves, so old links and
+# printed QR codes that point at /login keep working.
+[[redirects]]
+  from = "/login"
+  to = "/challenge#log-in"
+  status = 302
+
+[[redirects]]
+  from = "/login.html"
+  to = "/challenge#log-in"
+  status = 302
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+# Assets are content-hashed by hand only on rename; keep them fresh for a
+# day so poster/QR swaps appear quickly without re-downloading every visit.
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
