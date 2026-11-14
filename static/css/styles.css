@@ -189,19 +189,40 @@ a { color: var(--green); }
 .hero-leaf.l2 { width: 54px; bottom: 16%; right: 1.2%; animation: leafDrift 12s ease-in-out 1.2s infinite alternate-reverse; }
 .hero-leaf.l3 { width: 40px; bottom: 9%; left: 4.5%; animation: leafDrift 10s ease-in-out 0.6s infinite alternate; }
 
-/* QR code: inside the poster's green frame, bottom-right */
+/* QR code: a "Scan me!" sticker card pinned to the poster's corner.
+   The image is absolutely positioned with % inset/size — percentages then
+   resolve against the card (padding % would resolve against the poster
+   behind it and swallow the QR). */
 .hero-qr {
   position: absolute;
-  left: 93.63%; top: 89.47%;
-  width: 7.05%;
+  left: 91%; top: 86%;
+  width: 11%;
+  aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  border-radius: 9%;
-  line-height: 0;
+  background: var(--paper);
+  border-radius: 10%;
+  box-shadow: 0 5px 16px rgba(16, 64, 26, 0.38);
+  rotate: -3deg;
   z-index: 3;
   animation: qrPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s both;
+  transition: rotate 0.2s ease;
 }
-.hero-qr img { width: 100%; height: auto; border-radius: 9%; }
+.hero-qr img { position: absolute; inset: 6%; width: 88%; height: 88%; border-radius: 6%; }
+.hero-qr:hover { rotate: 0deg; }
 .hero-qr:hover img { box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.9); }
+
+/* gold "Scan me!" pill overlapping the sticker's top-left corner */
+.qr-label {
+  position: absolute; top: -14%; left: -17%;
+  background: var(--gold); color: #3d2c00;
+  font-family: var(--font-script); font-weight: 700;
+  font-size: 1.02rem; line-height: 1.15;
+  padding: 2px 14px; border-radius: 999px;
+  rotate: -7deg;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+  white-space: nowrap;
+  z-index: 2;
+}
 
 /* ping ring around the QR */
 .hero-qr::before {
@@ -214,7 +235,7 @@ a { color: var(--green); }
 /* scan line sweeping across the QR */
 .hero-qr::after {
   content: ""; position: absolute; inset: 0;
-  border-radius: 9%;
+  border-radius: 10%;
   background: linear-gradient(180deg,
     transparent 0%, transparent 42%,
     rgba(255, 213, 79, 0.8) 50%,
@@ -592,6 +613,7 @@ input::placeholder { color: #b3bfa6; }
   .hero-frame { border-radius: 0; box-shadow: none; }
   .hero { padding: 12px 0 20px; }
   .hero-leaf { display: none; }
+  .qr-label { display: none; }
   .ticker { margin-top: -4px; }
   .brand img { height: 50px; }
 }
