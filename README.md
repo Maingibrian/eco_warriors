@@ -1,9 +1,10 @@
 # Eco Rangers · The 5-Day Recycling Challenge
 
-A very simple, single-page website for the **Eco Rangers** recycling campaign:
+A very simple, one-page website for the **Eco Rangers** recycling campaign,
+made for young kids — big buttons, playful characters, friendly animations:
 
 - **Segregation at the source. Behaviour change for good.**
-- The 5-day challenge: **BUILD · PLACE · LABEL · CHECK · SCAN**
+- The 5-day challenge: **BUILD · PLACE · LABEL · CHECK · SNAP**
 - Rangers take a photo of the bin they built, log how many plastic items they
   segregated, and instantly receive a personalised digital **Climate Champion badge**.
 
@@ -31,9 +32,9 @@ Then open <http://localhost:8000>. (Port can be changed with an argument:
 
 | Route | Method | Description |
 | --- | --- | --- |
-| `/` | GET | Page 1 — the cover (`static/index.html`) |
-| `/challenge` | GET | Page 2 — the 5-day challenge, ending in the ranger log-in band + badge (`static/challenge.html`) |
-| `/login` | GET | 302 → `/challenge#log-in` (the log-in band lives on the challenge page; old links keep working) |
+| `/` | GET | The whole campaign on one page (`static/index.html`): full-screen poster hero, five missions, the friends, board game corner, ranger log-in + badge |
+| `/challenge` | GET | 302 → `/#missions` (one page now; old two-page links keep working) |
+| `/login` | GET | 302 → `/#log-in` |
 | `/img/…`, `/css/…`, `/js/…` | GET | Static assets served from `static/` (traversal-proof) |
 | `/api/stats` | GET | Community totals: `{"ok":true,"rangers":N,"items":M}` |
 | `/api/report` | POST | Receives `name`, `email`, `plastics`, `photo` (base64) + `photo_mime`. Saves the photo, appends the report, returns the badge URL and updated totals |
@@ -48,8 +49,8 @@ Nothing else is stored; there is no tracking of any kind.
 
 ### About “send the badge”
 
-Per the challenge flow, the badge is *issued digitally*: the log-in band on
-the challenge page offers the sample **Climate Champion badge as an immediate
+Per the challenge flow, the badge is *issued digitally*: the log-in section
+offers the sample **Climate Champion badge as an immediate
 SVG/PNG download**, and the server generates a unique, personalised SVG
 (name, plastic count, date, official code such as `ER-2026-0042`) once a
 report is sent — displayed on the page and downloadable as **SVG** or
@@ -67,27 +68,28 @@ eco-rangers/
 │   ├── main.rs         # TCP listener + per-connection threads
 │   ├── http.rs         # tiny HTTP/1.1 parser/writer, form + base64 decoding
 │   ├── web.rs          # routing, static files, API handlers
-│   ├── badge.rs        # the Climate Champion badge (generated SVG)
+│   ├── badge.rs        # the Climate Champion badge (generated SVG, kid-sticker style)
 │   └── store.rs        # reports CSV + photo storage, UTC date helpers
 └── static/
-    ├── index.html      # page 1: the cover (poster + two doors)
-    ├── challenge.html  # page 2: the 5-day challenge + board game corner
-    │                   #   + the ranger log-in band (#log-in: report form + badge)
-    ├── css/styles.css
-    ├── js/app.js       # shared by both pages (element lookups optional)
-    └── img/            # hero artwork, right-looking game logo,
-                        # favicon, QR code, sample badge, game cover
+    ├── index.html      # the ONE page: full-screen poster hero → five missions
+    │                   #   → meet the friends → board game → log your win + badge
+    ├── 404.html        # themed not-found page
+    ├── css/styles.css  # kid edition: big type, bouncy animations (reduced-motion safe)
+    ├── js/app.js       # stats + report + badge downloads + static-host demo mode
+    └── img/            # poster hero, game logo, favicon, sample badge,
+                        #   game cover, and the generated character artwork
+                        #   (mascot, Binny, Snack Squad, Trash Busters, 5 day scenes)
 ```
 
 ## Content sources
 
-All copy on the page comes from the campaign material: the five day missions
-from the *Eco Rangers Challenge Cards*, the game flow and the 15 referee
-questions from the *Eco Rangers Guide Book*, and the artwork (hero poster) from
-the supplied PNG. The logo is the right-looking variant from the *Eco Rangers
-Game Logo* sheet (page 1 — the ranger girl beside the wordmark), and the QR
-code in the hero's green box points at the live site so a poster can be
-scanned straight to the report form.
+All copy comes from the campaign material: the five day missions from the
+*Eco Rangers Challenge Cards*, and the game flow from the *Eco Rangers Guide
+Book*. The hero is the campaign poster, filling the whole first screen. The
+character artwork (Ranger Kid, Binny, the Snack Squad, the Trash Busters and
+the five day scenes) was generated in the poster's flat cartoon style so the
+site feels like one drawn world. The logo is the right-looking variant from
+the *Eco Rangers Game Logo* sheet.
 
 ## Build a release binary
 

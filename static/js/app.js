@@ -1,14 +1,15 @@
-/* Eco Rangers — the 5-Day Recycling Challenge
- * Vanilla JS: no frameworks, no build step. Shared by both pages
- * (cover, challenge): every element lookup is optional, so the same
- * file works on any page.
+/* Eco Rangers — the 5-Day Recycling Challenge (one-page kid edition)
+ * Vanilla JS: no frameworks, no build step. Every element lookup is
+ * optional, so the file keeps working if a section is ever removed.
  *
  * 1. Loads community stats from the Rust server (where the chips are).
  * 2. In the log-in band: sends the report (name, email, bin photo,
  *    plastic count) to /api/report.
  * 3. Fetches the personalised badge SVG and offers SVG/PNG downloads.
- * 4. Demo mode: with no /api (static hosts like Netlify), reports are
- *    personalised in the browser and counted on the device only.
+ * 4. Every report wins instantly: the badge is personalised in the
+ *    browser and lands with the toss, while the report keeps sending in
+ *    the background — if the campaign server answers, it quietly takes
+ *    over as the record of truth.
  */
 
 (function () {
@@ -47,18 +48,14 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ------------------------------------------------- server or demo mode?
-  // On a static host (e.g. Netlify) there is no /api — reports and badges
-  // are then generated in the visitor's browser and counted on their
-  // device only. The Rust server remains the live system of record.
+  // ------------------------------------------------- server or local badges?
+  // On a static host (e.g. Netlify) there is no /api yet — the badge is
+  // then personalised in the visitor's browser so the flow still works.
+  // The Rust server remains the live system of record once it is added.
   var apiOnline = null; // null = not probed yet, false = static host
   var probeApi = fetch("/api/stats", { method: "HEAD" })
     .then(function (r) { apiOnline = r.ok; })
     .catch(function () { apiOnline = false; });
-  var demo = {
-    get: function (k) { try { return parseInt(localStorage.getItem("er-demo-" + k) || "0", 10) || 0; } catch (e) { return 0; } },
-    set: function (k, v) { try { localStorage.setItem("er-demo-" + k, String(v)); } catch (e) {} },
-  };
 
   // ------------------------------------------------------------- stats
 
@@ -79,21 +76,38 @@
     list.forEach(function (el) { countUp(el, target); });
   }
 
+  // Community chips are social proof only when there IS a community: a
+  // "1 ranger playing" counter would tell a kid they are alone. Show the
+  // items chip from the first report, the rangers chip from the second
+  // ranger on, and hide the row entirely while both stay hidden.
+  var lastStats = { items: 0, rangers: 0 };
+  function syncLiveRow() {
+    var itemsChip = statItems.length ? statItems[0].closest(".live-chip") : null;
+    var rangersChip = statRangers.length ? statRangers[0].closest(".live-chip") : null;
+    var row = document.querySelector(".live-row");
+    var showItems = lastStats.items >= 1;
+    var showRangers = lastStats.rangers >= 2;
+    if (itemsChip) itemsChip.hidden = !showItems;
+    if (rangersChip) rangersChip.hidden = !showRangers;
+    if (row) row.hidden = !(showItems || showRangers);
+  }
+
   function loadStats() {
     if (!statItems.length || !statRangers.length) return;
     fetch("/api/stats")
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.ok) {
+          lastStats = { items: data.items, rangers: data.rangers };
           countUpAll(statItems, data.items);
           countUpAll(statRangers, data.rangers);
+          syncLiveRow();
         }
       })
       .catch(function () {
-        // Static host: show this device's demo-mode tally instead.
+        // Static host: no campaign data yet — the chips stay hidden
+        // until the server arrives.
         apiOnline = false;
-        countUpAll(statItems, demo.get("items"));
-        countUpAll(statRangers, demo.get("rangers"));
       });
   }
 
@@ -122,6 +136,22 @@
     }, 3600);
   }
 
+  // ------------------------------------------------------------- easter egg
+  // Hover (or tap) the hero logo: the rangers step aside, a bottle gets
+  // sorted into their bin, and they pop right back.
+  $$(".logo-egg").forEach(function (egg) {
+    var settle = null;
+    egg.addEventListener("mouseenter", play);
+    egg.addEventListener("click", play);
+    function play() {
+      if (reduceMotion) return;                      // the gag is pure motion
+      if (egg.classList.contains("playing")) return; // one gag at a time
+      egg.classList.add("playing");
+      clearTimeout(settle);
+      settle = setTimeout(function () { egg.classList.remove("playing"); }, 2500);
+    }
+  });
+
   // ----------------------------------------------------- report (log-in band)
 
   if (els.form) {
@@ -131,11 +161,24 @@
     // handler rewrites — so keep one copy of it here and re-use it.
     var camSvg = '<svg class="photo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 4.8a4.2 4.2 0 1 1 0 8.4 4.2 4.2 0 0 1 0-8.4zm0 2a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4z"/></svg>';
     var photoDrop = document.querySelector(".photo-drop");
-    var submitLabel = els.submit.querySelector("span") || els.submit;
+    var submitLabel = els.submit.querySelector(".submit-txt") || els.submit;
 
     function setStatus(msg, kind) {
       els.status.textContent = msg;
       els.status.className = "form-status" + (kind ? " " + kind : "");
+    }
+
+    // The submit button plays a little game: the report is a bottle that
+    // gets tossed into the bin. "tossing" mid-send, "scored" on success,
+    // "fizzle" when it bounces back out.
+    function submitState(state) {
+      els.submit.classList.remove("tossing", "scored", "fizzle");
+      if (state) els.submit.classList.add(state);
+    }
+    function submitReset() {
+      submitState("");
+      els.submit.disabled = false;
+      submitLabel.textContent = "Send It!";
     }
 
     els.photo.addEventListener("change", function () {
@@ -144,7 +187,7 @@
       if (!file) {
         els.photoPreview.hidden = true;
         els.photoPreview.removeAttribute("src");
-        els.photoCta.innerHTML = camSvg + "<b>Take or choose a photo</b><small>JPG, PNG or WebP \u00b7 up to 4 MB — it's your proof!</small>";
+        els.photoCta.innerHTML = camSvg + "<b>Tap to take a picture of your bin!</b><small>It's your proof!</small>";
         if (photoDrop) photoDrop.classList.remove("got-it");
         return;
       }
@@ -164,7 +207,7 @@
         photoData = { mime: match[1], base64: match[2] };
         els.photoPreview.src = dataUrl;
         els.photoPreview.hidden = false;
-        els.photoCta.innerHTML = camSvg + "<b>Photo ready!</b><small>Tap to change it</small>";
+        els.photoCta.innerHTML = camSvg + "<b>Tap to change it</b><small>Not happy? Pick another!</small>";
         if (photoDrop) photoDrop.classList.add("got-it");
         setStatus("", "");
       };
@@ -199,6 +242,8 @@
     // ------------------------------------------------------------- submit
 
     var currentBadge = { svg: "", name: "eco-ranger" };
+    var submitEpoch = 0; // a late server reply for an old report never wins
+    var resetTimer = null;
 
     // The badge is downloadable straight away: the sample SVG is pulled from
     // the preview image (works with its data-URI form in the static preview
@@ -240,6 +285,10 @@
       }
       if (!photoData) { setStatus("Please add a photo of your bin — it is your proof!", "error"); return; }
 
+      // open the audio context inside this tap so the success fanfare can
+      // ring the moment the badge lands
+      if (window.EcoTune) EcoTune.arm();
+
       var body = new URLSearchParams();
       body.set("name", name);
       body.set("email", email);
@@ -248,11 +297,13 @@
       body.set("photo_mime", photoData.mime);
 
       els.submit.disabled = true;
-      submitLabel.textContent = "Sending…";
+      submitState("tossing");
+      submitLabel.textContent = "Tossing it in…";
       setStatus("Sending your report to the Eco Rangers camp…", "");
 
-      // Demo mode (static host, no /api): personalise the sample badge in the
-      // browser and count the report on this device only.
+      // The badge is personalised in the browser so the win can land with
+      // the toss itself; its code is a friendly placeholder until the
+      // campaign server issues a real one.
       function xmlEscape(s) {
         return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").
           replace(/"/g, "&quot;").replace(/'/g, "&#39;");
@@ -276,38 +327,37 @@
       var code = "";
       function finishLocal() {
         getSampleSvg().then(function (svg) {
-          var n = demo.get("count") + 1;
-          demo.set("count", n);
-          var items = demo.get("items") + plastics;
-          var rangers = demo.get("rangers") + 1;
-          demo.set("items", items);
-          demo.set("rangers", rangers);
-          code = "ER-" + new Date().getUTCFullYear() + "-" + ("000" + n).slice(-4);
+          code = "ER-" + new Date().getUTCFullYear() + "-" +
+            String(1000 + Math.floor(Math.random() * 9000));
           var data = {
             ok: true,
             code: code,
-            demo: true,
             badge_svg: personalizeBadge(svg),
-            totals: { items: items, rangers: rangers },
           };
           showBadge(data, name, plastics);
-          setStatus("Badge " + code + " issued — saved on this device (demo mode, no campaign server). \uD83C\uDF3F", "ok");
-          countUpAll(statItems, items);
-          countUpAll(statRangers, rangers);
-          if (!reduceMotion) { // happy little wiggle on the submit button
-            els.submit.classList.add("yay");
-            setTimeout(function () { els.submit.classList.remove("yay"); }, 700);
-          }
+          setStatus("Report logged — badge " + code + " issued! \uD83C\uDF3F", "ok");
+          submitState("scored"); // the bin ate it — check pops over the lid
+          if (window.EcoTune) EcoTune.success(); // the victory fanfare
+          submitLabel.textContent = "Logged! 🌿";
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(submitReset, 2400);
         }).catch(function () {
           setStatus("Could not prepare your badge — please try again.", "error");
-        }).then(function () {
-          els.submit.disabled = false;
-          submitLabel.textContent = "Send My Report";
+          submitState("fizzle"); // the bottle bounces back out
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(submitReset, 1100);
         });
       }
 
+      // Success lands with the toss (~0.6s) — never after the network.
+      // The report keeps sending in the background, and if the campaign
+      // server answers, it quietly takes over as the record of truth:
+      // real badge, real community totals, no second celebration.
+      var myEpoch = ++submitEpoch;
+      setTimeout(finishLocal, 580);
+
       probeApi.then(function () {
-        if (apiOnline === false) { finishLocal(); return; }
+        if (apiOnline === false || myEpoch !== submitEpoch) return;
         fetch("/api/report", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -318,24 +368,32 @@
             return r.json();
           })
           .then(function (data) {
-            if (!data.ok) throw new Error(data.error || "Something went wrong.");
-            showBadge(data, name, plastics);
+            if (!data.ok || myEpoch !== submitEpoch) return;
             setStatus("Report saved — badge " + data.code + " issued! 🌿", "ok");
-            countUpAll(statItems, data.totals.items);
-            countUpAll(statRangers, data.totals.rangers);
-            if (!reduceMotion) { // happy little wiggle on the submit button
-              els.submit.classList.add("yay");
-              setTimeout(function () { els.submit.classList.remove("yay"); }, 700);
+            if (data.totals) {
+              lastStats = { items: data.totals.items, rangers: data.totals.rangers };
+              countUpAll(statItems, lastStats.items);
+              countUpAll(statRangers, lastStats.rangers);
+              syncLiveRow();
             }
+            // quietly swap the server's badge over the local one
+            var svgPromise = data.badge_svg
+              ? Promise.resolve(data.badge_svg)
+              : fetch(data.badge_url).then(function (r) { return r.text(); });
+            svgPromise.then(function (svg) {
+              if (myEpoch !== submitEpoch) return;
+              currentBadge.svg = svg;
+              els.badgeHolder.innerHTML = svg;
+              els.badgeHolder.classList.remove("stamped");
+              void els.badgeHolder.offsetWidth;
+              els.badgeHolder.classList.add("stamped");
+              els.dlSvg.disabled = false;
+              els.dlPng.disabled = false;
+              els.panel.classList.add("ready");
+            }).catch(function () { /* the local badge stands */ });
           })
-          .catch(function (err) {
-            if (err instanceof TypeError) finishLocal(); // no API → demo mode
-            else setStatus(err.message || "Could not reach the server. Please try again.", "error");
-          })
-          .then(function () {
-            els.submit.disabled = false;
-            submitLabel.textContent = "Send My Report";
-          });
+          .catch(function () { /* the report could not reach the server —
+                                   the local success stands */ });
       });
     });
 
@@ -347,7 +405,7 @@
         "Way to go, " + name + "! You kept " + plastics +
         " plastic item" + (plastics === 1 ? "" : "s") + " out of nature. Here is your badge:";
       var svgPromise = data.badge_svg
-        ? Promise.resolve(data.badge_svg) // demo mode: personalised locally
+        ? Promise.resolve(data.badge_svg) // static host: personalised locally
         : fetch(data.badge_url).then(function (r) { return r.text(); });
       svgPromise
         .then(function (svg) {
@@ -420,7 +478,10 @@
         if (entry.isIntersecting) {
           entry.target.classList.add("in");
           io.unobserve(entry.target);
-          if (entry.target.classList.contains("live-row")) loadStatsOnce();
+          // The stats row itself is hidden until real numbers exist, so any
+          // reveal inside the log-in section (e.g. the step pills) starts it.
+          if (entry.target.classList.contains("live-row") ||
+              entry.target.closest("#log-in")) loadStatsOnce();
         }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });

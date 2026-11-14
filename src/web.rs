@@ -17,11 +17,10 @@ pub fn handle(req: &Request) -> Response {
             r.cache_control = "no-cache".to_string();
             r
         }
-        // The two pages of the campaign site (pretty, extensionless URLs).
-        ("GET", "/challenge") => static_file("challenge.html"),
-        // The log-in section lives on the challenge page now; old links and
-        // QR codes keep working via a redirect.
-        ("GET", "/login") | ("GET", "/login.html") => redirect("/challenge#log-in"),
+        // The whole campaign lives on ONE page now; old two-page links keep
+        // working via redirects to the right section of that page.
+        ("GET", "/challenge") | ("GET", "/challenge.html") => redirect("/#missions"),
+        ("GET", "/login") | ("GET", "/login.html") => redirect("/#log-in"),
         ("GET", "/api/stats") => api_stats(),
         ("GET", "/api/badge") => api_badge(req),
         ("POST", "/api/report") => api_report(req),

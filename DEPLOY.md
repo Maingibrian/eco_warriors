@@ -48,17 +48,12 @@ Every push to `main` now redeploys automatically.
   serves `challenge.html` via Netlify's pretty URLs.
 - **404s:** `static/404.html` is served for unknown paths.
 
-## The QR code and your Netlify URL
+## The old QR code
 
-The printed QR on the poster (and `static/img/qr-scan.png`) encodes the
-campaign's preview URL. If Netlify becomes the campaign's real home,
-regenerate it for your Netlify URL so phones land on the live site:
-
-```bash
-# in this repo's workspace (scripts/gen_qr_logo.py)
-# edit PUBLIC_URL to https://<site-name>.netlify.app/ and run it,
-# then commit the new static/img/qr-scan.png
-```
+The hero QR sticker was removed from the site — the page is meant to be
+opened directly (the big "How to Play" button starts the fun). If you ever
+want a scannable poster code again, generate one that points at your
+Netlify URL and print it on the physical poster instead of the screen.
 
 ## Later: switching the form to live mode
 
@@ -75,5 +70,5 @@ serves everything itself.
 ```bash
 cd static
 python3 -m http.server 3001
-# open http://localhost:3001/ — pages, poster, QR, demo-mode form
+# open http://localhost:3001/ — poster hero, characters, demo-mode form
 ```

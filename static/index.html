@@ -4,104 +4,413 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Eco Rangers · The 5-Day Recycling Challenge</title>
-  <meta name="description" content="Segregation at the source. Behaviour change for good. Join the Eco Rangers 5-Day Recycling Challenge, log the plastic you segregated and earn your digital Climate Champion badge."/>
+  <meta name="description" content="One small mission every day for five days — build, place, label, check, snap! Join the Eco Rangers, log your win and earn your Climate Champion badge."/>
   <meta property="og:title" content="Eco Rangers · The 5-Day Recycling Challenge"/>
-  <meta property="og:description" content="Build, Place, Label, Check, Scan — then log your win and earn your Climate Champion badge."/>
+  <meta property="og:description" content="Build, Place, Label, Check, Snap — then log your win and earn your Climate Champion badge."/>
   <meta property="og:image" content="/img/hero.jpg"/>
   <link rel="icon" type="image/png" href="/img/favicon.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/css/styles.css"/>
+  <!-- hero art starts loading immediately: the CSS background is discovered
+       late, so preload it; the phone poster only preloads on small screens -->
+  <link rel="preload" as="image" href="/img/hero-landscape.webp" fetchpriority="high"/>
+  <link rel="preload" as="image" href="/img/hero-mobile.webp" media="(max-width: 760px)"/>
 </head>
 <body id="top">
 
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header" id="site-header">
-    <a class="brand" href="index.html" aria-label="Eco Rangers home">
-      <img src="/img/logo.png" alt="Eco Rangers logo: the smiling ranger girl looking right beside the stacked Eco Rangers wordmark" height="64"/>
-    </a>
-    <nav class="site-nav" aria-label="Main">
-      <a href="index.html" class="active" aria-current="page">Cover</a>
-      <a href="challenge.html">The Challenge</a>
-      <a href="challenge.html#log-in">Log In</a>
-    </nav>
-    <a class="btn btn-gold btn-nav" href="challenge.html#log-in">Get Your Badge</a>
-  </header>
-
   <main id="main">
 
-    <!-- ================= COVER ================= -->
+    <!-- ================= FULL-SCREEN HERO ================= -->
     <section class="hero" aria-label="Eco Rangers, the five-day recycling challenge">
+      <h1 class="sr-only">Eco Rangers — the 5-Day Recycling Challenge</h1>
       <div class="hero-bg" aria-hidden="true"></div>
-      <span class="hero-leaf l1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg></span>
-      <span class="hero-leaf l2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg></span>
-      <span class="hero-leaf l3" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg></span>
+      <!-- The logo and tagline float ABOVE the artwork as HTML layers:
+           depth and motion that a flat poster can never give. -->
+      <div class="hero-stage">
+        <div class="logo-egg">
+          <img class="hero-logo" src="/img/logo.webp" width="809" height="720"
+               fetchpriority="high" decoding="async"
+               alt="Eco Rangers logo: the smiling ranger girl looking right beside the stacked Eco Rangers wordmark"/>
+          <!-- easter egg: hover (or tap) the logo and a bottle gets sorted -->
+          <span class="egg-stage" aria-hidden="true">
+            <svg class="egg-bottle" viewBox="0 0 28 36">
+              <rect x="10" y="1.5" width="8" height="4.5" rx="2" fill="#1b5e20"/>
+              <path d="M10.6 5.5h6.8l1.8 4.2H8.8z" fill="#1d4f77"/>
+              <rect x="6.5" y="9" width="15" height="25.5" rx="5.5" fill="#1d4f77"/>
+              <rect x="6.5" y="18.5" width="15" height="7.5" fill="#2d6ca3"/>
+              <rect x="9.8" y="12" width="2.8" height="7.2" rx="1.4" fill="#fff" opacity=".92"/>
+            </svg>
+            <svg class="egg-bin" viewBox="0 0 38 38">
+              <g class="egg-lid">
+                <rect x="14.5" y="3.5" width="9" height="4.5" rx="2.2" fill="#2e7d32" stroke="#10401a" stroke-width="1.6"/>
+                <rect x="3.5" y="7.5" width="31" height="5.5" rx="2.75" fill="#2e7d32" stroke="#10401a" stroke-width="1.6"/>
+              </g>
+              <path d="M7 14.2h24l-1.8 18a3 3 0 0 1-3 2.9H11.8a3 3 0 0 1-3-2.9z"
+                    fill="#1b5e20" stroke="#10401a" stroke-width="1.6"/>
+              <g fill="#fff">
+                <path d="M19 16.6l2.7 4.7h-5.4z"/>
+                <path d="M11.4 27.2l3.5-1.8 2.3 4.1-5.6-.3z"/>
+                <path d="M26.6 27.2l-3.5-1.8-2.3 4.1 5.6-.3z"/>
+              </g>
+            </svg>
+            <i class="egg-spark s1"></i><i class="egg-spark s2"></i><i class="egg-spark s3"></i><i class="egg-spark s4"></i><i class="egg-spark s5"></i><i class="egg-spark s6"></i>
+            <svg class="egg-check" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10.6" fill="#2e7d32" stroke="#ffc107" stroke-width="2.6"/>
+              <path d="M6.5 12.5l3.6 3.8 7.4-8.6" fill="none" stroke="#fffdf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+        <p class="hero-tagline">
+          <span class="line">
+            <span class="w" style="--d:.45s">Segregation</span>
+            <span class="w" style="--d:.60s">at</span>
+            <span class="w" style="--d:.72s">the</span>
+            <span class="w" style="--d:.85s">source.</span>
+          </span>
+          <span class="line">
+            <span class="w" style="--d:1.10s">Behaviour</span>
+            <span class="w" style="--d:1.22s">change</span>
+            <span class="w" style="--d:1.34s">for</span>
+            <span class="w" style="--d:1.46s">good.</span>
+          </span>
+        </p>
+      </div>
+      <!-- On phones the hero is the portrait artwork, full-bleed, with the
+           same logo and tagline as floating layers — curated for the phone
+           canvas: sky for the words, hills to seat the buttons. -->
+      <div class="hero-mobile">
+        <img class="hm-art" src="/img/hero-mobile.webp" width="1052" height="1495"
+             fetchpriority="high" decoding="async"
+             alt="Cheerful environmental landscape: rolling green hills with a big leafy tree, smiling vegetable friends on one side, a bag of trash on the other, under a bright speckled sky"/>
+        <div class="hm-layers">
+          <div class="logo-egg">
+            <img class="hero-logo hm-logo" src="/img/logo.webp" width="809" height="720"
+                 decoding="async"
+                 alt="Eco Rangers logo: the smiling ranger girl looking right beside the stacked Eco Rangers wordmark"/>
+            <!-- the same easter egg, thumb-sized -->
+            <span class="egg-stage" aria-hidden="true">
+              <svg class="egg-bottle" viewBox="0 0 28 36">
+                <rect x="10" y="1.5" width="8" height="4.5" rx="2" fill="#1b5e20"/>
+                <path d="M10.6 5.5h6.8l1.8 4.2H8.8z" fill="#1d4f77"/>
+                <rect x="6.5" y="9" width="15" height="25.5" rx="5.5" fill="#1d4f77"/>
+                <rect x="6.5" y="18.5" width="15" height="7.5" fill="#2d6ca3"/>
+                <rect x="9.8" y="12" width="2.8" height="7.2" rx="1.4" fill="#fff" opacity=".92"/>
+              </svg>
+              <svg class="egg-bin" viewBox="0 0 38 38">
+                <g class="egg-lid">
+                  <rect x="14.5" y="3.5" width="9" height="4.5" rx="2.2" fill="#2e7d32" stroke="#10401a" stroke-width="1.6"/>
+                  <rect x="3.5" y="7.5" width="31" height="5.5" rx="2.75" fill="#2e7d32" stroke="#10401a" stroke-width="1.6"/>
+                </g>
+                <path d="M7 14.2h24l-1.8 18a3 3 0 0 1-3 2.9H11.8a3 3 0 0 1-3-2.9z"
+                      fill="#1b5e20" stroke="#10401a" stroke-width="1.6"/>
+                <g fill="#fff">
+                  <path d="M19 16.6l2.7 4.7h-5.4z"/>
+                  <path d="M11.4 27.2l3.5-1.8 2.3 4.1-5.6-.3z"/>
+                  <path d="M26.6 27.2l-3.5-1.8-2.3 4.1 5.6-.3z"/>
+                </g>
+              </svg>
+              <i class="egg-spark s1"></i><i class="egg-spark s2"></i><i class="egg-spark s3"></i><i class="egg-spark s4"></i><i class="egg-spark s5"></i><i class="egg-spark s6"></i>
+              <svg class="egg-check" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10.6" fill="#2e7d32" stroke="#ffc107" stroke-width="2.6"/>
+                <path d="M6.5 12.5l3.6 3.8 7.4-8.6" fill="none" stroke="#fffdf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <p class="hero-tagline hm-tagline">
+            <span class="line">
+              <span class="w" style="--d:.45s">Segregation</span>
+              <span class="w" style="--d:.60s">at</span>
+              <span class="w" style="--d:.72s">the</span>
+              <span class="w" style="--d:.85s">source.</span>
+            </span>
+            <span class="line">
+              <span class="w" style="--d:1.10s">Behaviour</span>
+              <span class="w" style="--d:1.22s">change</span>
+              <span class="w" style="--d:1.34s">for</span>
+              <span class="w" style="--d:1.46s">good.</span>
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="hero-bottom">
+        <a class="btn btn-gold btn-lg btn-play reveal in" href="#missions">Start the Challenge!&nbsp;▶</a>
+        <a class="hero-alt reveal in" href="#log-in">Already finished? Log your win&nbsp;↓</a>
+      </div>
+      <span class="scroll-cue" aria-hidden="true">▼</span>
+    </section>
 
-      <div class="hero-frame">
-        <picture>
-          <source type="image/webp" srcset="/img/hero.webp"/>
-          <img src="/img/hero.jpg" width="1600" height="900"
-               alt="Eco Rangers poster: a smiling ranger girl in a safari hat beside the title and tagline 'Segregation at the source. Behaviour change for good.', with cheerful food-scrap characters on one side, a leaking trash bag and a plastic bottle on the other, and a big tree between them"/>
-        </picture>
-        <!-- The Scan-me sticker, bottom-right, carries the QR code. -->
-        <a class="hero-qr" href="challenge.html#log-in" title="Scan me — or tap — to log your win">
-          <span class="qr-label" aria-hidden="true">Scan me!</span>
-          <img src="/img/qr-scan.png" alt="QR code: scan to open the Eco Rangers report form and earn your Climate Champion badge"/>
-        </a>
+    <!-- ================= LOG YOUR WIN (second section) ================= -->
+    <section class="section log-band" id="log-in">
+      <!-- lazy doodles drifting behind the band, like thoughts about trash -->
+      <svg class="doodle d1" viewBox="0 0 40 56" aria-hidden="true">
+        <rect x="14" y="2" width="12" height="6" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M16 8h8l2 5H14z" fill="none" stroke="currentColor" stroke-width="2.6"/>
+        <rect x="9" y="13" width="22" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M13.5 30c5-2.4 8 2.4 13 0" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <svg class="doodle d2" viewBox="0 0 56 56" aria-hidden="true">
+        <path d="M28 50C14 42 8 30 10 16c14-4 28 2 32 16 2.6 9-4 16-14 18z" fill="none" stroke="currentColor" stroke-width="2.6"/>
+        <path d="M16 44C22 32 30 24 40 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <div class="wrap">
+        <p class="eyebrow reveal">🏆 Mission complete?</p>
+        <h2 class="reveal">Log Your Win!</h2>
+        <p class="lead reveal">
+          Take a photo of your bin, count your plastic, and send it —
+          your Climate Champion badge appears like magic!
+        </p>
+
+        <div class="bubble-trail reveal">
+          <svg class="trail-path" viewBox="0 0 1000 170" preserveAspectRatio="none" aria-hidden="true">
+            <path class="trail-line" fill="none"
+                  d="M5 132 C 30 152, 60 96, 105 62 C 140 32, 190 24, 221 24 C 252 24, 268 60, 296 96 C 322 130, 344 148, 370 148 C 396 148, 414 116, 446 84 C 474 56, 494 24, 521 24 C 548 24, 566 58, 600 96 C 630 130, 652 153, 677 153 C 702 153, 724 118, 760 88 C 810 44, 900 34, 995 40"/>
+          </svg>
+          <ol class="steps-trail" aria-label="The five steps">
+            <li class="bub" style="--i:0"><span class="n">1</span>Build</li>
+            <li class="bub" style="--i:1"><span class="n">2</span>Place</li>
+            <li class="bub" style="--i:2"><span class="n">3</span>Label</li>
+            <li class="bub" style="--i:3"><span class="n">4</span>Check</li>
+            <li class="bub now" style="--i:4"><span class="n">5</span>Snap it — log it!</li>
+          </ol>
+        </div>
+
+        <div class="live-row reveal" hidden>
+          <p class="live-chip"><span class="live-dot" aria-hidden="true"></span><span class="live-num" id="stat-items">0</span> plastic items rescued</p>
+          <p class="live-chip"><span class="live-dot" aria-hidden="true"></span><span class="live-num" id="stat-rangers">0</span> Eco Rangers playing</p>
+        </div>
+
+        <div class="log-layout">
+
+          <form id="report-form" class="card form-card reveal" novalidate>
+            <div class="mascot-sticker" aria-hidden="true">
+              <img src="/img/mascot.webp" width="640" height="640" alt=""/>
+            </div>
+
+            <h3>My Ranger Report ✨</h3>
+
+            <div class="field">
+              <label for="f-name">Your Ranger name</label>
+              <input id="f-name" name="name" type="text" maxlength="40" placeholder="e.g. Amina" autocomplete="name" required/>
+            </div>
+
+            <div class="field">
+              <label for="f-email">Email <span class="hint">(we send your badge here)</span></label>
+              <input id="f-email" name="email" type="email" maxlength="80" placeholder="you@example.com" autocomplete="email" required/>
+            </div>
+
+            <div class="field">
+              <span class="label-text" id="photo-label">Photo of your bin 📸</span>
+              <label class="photo-drop" for="f-photo">
+                <input id="f-photo" type="file" accept="image/*" capture="environment" hidden aria-labelledby="photo-label"/>
+                <img id="photo-preview" class="photo-preview" alt="Preview of your bin photo" hidden/>
+                <span class="photo-cta" id="photo-cta"><svg class="photo-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 4.8a4.2 4.2 0 1 1 0 8.4 4.2 4.2 0 0 1 0-8.4zm0 2a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4z"/></svg><b>Tap to take a picture of your bin!</b><small>It's your proof!</small></span>
+              </label>
+            </div>
+
+            <div class="field">
+              <label for="f-plastics">How many bottles and tubs did you sort?</label>
+              <div class="stepper">
+                <button type="button" id="step-down" aria-label="One less">−</button>
+                <input id="f-plastics" type="number" min="1" max="100000" step="1" value="10" inputmode="numeric" required/>
+                <button type="button" id="step-up" aria-label="One more">+</button>
+              </div>
+            </div>
+
+            <button class="btn btn-gold btn-submit" id="submit-btn" type="submit">
+              <span class="submit-txt">Send It!</span>
+              <span class="toss-stage" aria-hidden="true">
+                <!-- the report is a bottle: rest → toss → the bin eats it.
+                     Dark navy + forest art so it pops on the gold. -->
+                <svg class="toss-bottle" viewBox="0 0 28 36">
+                  <rect x="10" y="1.5" width="8" height="4.5" rx="2" fill="#1b5e20"/>
+                  <path d="M10.6 5.5h6.8l1.8 4.2H8.8z" fill="#1d4f77"/>
+                  <rect x="6.5" y="9" width="15" height="25.5" rx="5.5" fill="#1d4f77"/>
+                  <rect x="6.5" y="18.5" width="15" height="7.5" fill="#2d6ca3"/>
+                  <rect x="9.8" y="12" width="2.8" height="7.2" rx="1.4" fill="#fff" opacity=".92"/>
+                </svg>
+                <svg class="toss-bin" viewBox="0 0 38 38">
+                  <g class="bin-lid">
+                    <rect x="14.5" y="3.5" width="9" height="4.5" rx="2.2" fill="#2e7d32" stroke="#10401a" stroke-width="1.6"/>
+                    <rect x="3.5" y="7.5" width="31" height="5.5" rx="2.75" fill="#2e7d32" stroke="#10401a" stroke-width="1.6"/>
+                  </g>
+                  <path d="M7 14.2h24l-1.8 18a3 3 0 0 1-3 2.9H11.8a3 3 0 0 1-3-2.9z"
+                        fill="#1b5e20" stroke="#10401a" stroke-width="1.6"/>
+                  <g fill="#fff">
+                    <path d="M19 16.6l2.7 4.7h-5.4z"/>
+                    <path d="M11.4 27.2l3.5-1.8 2.3 4.1-5.6-.3z"/>
+                    <path d="M26.6 27.2l-3.5-1.8-2.3 4.1 5.6-.3z"/>
+                  </g>
+                </svg>
+                <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
+                <svg class="toss-check" viewBox="-8 -8 16 16">
+                  <circle r="6.4" fill="#1b5e20" stroke="#fffdf6" stroke-width="1.6"/>
+                  <path d="M-3 .2l2 2.3 3.4-4" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            <p class="fine">🛡️ We save your report and make your badge — nothing else. No spam, ever.</p>
+          </form>
+
+          <aside class="card badge-panel reveal" id="badge-panel" aria-live="polite">
+            <h3>Climate Champion!</h3>
+            <p id="badge-text">Your badge is ready right now — send your report and it turns into YOUR badge, with your name and your count on it!</p>
+            <div class="badge-holder" id="badge-holder">
+              <span class="sample-tag" aria-hidden="true">Sample</span>
+              <img src="/img/badge-sample.svg" alt="Sample Climate Champion badge: a colourful sticker rosette reading Eco Rangers" loading="lazy"/>
+            </div>
+            <div class="badge-actions" id="badge-actions">
+              <button class="btn btn-gold" id="dl-png" type="button" disabled>Save My Badge 🖼️</button>
+              <button class="btn btn-ghost" id="dl-svg" type="button" disabled title="Downloads the badge as an SVG file that stays sharp when printed">Print it!</button>
+            </div>
+            <p class="fine" id="badge-fine">Send your report to make it official — your name, your count, your own badge code.</p>
+          </aside>
+        </div>
       </div>
     </section>
 
-    <!-- ================= TICKER ================= -->
-    <div class="ticker" aria-hidden="true">
-      <p class="sr-only">The five steps: build, place, label, check, scan. Segregation at the source. Behaviour change for good.</p>
-      <div class="ticker-track">
-        <div class="tick-group">
-          <span>Build</span><i>✦</i><span>Place</span><i>✦</i><span>Label</span><i>✦</i><span>Check</span><i>✦</i><span>Scan</span><i>✦</i><span>Segregation at the source</span><i>✦</i><span>Behaviour change for good</span><i>✦</i>
-        </div>
-        <div class="tick-group">
-          <span>Build</span><i>✦</i><span>Place</span><i>✦</i><span>Label</span><i>✦</i><span>Check</span><i>✦</i><span>Scan</span><i>✦</i><span>Segregation at the source</span><i>✦</i><span>Behaviour change for good</span><i>✦</i>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= TWO DOORS ================= -->
-    <section class="section doors-section">
-      <span class="starburst s1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.6 6.2L21 4l-2.2 6.4L24 12l-5.2 1.6L21 20l-6.4-2.2L12 24l-2.6-6.2L3 20l2.2-6.4L0 12l5.2-1.6L3 4l6.4 2.2z"/></svg></span>
-      <span class="starburst s2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.6 6.2L21 4l-2.2 6.4L24 12l-5.2 1.6L21 20l-6.4-2.2L12 24l-2.6-6.2L3 20l2.2-6.4L0 12l5.2-1.6L3 4l6.4 2.2z"/></svg></span>
+    <!-- ================= HOW TO PLAY ================= -->
+    <section class="section missions" id="missions">
       <div class="wrap">
-        <p class="eyebrow reveal">The cover is just the start…</p>
-        <h2 class="reveal">Ready, Rangers? Pick Your Door!</h2>
+        <p class="eyebrow reveal">🌱 Your five missions</p>
+        <h2 class="reveal">How to Play</h2>
         <p class="lead reveal">
-          Two ways to play: dive into the five-day challenge, or — if you have already
-          finished it — head straight to the log-in and claim your badge.
+          One small mission every day. By Friday you are a recycling hero!
         </p>
 
-        <div class="doors">
-          <a class="door door-mint reveal" href="challenge.html">
-            <span class="door-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-            </span>
-            <h3>Play the Challenge</h3>
-            <p>Five days, five missions — one small win for the planet every single day.</p>
-            <span class="door-pills" aria-hidden="true"><b>Build</b><b>Place</b><b>Label</b><b>Check</b><b>Scan</b></span>
-            <span class="btn btn-primary">See the 5 Missions →</span>
-          </a>
+        <ol class="trail">
+          <li class="stop c1 reveal">
+            <span class="stop-num" aria-hidden="true">1</span>
+            <img class="stop-art" src="/img/day1-build.webp" width="640" height="640"
+                 alt="A happy cardboard box being decorated into a recycling bin with stickers and paint" loading="lazy"/>
+            <div class="stop-body">
+              <h3>Build Your Bin!</h3>
+              <p>Grab a box. Make it yours. Stickers allowed!</p>
+              <p class="tip-pill"><b>Ranger tip:</b> cereal boxes make great bins!</p>
+            </div>
+          </li>
 
-          <a class="door door-gold reveal" href="challenge.html#log-in">
-            <span class="door-badge" aria-hidden="true">
-              <img src="/img/badge-sample.svg" alt="" loading="lazy"/>
-            </span>
-            <h3>Log Your Win</h3>
-            <p>Finished all five missions? Take a photo, count your plastic, claim your badge!</p>
-            <span class="btn btn-gold">Get Your Badge →</span>
-          </a>
+          <li class="stop c2 reveal">
+            <span class="stop-num" aria-hidden="true">2</span>
+            <img class="stop-art" src="/img/day2-place.webp" width="640" height="640"
+                 alt="A smiling recycling bin standing proudly in a kitchen corner" loading="lazy"/>
+            <div class="stop-body">
+              <h3>Pick Its Spot!</h3>
+              <p>Park it where the trash happens. The kitchen wins!</p>
+              <p class="tip-pill"><b>Ranger tip:</b> close to the action!</p>
+            </div>
+          </li>
+
+          <li class="stop c3 reveal">
+            <span class="stop-num" aria-hidden="true">3</span>
+            <img class="stop-art" src="/img/day3-label.webp" width="640" height="640"
+                 alt="A smiling recycling bin holding up a big sign with a bottle and a green tick" loading="lazy"/>
+            <div class="stop-body">
+              <h3>Make a Big Label!</h3>
+              <p>Draw a huge sign: PLASTIC GOES HERE!</p>
+              <p class="tip-pill"><b>Ranger tip:</b> fat markers, HUGE letters!</p>
+            </div>
+          </li>
+
+          <li class="stop c4 reveal">
+            <span class="stop-num" aria-hidden="true">4</span>
+            <img class="stop-art" src="/img/day4-check.webp" width="640" height="640"
+                 alt="A happy child giving a thumbs up beside a recycling bin, with a grown-up hand also giving a thumbs up" loading="lazy"/>
+            <div class="stop-body">
+              <h3>Grown-Up Check!</h3>
+              <p>Show a grown-up. Make sure they use it right!</p>
+              <p class="tip-pill"><b>Ranger tip:</b> rangers are polite but firm!</p>
+            </div>
+          </li>
+
+          <li class="stop c5 reveal">
+            <span class="stop-num" aria-hidden="true">5</span>
+            <img class="stop-art" src="/img/day5-photo.webp" width="640" height="640"
+                 alt="A smiling recycling bin taking a selfie with a camera" loading="lazy"/>
+            <div class="stop-body">
+              <h3>Snap Your Proof!</h3>
+              <p>Take a photo of your bin — then log your win!</p>
+              <p class="tip-pill"><b>Ranger tip:</b> big smile, big bin!</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= MEET THE FRIENDS ================= -->
+    <section class="section friends-section" id="friends">
+      <div class="wrap">
+        <p class="eyebrow reveal">🌿 Say hello!</p>
+        <h2 class="reveal">Meet the Eco Rangers!</h2>
+        <p class="lead reveal">These are the friends you will meet on your mission.</p>
+
+        <div class="friend-grid">
+          <article class="friend-card reveal">
+            <img src="/img/mascot.webp" width="640" height="640"
+                 alt="The Eco Rangers kid mascot in a green bucket hat and backpack, waving hello" loading="lazy"/>
+            <h3>Ranger Kid</h3>
+            <p>“Hi! I am the boss of this adventure. Join me!”</p>
+          </article>
+
+          <article class="friend-card reveal">
+            <img src="/img/char-binny.webp" width="640" height="640"
+                 alt="Binny, a smiling green recycling bin character holding a plastic bottle" loading="lazy"/>
+            <h3>Binny</h3>
+            <p>“Feed me your plastic! I am ALWAYS hungry.”</p>
+          </article>
+
+          <article class="friend-card reveal">
+            <img src="/img/char-scraps.webp" width="640" height="640"
+                 alt="The Snack Squad: a smiling pepper, carrot and corn cob" loading="lazy"/>
+            <h3>The Snack Squad</h3>
+            <p>“We turn into plant food! Ask about compost.”</p>
+          </article>
+
+          <article class="friend-card reveal">
+            <img src="/img/char-trash.webp" width="640" height="640"
+                 alt="The Trash Busters: a happy grey trash bag and a cheerful plastic bottle" loading="lazy"/>
+            <h3>The Trash Busters</h3>
+            <p>“Leaky bag? Sticky bottle? Keep them out of nature!”</p>
+          </article>
         </div>
+      </div>
+    </section>
 
-        <div class="live-row reveal">
-          <p class="live-chip"><span class="live-dot" aria-hidden="true"></span><span class="live-num" id="stat-items">0</span> plastic items segregated</p>
-          <p class="live-chip"><span class="live-dot" aria-hidden="true"></span><span class="live-num" id="stat-rangers">0</span> Eco Rangers on board</p>
+    <!-- ================= BOARD GAME CORNER ================= -->
+    <section class="section game-section" id="game">
+      <div class="wrap">
+        <p class="eyebrow reveal">🎲 Rainy day?</p>
+        <h2 class="reveal">Play the Board Game!</h2>
+        <p class="lead reveal">
+          Eco Rangers is also a real board game about spotting waste types —
+          grab the right card and race to the right bin!
+        </p>
+
+        <div class="game-cols">
+          <figure class="game-shot reveal">
+            <img src="/img/game-cover.webp" width="640" height="909"
+                 alt="Eco Rangers board game box cover: the superhero bin mascot, the game logo and player badges"
+                 loading="lazy"/>
+            <figcaption>From the official Eco Rangers guide book</figcaption>
+          </figure>
+
+          <div class="game-rules reveal">
+            <ul class="chips" aria-label="Game facts">
+              <li>2–5 players</li>
+              <li>6+ years</li>
+              <li>15 minutes</li>
+            </ul>
+            <ol class="flow">
+              <li><span class="n">1</span>The referee asks a question.</li>
+              <li><span class="n">2</span>Race to grab the card that answers it!</li>
+              <li><span class="n">3</span>Right? Jump to the matching bin. Most cards wins!</li>
+            </ol>
+          </div>
         </div>
       </div>
     </section>
@@ -110,24 +419,35 @@
   <footer class="site-footer">
     <div class="wrap footer-grid">
       <div class="footer-brand">
-        <img src="/img/logo.png" alt="" height="88" class="footer-logo" aria-hidden="true"/>
-        <p class="footer-tag">Segregation at the source.<br/>Behaviour change for good.</p>
+        <img src="/img/logo.webp" alt="" height="88" class="footer-logo" aria-hidden="true"/>
+        <p class="footer-tag">Sort your trash.<br/>Win your badge!</p>
       </div>
       <nav class="footer-links" aria-label="Footer">
-        <h4>Explore</h4>
-        <a href="index.html">Cover</a>
-        <a href="challenge.html">The Challenge</a>
-        <a href="challenge.html#log-in">Log Your Win</a>
-        <a href="/">Campaign portal</a>
+        <h4>Jump to</h4>
+        <a href="#log-in">Log Your Win</a>
+        <a href="#missions">How to Play</a>
+        <a href="#friends">Friends</a>
+        <a href="#game">Board Game</a>
       </nav>
       <div class="footer-note">
         <h4>Good to know</h4>
-        <p>Served by a tiny Rust server — no frameworks, no tracking. Your report and badge live on the Eco Rangers server.</p>
+        <p>A fun, safe place for young rangers — no ads, no tracking, just recycling.</p>
+        <p class="footer-contact">Questions? Call <a href="tel:0796337448">0796 337 448</a> · <a href="mailto:soraummy@gmail.com">soraummy@gmail.com</a></p>
         <p class="footer-copy">© 2026 Eco Rangers · The 5-Day Recycling Challenge</p>
       </div>
     </div>
   </footer>
 
+  <!-- Floating tune button: a little synthesized theme song, on by default
+       (it starts with the visitor's first tap) and always controllable. -->
+  <button id="tune-btn" class="tune-btn" type="button" aria-pressed="true"
+          title="Stop the tune">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/>
+    </svg>
+  </button>
+
+  <script src="/js/tune.js"></script>
   <script src="/js/app.js"></script>
 </body>
 </html>

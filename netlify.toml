@@ -6,16 +6,26 @@
   publish = "static"
   command = "echo 'Static site: no build step required'"
 
-# Same redirect the Rust server (src/web.rs) serves, so old links and
-# printed QR codes that point at /login keep working.
+# Same redirects the Rust server (src/web.rs) serves: the campaign is one
+# page now, so old two-page links land on the right section of that page.
+[[redirects]]
+  from = "/challenge"
+  to = "/#missions"
+  status = 302
+
+[[redirects]]
+  from = "/challenge.html"
+  to = "/#missions"
+  status = 302
+
 [[redirects]]
   from = "/login"
-  to = "/challenge#log-in"
+  to = "/#log-in"
   status = 302
 
 [[redirects]]
   from = "/login.html"
-  to = "/challenge#log-in"
+  to = "/#log-in"
   status = 302
 
 [[headers]]
@@ -25,8 +35,8 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
 
-# Assets are content-hashed by hand only on rename; keep them fresh for a
-# day so poster/QR swaps appear quickly without re-downloading every visit.
+# Assets are renamed on change; keep them fresh for a day so poster swaps
+# appear quickly without re-downloading every visit.
 [[headers]]
   for = "/img/*"
   [headers.values]

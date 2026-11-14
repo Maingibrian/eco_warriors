@@ -1,15 +1,15 @@
 /* ==========================================================================
-   Eco Rangers — The 5-Day Recycling Challenge
-   Cover + Log-Your-Win edition: cream paper, forest green, sunshine gold.
-   The whole deal: ambient hero backdrop, marquee ticker, QR scan-line,
-   floating leaves, 3D buttons with shine, springy reveals.
+   Eco Rangers — The 5-Day Recycling Challenge · KID EDITION (one page)
+   Full-bleed poster hero, numbered mission trail, sticker cards.
+   Everything big, round and friendly — made for young readers.
+   Section order: hero → log your win → how to play → friends → board game.
    ========================================================================== */
 
 :root {
   --cream: #f7f1e1;
   --paper: #fffdf6;
   --mint: #eef3e2;
-  --ink: #243b24;
+  --ink: #26391f;
   --ink-soft: #54704f;
   --forest: #1b5e20;
   --forest-deep: #10401a;
@@ -26,9 +26,6 @@
   --shadow: 0 12px 32px rgba(27, 94, 32, 0.12), 0 2px 6px rgba(27, 94, 32, 0.07);
   --shadow-lift: 0 20px 44px rgba(27, 94, 32, 0.18);
   --font-head: "Baloo 2", "Segoe UI", system-ui, sans-serif;
-  --font-script: "Caveat", "Segoe Script", cursive;
-  --header-h: 82px;
-  --hero-reserve: 112px;   /* hero padding + gold ticker + breathing room */
   --wave-up: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 26' preserveAspectRatio='none'%3E%3Cpath fill='%231b5e20' d='M0 26h1440V14c-180-12-360-14-540-6s-420 16-600 10S120 8 0 16v10z'/%3E%3C/svg%3E");
 }
 
@@ -43,9 +40,10 @@ body {
   margin: 0;
   font-family: var(--font-head);
   font-weight: 500;
+  font-size: 1.08rem;           /* bigger words for young readers */
   color: var(--ink);
   background: var(--cream);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -53,8 +51,8 @@ body {
 img { max-width: 100%; display: block; }
 
 h1, h2, h3, h4 { font-family: var(--font-head); color: var(--forest); line-height: 1.12; margin: 0 0 12px; }
-h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 800; }
-h3 { font-size: 1.3rem; font-weight: 700; }
+h2 { font-size: clamp(2.1rem, 4.8vw, 3rem); font-weight: 800; }
+h3 { font-size: 1.4rem; font-weight: 800; }
 h4 { font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
 
 a { color: var(--green); }
@@ -69,7 +67,7 @@ a { color: var(--green); }
 ::-webkit-scrollbar-thumb { background: var(--leaf); border-radius: 99px; border: 3px solid #efe8d4; }
 ::-webkit-scrollbar-thumb:hover { background: var(--green); }
 
-.wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -82,33 +80,18 @@ a { color: var(--green); }
 }
 .skip-link:focus { left: 0; }
 
-/* ------------------------------------------------------------------ header */
-
-.site-header {
-  position: sticky; top: 0; z-index: 50;
-  display: flex; align-items: center; gap: 20px;
-  padding: 10px clamp(16px, 4vw, 40px);
-  background: rgba(255, 253, 246, 0.94);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 2px solid var(--line);
-  transition: padding 0.25s ease, box-shadow 0.25s ease;
-}
-.site-header.scrolled { padding: 5px clamp(16px, 4vw, 40px); box-shadow: 0 6px 24px rgba(27, 94, 32, 0.14); }
-
-.brand img { height: 62px; width: auto; transition: height 0.25s ease; }
-.site-header.scrolled .brand img { height: 48px; }
-.brand { margin-right: auto; }
+/* no sticky header on this one-pager — sections sit close to the top */
+#missions, #friends, #game, #log-in { scroll-margin-top: 24px; }
 
 /* ------------------------------------------------------------------ buttons */
 
 .btn {
   position: relative; overflow: hidden;
   display: inline-block;
-  font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+  font-family: var(--font-head); font-weight: 800; font-size: 1.12rem;
   text-decoration: none; text-align: center; cursor: pointer;
-  border: none; border-radius: 16px;
-  padding: 12px 26px;
+  border: none; border-radius: 18px;
+  padding: 14px 28px;
   transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.15s ease, color 0.15s ease;
 }
 .btn:active { transform: translateY(3px); }
@@ -117,17 +100,25 @@ a { color: var(--green); }
 
 .btn-primary {
   background: var(--forest); color: #fff;
-  box-shadow: 0 5px 0 var(--forest-deep);
+  box-shadow: 0 6px 0 var(--forest-deep);
 }
-.btn-primary:hover:not(:disabled) { background: var(--green); transform: translateY(-2px); box-shadow: 0 7px 0 var(--forest-deep); }
+.btn-primary:hover:not(:disabled) { background: var(--green); transform: translateY(-2px); box-shadow: 0 8px 0 var(--forest-deep); }
 .btn-primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--forest-deep); }
 
 .btn-gold {
   background: var(--gold); color: var(--ink);
-  box-shadow: 0 5px 0 var(--gold-shadow);
+  box-shadow: 0 6px 0 var(--gold-shadow);
 }
-.btn-gold:hover:not(:disabled) { background: var(--gold-deep); color: #241d00; transform: translateY(-2px); box-shadow: 0 7px 0 var(--gold-shadow); }
+.btn-gold:hover:not(:disabled) { background: var(--gold-deep); color: #241d00; transform: translateY(-2px); box-shadow: 0 8px 0 var(--gold-shadow); }
 .btn-gold:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--gold-shadow); }
+
+/* quiet secondary button (e.g. the SVG download) */
+.btn-ghost {
+  background: var(--paper); color: var(--forest);
+  border: 2px solid var(--line);
+  box-shadow: 0 3px 0 rgba(27, 94, 32, 0.12);
+}
+.btn-ghost:hover:not(:disabled) { border-color: var(--leaf); transform: translateY(-2px); }
 
 /* shine sweep */
 .btn-gold::after {
@@ -139,260 +130,303 @@ a { color: var(--green); }
 }
 .btn-gold:hover::after { transform: translateX(130%); }
 
-.btn-lg { font-size: 1.1rem; padding: 15px 32px; border-radius: 18px; }
-.btn-nav { padding: 9px 20px; font-size: 0.95rem; }
-.btn-block { display: block; width: 100%; }
+.btn-lg { font-size: 1.34rem; padding: 19px 42px; border-radius: 24px; }
 
-/* ------------------------------------------------------------------ cover */
+/* ------------------------------------------------------- full-bleed hero */
+
+/* the whole-poster layout for small screens (set up here, shown below) */
+.hero-mobile { display: none; }
 
 .hero {
   position: relative;
-  padding: 20px 0 24px;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex; align-items: flex-end; justify-content: center;
   overflow: hidden;
-  background: var(--cream);
+  background: var(--forest);
 }
-
-/* ambient backdrop: blurred copy of the artwork fills the side bands */
+/* the landscape artwork fills the whole screen, corner to corner */
 .hero-bg {
-  position: absolute; inset: -48px;
-  background:
-    linear-gradient(rgba(247, 241, 225, 0.30), rgba(247, 241, 225, 0.30)),
-    url("/img/hero.webp") center / cover no-repeat;
-  filter: blur(32px) saturate(1.15) brightness(1.04);
-  transform: scale(1.08);
-  animation: fadeIn 1.4s ease both;
-  z-index: 0;
+  position: absolute; inset: 0;
+  background: url("/img/hero-landscape.webp") center / cover no-repeat;
+  animation: heroZoom 1.7s cubic-bezier(0.22, 0.9, 0.34, 1) both;
 }
-
-/* the poster itself — always fits the first screen, ticker included */
-.hero-frame {
-  position: relative;
-  z-index: 2;
-  width: min(100%, calc((100vh - var(--header-h) - var(--hero-reserve)) * 16 / 9));
-  width: min(100%, calc((100dvh - var(--header-h) - var(--hero-reserve)) * 16 / 9));
+/* the logo and tagline float ABOVE the artwork — depth, not a flat poster */
+.hero-stage {
+  position: absolute; z-index: 2;
+  top: clamp(10px, 2.5vh, 32px); left: 50%;
+  translate: -50% 0;
+  width: min(94vw, 1200px);
+  text-align: center;
+  pointer-events: none;   /* taps pass through to the hero beneath */
+}
+.hero-logo {
+  width: clamp(320px, 50vh, 600px); height: auto;
   margin: 0 auto;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow:
-    0 34px 68px rgba(27, 94, 32, 0.28),
-    0 0 0 6px rgba(255, 253, 246, 0.85),
-    0 0 0 8px var(--line);
-  animation: heroIn 0.9s cubic-bezier(0.22, 0.9, 0.34, 1.08) both;
+  filter: drop-shadow(0 26px 36px rgba(9, 38, 15, 0.45));
+  animation: floatBob 5.5s ease-in-out infinite;
 }
-.hero-frame picture { display: block; line-height: 0; }
-.hero-frame img { width: 100%; height: auto; }
-
-/* drifting leaves over the backdrop bands */
-.hero-leaf { position: absolute; z-index: 1; color: rgba(46, 125, 50, 0.42); pointer-events: none; }
-.hero-leaf svg { width: 100%; height: auto; display: block; }
-.hero-leaf.l1 { width: 72px; top: 12%; left: 1.2%; animation: leafDrift 9s ease-in-out infinite alternate; }
-.hero-leaf.l2 { width: 54px; bottom: 16%; right: 1.2%; animation: leafDrift 12s ease-in-out 1.2s infinite alternate-reverse; }
-.hero-leaf.l3 { width: 40px; bottom: 9%; left: 4.5%; animation: leafDrift 10s ease-in-out 0.6s infinite alternate; }
-
-/* QR code: a "Scan me!" sticker card pinned to the poster's corner.
-   The image is absolutely positioned with % inset/size — percentages then
-   resolve against the card (padding % would resolve against the poster
-   behind it and swallow the QR). */
-.hero-qr {
-  position: absolute;
-  left: 91%; top: 86%;
-  width: 11%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  background: var(--paper);
-  border-radius: 10%;
-  box-shadow: 0 5px 16px rgba(16, 64, 26, 0.38);
-  rotate: -3deg;
-  z-index: 3;
-  animation: qrPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s both;
-  transition: rotate 0.2s ease;
+.hero-tagline {
+  margin: clamp(4px, 0.8vh, 12px) 0 0;
+  font-weight: 800;
+  font-size: clamp(1.8rem, max(2.6vw, 4.6vh), 3.4rem);
+  line-height: 1.18;
+  color: #fff;
+  text-shadow:
+    0 3px 0 var(--forest-deep), 0 -3px 0 var(--forest-deep),
+    3px 0 0 var(--forest-deep), -3px 0 0 var(--forest-deep),
+    0 8px 22px rgba(9, 38, 15, 0.55);
 }
-.hero-qr img { position: absolute; inset: 6%; width: 88%; height: 88%; border-radius: 6%; }
-.hero-qr:hover { rotate: 0deg; }
-.hero-qr:hover img { box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.9); }
-
-/* gold "Scan me!" pill overlapping the sticker's top-left corner */
-.qr-label {
-  position: absolute; top: -14%; left: -17%;
-  background: var(--gold); color: #3d2c00;
-  font-family: var(--font-script); font-weight: 700;
-  font-size: 1.02rem; line-height: 1.15;
-  padding: 2px 14px; border-radius: 999px;
-  rotate: -7deg;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
-  white-space: nowrap;
-  z-index: 2;
+.hero-tagline .line { display: block; }
+/* every word bounces in, one after another, then keeps swaying gently */
+.hero-tagline .w {
+  display: inline-block; white-space: nowrap;
+  animation: wordPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             wordBob 3.6s ease-in-out infinite;
+  animation-delay: var(--d, 0s), calc(var(--d, 0s) + 1.6s);
 }
-
-/* ping ring around the QR */
-.hero-qr::before {
-  content: ""; position: absolute; inset: -9%;
-  border-radius: 14%;
-  border: 3px solid rgba(255, 193, 7, 0.9);
-  animation: qrPing 3.2s ease-out 1.8s infinite;
+/* deep soft skirt so the big button always sits on calm, readable ground */
+.hero::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 44%;
+  background: linear-gradient(180deg, transparent, rgba(9, 38, 15, 0.78));
   pointer-events: none;
 }
-/* scan line sweeping across the QR */
-.hero-qr::after {
-  content: ""; position: absolute; inset: 0;
-  border-radius: 10%;
-  background: linear-gradient(180deg,
-    transparent 0%, transparent 42%,
-    rgba(255, 213, 79, 0.8) 50%,
-    transparent 58%, transparent 100%);
-  background-size: 100% 200%;
-  background-repeat: no-repeat;
-  animation: qrScan 3.2s ease-in-out 1.8s infinite;
+.hero-bottom {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 0 20px calc(38px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+}
+/* the big play button gently bounces, inviting a tap */
+.btn-play { animation: btnBounce 2.4s ease-in-out infinite; }
+.btn-play:hover { animation-play-state: paused; transform: translateY(-4px) scale(1.04); }
+.hero-alt {
+  color: #fff; font-weight: 700; font-size: 1.14rem;
+  text-decoration: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  padding: 10px 16px;
+  border-radius: 999px;
+}
+.hero-alt:hover { color: #ffe082; }
+.scroll-cue {
+  position: absolute; right: 20px; bottom: 16px; z-index: 2;
+  color: rgba(255, 255, 255, 0.9); font-size: 1.1rem;
+  animation: cueBob 1.7s ease-in-out infinite;
   pointer-events: none;
 }
-
-/* ------------------------------------------------------------------ ticker */
-
-.ticker {
-  position: relative; z-index: 3;
-  background: var(--gold);
-  transform: rotate(-1.1deg) scale(1.03);
-  margin: -12px 0 30px;
-  box-shadow: 0 10px 26px rgba(199, 145, 0, 0.38);
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-.ticker-track {
-  display: flex; width: max-content;
-  animation: tickerScroll 26s linear infinite;
-}
-.ticker:hover .ticker-track { animation-play-state: paused; }
-.tick-group { display: flex; align-items: center; gap: 26px; padding: 11px 26px 11px 0; }
-.tick-group span {
-  font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--forest); font-size: 0.98rem; white-space: nowrap;
-}
-.tick-group i { color: rgba(27, 94, 32, 0.55); font-style: normal; font-size: 0.78rem; }
 
 /* ------------------------------------------------------------------ section */
 
-.section { position: relative; padding: 64px 0 70px; overflow: hidden; }
+.section { position: relative; padding: 68px 0 72px; overflow: hidden; }
 
 .eyebrow {
-  font-family: var(--font-script); font-weight: 700;
-  font-size: 1.55rem; color: var(--green);
-  margin: 0 0 2px; text-align: center;
+  font-family: var(--font-head); font-weight: 800;
+  font-size: 1.2rem; letter-spacing: 0.07em; text-transform: uppercase;
+  text-align: center; color: var(--green);
+  margin: 0 0 2px;
 }
 .section h2 { text-align: center; }
 .lead {
-  max-width: 730px; margin: 10px auto 0;
-  text-align: center; font-size: 1.06rem; color: var(--ink-soft);
+  max-width: 760px; margin: 10px auto 0;
+  text-align: center; font-size: 1.18rem; color: var(--ink-soft);
 }
 
-/* decorative leaf */
-.leaf { position: absolute; color: rgba(102, 187, 106, 0.2); pointer-events: none; }
-.leaf svg { width: 100%; height: auto; display: block; }
-.leaf-c { width: 130px; top: 70px; left: 3%; transform: rotate(-30deg); animation: leafDrift 11s ease-in-out infinite alternate; }
+/* -------------------------------------------------- log band (2nd section) */
 
-/* steps pills */
-.steps-pills {
+.log-band {
+  position: relative; overflow: hidden;
+  padding-top: 60px;
+  background:
+    radial-gradient(rgba(27, 94, 32, 0.07) 1.6px, transparent 1.6px) 0 0 / 26px 26px,
+    linear-gradient(180deg, #fdf8ea, var(--cream));
+}
+.log-band .wrap { position: relative; }
+
+/* five step bubbles bob above a trail of marching dots — 1 Build · 2 Place
+   · 3 Label · 4 Check · 5 Snap it — log it! (the gold one is "you are here") */
+.bubble-trail {
+  position: relative;
+  max-width: 1060px;
+  margin: 34px auto 0;
+  padding: 46px 0 48px;
+}
+.trail-path {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.trail-line {
+  stroke: var(--leaf);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.5 16.5;
+  opacity: 0.9;
+  animation: dashMarch 1.6s linear infinite;
+}
+.steps-trail {
+  position: relative;
   list-style: none; display: flex; flex-wrap: wrap; justify-content: center;
-  align-items: center; gap: 10px;
-  margin: 28px auto 0; padding: 0;
+  align-items: center; gap: 16px 22px;
+  margin: 0; padding: 0;
 }
-.steps-pills li {
-  font-weight: 800; font-size: 1.02rem; color: var(--forest);
+.bub {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 11px;
+  font-weight: 800; font-size: 1.18rem; color: var(--forest);
   background: var(--paper);
-  border: 2px solid var(--line);
+  border: 2.5px solid var(--line);
   border-radius: 999px;
-  padding: 7px 20px;
-  box-shadow: 0 3px 0 rgba(27, 94, 32, 0.08);
+  padding: 8px 22px 8px 9px;
+  box-shadow: 0 6px 0 rgba(27, 94, 32, 0.10);
+  animation: bubPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             bubFloat 4.6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.12s), calc(var(--i) * -0.85s);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.steps-pills li.dot {
-  border: none; background: none; box-shadow: none;
-  color: var(--gold-deep); font-size: 1.5rem; padding: 0 2px;
-  font-weight: 800; line-height: 1;
+/* little knot under every bubble — they hang like balloons over the trail */
+.bub::after {
+  content: ""; position: absolute; left: 50%; bottom: -10px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--line);
+  translate: -50% 0;
 }
-.steps-pills li.now {
+.bub .n {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--forest); color: #fff;
+  display: inline-grid; place-items: center;
+  font-size: 1.25rem; font-weight: 800;
+  box-shadow: 0 3px 0 var(--forest-deep);
+}
+@media (hover: hover) {
+  .bub:hover { border-color: var(--leaf); box-shadow: 0 8px 0 rgba(27, 94, 32, 0.16); }
+  .bub:hover .n { animation: numBump 0.4s ease; }
+}
+/* the 5th bubble is the one you are on: gold, bigger, ringing */
+.bub.now {
   background: var(--gold); border-color: var(--gold-deep);
-  color: #4a3300; box-shadow: 0 3px 0 var(--gold-shadow);
-  animation: nowPulse 2.4s ease-in-out infinite;
+  color: #4a3300; font-size: 1.26rem;
+  box-shadow: 0 6px 0 var(--gold-shadow);
+  animation: bubPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             bubFloat 4.6s ease-in-out infinite,
+             nowPulse 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.12s),
+                   calc(var(--i) * -0.85s),
+                   calc(var(--i) * 0.12s + 0.55s);
 }
+.bub.now::after { background: var(--gold); border-color: #4a3300; }
+.bub.now .n { background: #4a3300; box-shadow: 0 3px 0 #2a1e00; }
+.bub.now::before {
+  content: ""; position: absolute; inset: -9px -9px -3px;
+  border: 3px solid var(--gold); border-radius: 999px;
+  animation: ringOut 2.2s ease-out infinite;
+}
+/* pop-in waits for the scroll reveal, then each bubble springs up in turn */
+.js .bubble-trail:not(.in) .bub { animation-play-state: paused; }
+
+/* lazy doodles drifting behind the whole band */
+.doodle { position: absolute; color: var(--forest); opacity: 0.08; pointer-events: none; }
+.doodle.d1 { width: 128px; left: 3%; top: 14%; animation: doodleDrift 15s ease-in-out infinite; }
+.doodle.d2 { width: 150px; right: 4%; bottom: 8%; animation: doodleDrift 19s ease-in-out -8s infinite reverse; }
 
 /* live stats chips */
 .live-row {
   display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
-  margin: 26px 0 38px;
+  margin: 24px 0 10px;
 }
 .live-chip {
   display: inline-flex; align-items: center; gap: 10px; margin: 0;
   background: var(--paper); border: 2px solid var(--line); border-radius: 999px;
-  padding: 9px 20px; font-weight: 700; color: var(--ink-soft); font-size: 0.95rem;
+  padding: 11px 22px; font-weight: 700; color: var(--ink-soft); font-size: 1.02rem;
   box-shadow: var(--shadow);
 }
 .live-num {
-  font-size: 1.35rem; font-weight: 800; color: var(--forest);
+  font-size: 1.5rem; font-weight: 800; color: var(--forest);
   font-variant-numeric: tabular-nums; line-height: 1;
 }
 .live-dot {
-  flex: none; width: 9px; height: 9px; border-radius: 50%;
+  flex: none; width: 10px; height: 10px; border-radius: 50%;
   background: #7cfc98;
   animation: pulseDot 1.8s ease-out infinite;
 }
 
-/* ------------------------------------------------------------------ log form */
+/* ------------------------------------------------------------- log form */
 
 .log-layout {
   display: grid; grid-template-columns: 1.05fr 0.95fr;
-  gap: 28px; align-items: stretch;
+  gap: 30px; align-items: start;
+  margin-top: 26px;   /* keeps the mascot sticker clear of the step pills
+                         even when the stats row is hidden */
 }
 
 .card {
+  position: relative;
   background: var(--paper);
   border: 2px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 28px 30px;
+  padding: 34px 32px 26px;
 }
+/* chunky colour-coded top edges — one system, gold, on both cards */
+.form-card { border-top: 8px solid var(--gold); }
+.badge-panel { border-top: 8px solid var(--gold); text-align: center; }
 
-.form-card h3 { margin-bottom: 18px; }
+/* mascot sticker cheering from the corner of the form */
+.mascot-sticker {
+  position: absolute; top: -24px; right: 20px;
+  width: 116px; z-index: 3;
+  animation: floatBob 4s ease-in-out infinite;
+}
+.mascot-sticker img {
+  width: 116px; height: 116px; object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  box-shadow: var(--shadow-lift);
+}
+.form-card { padding-top: 44px; }
+.form-card h3 { margin-bottom: 20px; }
 
-.field { position: relative; margin-bottom: 18px; }
+.field { position: relative; margin-bottom: 22px; }
 .field label, .field .label-text {
-  display: block; margin-bottom: 7px;
-  font-weight: 700; font-size: 0.95rem; color: var(--forest);
+  display: block; margin-bottom: 8px;
+  font-weight: 800; font-size: 1.1rem; color: var(--forest);
+  text-wrap: balance;   /* no orphan words when labels wrap on phones */
 }
-.field .hint { font-weight: 600; color: #93a487; font-size: 0.86rem; }
+.field .hint { font-weight: 600; color: #93a487; font-size: 0.9rem; }
 
 /* gradient underline grows when the field is active */
-.field:not(.field-row)::after {
-  content: ""; position: absolute; left: 0; bottom: -6px;
-  height: 3px; width: 0;
+.field::after {
+  content: ""; position: absolute; left: 0; bottom: -8px;
+  height: 4px; width: 0;
   background: linear-gradient(90deg, var(--gold), var(--leaf));
   border-radius: 99px;
   transition: width 0.3s ease;
 }
-.field:focus-within:not(.field-row)::after { width: 100%; }
+.field:focus-within::after { width: 100%; }
 
 input[type="text"], input[type="email"], input[type="number"] {
   width: 100%;
-  font: inherit; color: var(--ink);
+  font: inherit; font-size: 1.12rem; color: var(--ink);
   background: #fff;
-  border: 2px solid var(--line);
-  border-radius: 13px;
-  padding: 11px 14px;
+  border: 3px solid #d9d2ba;
+  border-radius: 16px;
+  padding: 14px 16px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
 }
 input:focus {
   outline: none;
   border-color: var(--gold);
   background: #fffef9;
-  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.22);
+  box-shadow: 0 0 0 5px rgba(255, 193, 7, 0.22);
 }
-input::placeholder { color: #b3bfa6; }
+input::placeholder { color: #a9b598; }
 
 .photo-drop {
+  position: relative;
   display: block; cursor: pointer;
-  border: 2.5px dashed var(--leaf);
-  border-radius: 16px;
+  border: 3px dashed var(--leaf);
+  border-radius: 18px;
   background: #fbf8ee;
-  padding: 24px 18px;
+  padding: 20px 18px;
   text-align: center;
   transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
 }
@@ -401,55 +435,112 @@ input::placeholder { color: #b3bfa6; }
   background: #f1f7e9;
   transform: translateY(-2px);
 }
-.photo-cta b { display: block; font-size: 1.04rem; color: var(--forest); }
-.photo-cta small { display: block; margin-top: 4px; font-size: 0.82rem; color: #8a9b7e; }
+.photo-icon {
+  width: 40px; height: 40px; margin: 0 auto 8px; display: block;
+  color: var(--green);
+}
+.photo-drop:hover .photo-icon,
+.photo-drop:focus-within .photo-icon { animation: quickWiggle 0.45s ease; }
+.photo-cta b { display: block; font-size: 1.14rem; color: var(--forest); }
+.photo-cta small { display: block; margin-top: 4px; font-size: 0.9rem; color: #8a9b7e; }
 .photo-preview {
   width: 100%; max-height: 230px; object-fit: cover;
-  border-radius: 12px; margin-bottom: 10px;
+  border-radius: 14px; margin-bottom: 10px;
   border: 2px solid var(--line);
 }
-
-.field-row {
-  display: grid; grid-template-columns: 1fr auto; gap: 16px;
-  align-items: end;
+.photo-drop.got-it::after {
+  content: "Nice shot!";
+  position: absolute; top: -13px; right: 14px; z-index: 2;
+  font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+  color: #fff; background: var(--green);
+  padding: 2px 14px; border-radius: 999px;
+  rotate: 5deg;
+  box-shadow: 0 4px 10px rgba(27, 94, 32, 0.35);
+  animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-.field-col label { display: block; margin-bottom: 7px; font-weight: 700; font-size: 0.95rem; color: var(--forest); }
 
-.stepper { display: flex; gap: 8px; }
+/* big friendly +/− stepper */
+.stepper { display: flex; gap: 10px; }
 .stepper button {
   flex: none;
-  width: 46px; height: 46px;
-  font: inherit; font-size: 1.35rem; font-weight: 800;
+  width: 58px; height: 58px;
+  font: inherit; font-size: 1.7rem; font-weight: 800;
   color: #fff; background: var(--forest);
-  border: none; border-radius: 13px;
+  border: none; border-radius: 16px;
   cursor: pointer;
   box-shadow: 0 4px 0 var(--forest-deep);
   transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
 }
 .stepper button:hover { background: var(--green); }
 .stepper button:active { transform: translateY(3px) scale(0.94); box-shadow: 0 1px 0 var(--forest-deep); }
-.stepper input { width: 86px; height: 46px; padding: 0; text-align: center; font-weight: 800; font-size: 1.1rem; }
+.stepper input { width: 100px; height: 58px; padding: 0; text-align: center; font-weight: 800; font-size: 1.3rem; }
+.stepper.bump input { animation: numBump 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-.btn-submit { min-width: 190px; }
+.btn-submit {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  width: 100%; font-size: 1.3rem; padding: 15px 24px;
+}
 
-.form-status { min-height: 1.5em; margin: 4px 0 12px; font-weight: 700; font-size: 0.95rem; }
+/* ------- the send button is a mini recycling game: toss the bottle ------- */
+.toss-stage { position: relative; flex: none; width: 76px; height: 46px; }
+.toss-bottle {
+  position: absolute; left: 2px; bottom: 3px;
+  width: 27px; height: 35px; overflow: visible;
+  animation: bottleIdle 3s ease-in-out infinite;
+}
+.toss-bin {
+  position: absolute; right: 0; bottom: 2px;
+  width: 38px; height: 38px; overflow: visible;
+}
+.bin-lid {
+  transform-box: view-box; transform-origin: 5.5px 9.5px;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.spark {
+  position: absolute; right: 16px; top: 4px;
+  width: 9px; height: 9px; border-radius: 50%; opacity: 0;
+}
+.spark.s1 { background: #ffd54f; } .spark.s2 { background: #9ccc65; } .spark.s3 { background: #fffdf6; }
+.toss-check {
+  position: absolute; right: -8px; top: -12px;
+  width: 22px; height: 22px; opacity: 0;
+}
+/* peek: hover the button and the bin opens a crack, daring you to toss */
+@media (hover: hover) {
+  .btn-submit:not(:disabled):hover .bin-lid { transform: rotate(-26deg); }
+  .btn-submit:not(:disabled):hover .toss-bottle { animation-duration: 1.1s; }
+}
+/* the toss itself: bottle arcs up, lid flips wide, bin chomps, sparks fly —
+   quick! The success lands with the toss, not after the network. */
+.btn-submit.tossing .toss-bottle { animation: bottleToss 0.55s cubic-bezier(0.4, 0, 0.6, 1) both; }
+.btn-submit.tossing .bin-lid { transition: none; animation: lidOpen 0.55s ease-in-out both; }
+.btn-submit.tossing .toss-bin { animation: binChomp 0.3s 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.btn-submit.tossing .spark { animation: sparkPop 0.45s ease-out both; }
+.btn-submit.tossing .spark.s1 { animation-delay: 0.40s; --sx: -15px; --sy: -13px; }
+.btn-submit.tossing .spark.s2 { animation-delay: 0.45s; --sx: 5px;   --sy: -21px; }
+.btn-submit.tossing .spark.s3 { animation-delay: 0.50s; --sx: 16px;  --sy: -7px; }
+/* success: a check stamps over the bin and it does a happy dance */
+.btn-submit.scored .toss-check { animation: checkPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.btn-submit.scored .toss-bin { animation: binCelebrate 0.8s 0.1s ease-in-out; }
+/* failure: the bottle drops back unsorted and the bin shakes its head */
+.btn-submit.fizzle .toss-bottle { animation: bottleMiss 0.7s ease-in both; }
+.btn-submit.fizzle .toss-bin { animation: binNo 0.6s 0.1s ease-in-out; }
+
+.form-status { min-height: 1.5em; margin: 14px 0 10px; font-weight: 700; font-size: 1.05rem; }
 .form-status.ok { color: var(--green); animation: fadeUp 0.4s ease both; }
 .form-status.error { color: #c62828; animation: shake 0.4s ease both; }
 
-.fine { font-size: 0.83rem; color: #8a9b7e; margin: 0; }
+.fine { font-size: 0.92rem; color: #8a9b7e; margin: 0; }
 
 /* ------------------------------------------------------------ badge panel */
 
-.badge-panel {
-  text-align: center;
-  display: flex; flex-direction: column; justify-content: center;
-}
 .badge-panel h3 { margin-bottom: 6px; }
-#badge-text { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 18px; }
+#badge-text { color: var(--ink-soft); font-size: 1.02rem; margin: 0 0 18px; }
 
 .badge-holder {
   position: relative; display: inline-block;
-  max-width: 235px; width: 100%;
+  max-width: 240px; width: 100%;
+  margin: 0 auto;
   transform: rotate(2deg);
   transform-origin: 50% -6%;   /* swings from its ribbon tips */
   filter: drop-shadow(0 14px 22px rgba(27, 94, 32, 0.25));
@@ -459,18 +550,209 @@ input::placeholder { color: #b3bfa6; }
 .sample-tag {
   position: absolute; top: -10px; left: -14px;
   background: var(--pink); color: #fff;
-  font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em;
+  font-weight: 800; font-size: 0.85rem; letter-spacing: 0.05em;
   padding: 4px 14px; border-radius: 999px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   animation: tagWiggle 2.8s ease-in-out infinite;
   z-index: 2;
 }
 
+/* sparkles beside the badge */
+.badge-holder::before,
+.badge-holder::after {
+  content: "✦"; position: absolute; z-index: 2;
+  color: var(--gold-deep); font-size: 1.35rem; line-height: 1;
+  pointer-events: none;
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+.badge-holder::before { top: 1%; right: -10%; }
+.badge-holder::after {
+  bottom: 15%; left: -12%;
+  font-size: 0.95rem; color: var(--pink);
+  animation-delay: 1.2s;
+}
+
+/* the personalised badge lands with a stamp, then swings from its ribbon */
+.badge-holder.stamped {
+  animation: stampIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             badgeSwing 5.5s ease-in-out 0.65s infinite;
+}
+
 .badge-actions {
   display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
-  margin: 22px 0 14px;
+  margin: 24px 0 14px;
 }
-.badge-actions .btn { font-size: 0.95rem; padding: 10px 22px; }
+.badge-actions .btn-gold { font-size: 1.15rem; padding: 13px 26px; }
+.badge-actions .btn-ghost { font-size: 0.95rem; padding: 10px 18px; }
+.badge-panel.ready #dl-png:not(:disabled) { animation: btnPulse 2.4s ease-in-out infinite; }
+
+/* ------------------------------------------------------- mission trail */
+
+.missions { padding-top: 64px; }
+
+/* a numbered path down the page: number → picture → words, same shape
+   every day so young readers always know where to look */
+.trail {
+  list-style: none; margin: 44px auto 0; padding: 0;
+  max-width: 920px;
+  position: relative;
+}
+.trail::before {
+  content: ""; position: absolute; left: 35px; top: 30px; bottom: 30px;
+  width: 0; border-left: 4px dashed rgba(102, 187, 106, 0.55);
+  z-index: 0;
+}
+.stop {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 72px 250px minmax(0, 540px);
+  justify-content: center;
+  gap: 26px;
+  align-items: center;
+  padding: 18px 0;
+  transition: translate 0.2s ease;
+}
+.stop:hover { translate: 6px 0; }
+
+.stop-num {
+  width: 70px; height: 70px; border-radius: 50%;
+  background: var(--c, var(--forest)); color: #fff;
+  display: grid; place-items: center;
+  font-size: 2rem; font-weight: 800;
+  border: 5px solid var(--paper);
+  box-shadow: 0 5px 0 rgba(16, 64, 26, 0.25), var(--shadow);
+}
+.stop:hover .stop-num { animation: numBump 0.4s ease; }
+
+.stop-art {
+  /* height:auto keeps the square images square — the width/height HTML
+     attributes would otherwise pin the height at 640px */
+  width: 100%; height: auto; object-fit: cover;
+  border-radius: 24px;
+  border-bottom: 7px solid var(--c, var(--green));
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
+}
+.stop:nth-child(odd) .stop-art { rotate: -1.4deg; }
+.stop:nth-child(even) .stop-art { rotate: 1.4deg; }
+.stop:hover .stop-art { transform: scale(1.035) rotate(0deg); }
+
+.stop-body h3 {
+  font-size: 1.55rem; margin: 0 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 6px solid var(--c, var(--green));
+  display: inline-block;
+  line-height: 1.15;
+}
+.stop-body > p:first-of-type {
+  margin: 4px 0 12px; font-size: 1.14rem; color: var(--ink);
+}
+.tip-pill {
+  display: inline-block; margin: 0;
+  background: color-mix(in srgb, var(--c, var(--green)) 14%, #fff);
+  border: 2px solid color-mix(in srgb, var(--c, var(--green)) 45%, #fff);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.98rem; font-weight: 600;
+}
+.tip-pill b { color: var(--c, var(--green)); font-weight: 800; }
+
+/* one happy colour per day */
+.c1 { --c: #2e7d32; }   /* green  */
+.c2 { --c: #0288d1; }   /* sky    */
+.c3 { --c: #c79100; }   /* gold   */
+.c4 { --c: #c2185b; }   /* pink   */
+.c5 { --c: #00695c; }   /* teal   */
+
+/* stagger the pop-in down the trail */
+.js .trail .reveal { transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.34, 1.45, 0.45, 1); }
+.js .trail .reveal:nth-child(1) { transition-delay: 0.05s; }
+.js .trail .reveal:nth-child(2) { transition-delay: 0.12s; }
+.js .trail .reveal:nth-child(3) { transition-delay: 0.19s; }
+.js .trail .reveal:nth-child(4) { transition-delay: 0.26s; }
+.js .trail .reveal:nth-child(5) { transition-delay: 0.33s; }
+
+/* ------------------------------------------------------------- friends */
+
+.friends-section {
+  background: linear-gradient(180deg, var(--cream), #eef6e4 18%, #eef6e4 82%, var(--cream));
+}
+.friend-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px;
+  margin-top: 42px;
+}
+.friend-card {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 26px;
+  padding: 18px 18px 22px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: translate 0.2s ease, scale 0.2s ease, box-shadow 0.2s ease;
+}
+.friend-card:nth-child(odd) { rotate: -1.2deg; }
+.friend-card:nth-child(even) { rotate: 1.2deg; }
+.friend-card:hover { translate: 0 -8px; scale: 1.03; box-shadow: var(--shadow-lift); }
+.friend-card img {
+  width: 100%; height: auto; object-fit: cover;   /* square sources stay square */
+  border-radius: 20px;
+  border: 4px solid var(--mint);
+  animation: floatBob 3.8s ease-in-out infinite;
+}
+.friend-card:nth-child(2) img { animation-delay: 0.5s; }
+.friend-card:nth-child(3) img { animation-delay: 1s; }
+.friend-card:nth-child(4) img { animation-delay: 1.5s; }
+.friend-card:hover img { animation: quickWiggle 0.5s ease; }
+.friend-card h3 { margin: 14px 0 4px; font-size: 1.3rem; }
+.friend-card p { margin: 0; color: var(--ink-soft); font-size: 1rem; }
+
+/* --------------------------------------------------------- board game */
+
+.game-cols {
+  display: grid; grid-template-columns: 0.8fr 1.2fr;
+  gap: 36px; align-items: center; margin-top: 34px;
+}
+.game-shot {
+  margin: 0; text-align: center;
+  background: var(--paper);
+  border: 2px solid var(--line); border-radius: 18px;
+  padding: 16px 16px 12px;
+  box-shadow: var(--shadow);
+  rotate: -2deg;
+  transition: rotate 0.25s ease, translate 0.25s ease;
+}
+.game-shot:hover { rotate: 0deg; translate: 0 -5px; }
+.game-shot img {
+  border-radius: 12px;
+  max-height: 440px; width: auto; margin: 0 auto;
+}
+.game-shot figcaption {
+  font-family: var(--font-head); font-weight: 700; font-size: 0.95rem;
+  color: var(--ink-soft); padding-top: 8px;
+}
+
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
+.chips li {
+  font-weight: 800; font-size: 0.98rem; color: var(--forest);
+  background: var(--paper); border: 2px solid var(--line);
+  border-radius: 999px; padding: 6px 16px;
+}
+
+.flow { list-style: none; margin: 20px 0 0; padding: 0; }
+.flow li {
+  position: relative; padding: 0 0 16px 50px;
+  font-size: 1.08rem; color: var(--ink);
+}
+.flow li:last-child { padding-bottom: 0; }
+.flow .n {
+  position: absolute; left: 0; top: -2px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--forest); color: #fff;
+  font-weight: 800; font-size: 1rem;
+  display: grid; place-items: center;
+  box-shadow: 0 3px 0 var(--forest-deep);
+}
 
 /* -------------------------------------------------------------- footer */
 
@@ -495,19 +777,19 @@ input::placeholder { color: #b3bfa6; }
 }
 .footer-logo { height: 92px; width: auto; margin-bottom: 10px; }
 .footer-tag {
-  font-family: var(--font-script); font-size: 1.4rem; font-weight: 600;
-  color: #fff; margin: 0; line-height: 1.3;
+  font-family: var(--font-head); font-size: 1.12rem; font-weight: 700;
+  color: #fff; margin: 0; line-height: 1.45;
 }
 .site-footer h4 { color: var(--gold); margin: 6px 0 12px; }
 .footer-links { display: flex; flex-direction: column; }
 .footer-links a {
   color: rgba(244, 249, 239, 0.9); text-decoration: none;
-  padding: 5px 0; font-weight: 600;
+  padding: 7px 0; font-weight: 600; font-size: 1.02rem;
   transition: color 0.15s ease, transform 0.15s ease;
 }
 .footer-links a:hover { color: var(--gold); transform: translateX(4px); }
-.footer-note p { color: rgba(244, 249, 239, 0.82); font-size: 0.93rem; margin: 0 0 10px; }
-.footer-copy { color: rgba(244, 249, 239, 0.55); font-size: 0.8rem; }
+.footer-note p { color: rgba(244, 249, 239, 0.82); font-size: 0.95rem; margin: 0 0 10px; }
+.footer-copy { color: rgba(244, 249, 239, 0.55); font-size: 0.82rem; }
 
 /* ------------------------------------------------------------- confetti */
 
@@ -528,577 +810,135 @@ input::placeholder { color: #b3bfa6; }
   from { opacity: 0; transform: translateY(14px); }
 }
 
-@keyframes heroIn {
-  from { opacity: 0; transform: translateY(26px) scale(0.96); }
+/* the poster gently settles into place */
+@keyframes heroZoom {
+  from { transform: scale(1.09); opacity: 0.4; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-@keyframes qrPop {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+/* tagline words drop in with a bounce, one after another */
+@keyframes wordPop {
+  0% { opacity: 0; transform: translateY(-22px) scale(0.4); }
+  70% { opacity: 1; transform: translateY(3px) scale(1.07); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes qrPing {
-  0% { transform: scale(0.92); opacity: 0.9; }
-  60%, 100% { transform: scale(1.3); opacity: 0; }
+/* …then each word keeps swaying softly, offset from its neighbours */
+@keyframes wordBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
-@keyframes qrScan {
-  0% { background-position-y: -85%; }
-  55%, 100% { background-position-y: 185%; }
+@keyframes btnBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
 }
 
-@keyframes leafDrift {
-  from { transform: translateY(-14px) rotate(-8deg); }
-  to { transform: translateY(14px) rotate(10deg); }
+@keyframes cueBob {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(7px); opacity: 1; }
 }
 
-@keyframes tickerScroll {
-  to { transform: translateX(-50%); }
+@keyframes floatBob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -14px; }
+}
+
+@keyframes quickWiggle {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -7deg; }
+  55% { rotate: 6deg; }
+  80% { rotate: -3deg; }
 }
 
 @keyframes nowPulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  50% { transform: scale(1.06); }
+}
+
+/* ---- log-band: bubbles, trail, doodles ---- */
+@keyframes bubPop {
+  0% { opacity: 0; transform: translateY(26px) scale(0.5); }
+  70% { opacity: 1; transform: translateY(-7px) scale(1.06); }
+  100% { opacity: 1; transform: none; }
+}
+/* float uses translate/rotate (independent of transform) so it composes
+   with bubPop instead of fighting it — same trick as the hero logo */
+@keyframes bubFloat {
+  0%, 100% { translate: 0 0; rotate: -1.2deg; }
+  50% { translate: 0 -10px; rotate: 1.4deg; }
+}
+@keyframes ringOut {
+  0% { opacity: 0.85; transform: scale(0.92); }
+  100% { opacity: 0; transform: scale(1.24); }
+}
+@keyframes dashMarch { to { stroke-dashoffset: -34; } }
+/* phone: the vertical dotted path marches downward toward the form */
+@keyframes dotSlide { to { background-position-y: 17px; } }
+@keyframes doodleDrift {
+  0%, 100% { translate: 0 0; rotate: -6deg; }
+  50% { translate: 16px -22px; rotate: 9deg; }
+}
+
+/* ---- send button: the bottle-toss game ---- */
+@keyframes bottleIdle {
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50% { transform: rotate(8deg) translateY(-2.5px); }
+}
+@keyframes bottleToss {
+  0% { transform: translate(0, 0) rotate(6deg) scale(1); opacity: 1; }
+  12% { transform: translate(-3px, 3px) rotate(-16deg) scale(1); }
+  32% { transform: translate(3px, -30px) rotate(130deg) scale(0.95); }
+  56% { transform: translate(23px, -38px) rotate(300deg) scale(0.8); }
+  78% { transform: translate(36px, -16px) rotate(470deg) scale(0.55); }
+  90% { transform: translate(39px, -8px) rotate(540deg) scale(0.4); }
+  100% { transform: translate(40px, -11px) rotate(560deg) scale(0.1); opacity: 0; }
+}
+@keyframes lidOpen {
+  0% { transform: rotate(0deg); }
+  14% { transform: rotate(-62deg); }
+  75% { transform: rotate(-62deg); }
+  90% { transform: rotate(7deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes binChomp {
+  0% { transform: scale(1, 1); }
+  35% { transform: scale(1.12, 0.8); }
+  65% { transform: scale(0.94, 1.12); }
+  100% { transform: scale(1, 1); }
+}
+@keyframes sparkPop {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--sx, 0px), var(--sy, 0px)) scale(1.55); }
+}
+@keyframes checkPop {
+  0% { opacity: 0; transform: scale(0.3) rotate(-14deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes binCelebrate {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  25% { translate: 0 -6px; rotate: -6deg; }
+  55% { translate: 0 -2px; rotate: 5deg; }
+  80% { rotate: -2deg; }
+}
+@keyframes bottleMiss {
+  0% { transform: translate(0, -26px) rotate(-120deg) scale(0.6); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(0, 0) rotate(6deg) scale(1); opacity: 1; }
+}
+@keyframes binNo {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -7deg; }
+  55% { rotate: 6deg; }
+  80% { rotate: -4deg; }
 }
 
 @keyframes pulseDot {
   0% { box-shadow: 0 0 0 0 rgba(124, 252, 152, 0.7); }
-  70% { box-shadow: 0 0 0 9px rgba(124, 252, 152, 0); }
+  70% { box-shadow: 0 0 0 10px rgba(124, 252, 152, 0); }
   100% { box-shadow: 0 0 0 0 rgba(124, 252, 152, 0); }
 }
-
-@keyframes badgeFloat {
-  0%, 100% { transform: rotate(2deg) translateY(0); }
-  50% { transform: rotate(2.8deg) translateY(-9px); }
-}
-
-@keyframes tagWiggle {
-  0%, 100% { transform: rotate(-7deg); }
-  50% { transform: rotate(-2deg) translateY(-2px); }
-}
-
-@keyframes waveRoll {
-  to { background-position-x: 1440px; }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-3px); }
-}
-
-/* ------------------------------------------------------------- reveals */
-
-.js .reveal {
-  opacity: 0; transform: translateY(22px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1.15, 0.36, 1);
-}
-.js .reveal.in { opacity: 1; transform: none; }
-.js .live-row.reveal { transition-delay: 0.08s; }
-.js .log-layout .reveal:nth-child(2) { transition-delay: 0.1s; }
-
-/* ------------------------------------------------------------- responsive */
-
-@media (max-width: 1020px) {
-  .log-layout { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 760px) {
-  .section { padding: 48px 0 56px; }
-  .field-row { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 26px; }
-  .footer-logo { margin-left: auto; margin-right: auto; }
-  .footer-links { align-items: center; }
-  .hero-frame { border-radius: 0; box-shadow: none; }
-  .hero { padding: 12px 0 20px; }
-  .hero-leaf { display: none; }
-  .qr-label { display: none; }
-  /* bigger sticker + roomier footer links: every tap target clears 44px */
-  .hero-qr { width: 14%; }
-  .footer-links a { padding: 12px 4px; }
-  .ticker { margin-top: -4px; }
-  .brand img { height: 50px; }
-}
-
-@media (max-width: 480px) {
-  .btn-lg { font-size: 1rem; padding: 13px 24px; }
-  .steps-pills li { padding: 6px 14px; font-size: 0.95rem; }
-  .tick-group span { font-size: 0.88rem; }
-  .card { padding: 22px 20px; }
-}
-
-/* ------------------------------------------------------- reduced motion */
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .js .reveal { opacity: 1; transform: none; transition: none; }
-  .hero-bg, .hero-frame, .hero-qr, .hero-qr::before, .hero-qr::after,
-  .hero-leaf, .leaf, .ticker-track, .steps-pills li.now, .live-dot,
-  .badge-holder, .sample-tag, .site-footer::before, .btn-gold::after,
-  .btn, .btn-primary, .btn-gold, .stepper button, .brand img, .site-header,
-  .footer-links a, .form-status.ok, .form-status.error {
-    animation: none !important;
-    transition: none !important;
-  }
-  .confetti-piece { display: none; }
-}
-
-/* ==========================================================================
-   Three-page edition: shared nav, mission briefing band, day cards,
-   board-game corner, doors, starbursts, washi tape — the fun layer.
-   Tilt/lift uses the individual `rotate`/`translate`/`scale` properties so
-   it composes with the reveal `transform` instead of fighting it.
-   ========================================================================== */
-
-/* ------------------------------------------------------------------ nav */
-
-.site-nav { display: flex; gap: 4px; margin-right: 10px; }
-.site-nav a {
-  font-weight: 700; font-size: 0.98rem; text-decoration: none;
-  color: var(--forest);
-  padding: 8px 14px; border-radius: 999px;
-  transition: background 0.15s ease, color 0.15s ease, translate 0.15s ease;
-}
-.site-nav a:hover { background: var(--mint); translate: 0 -1px; }
-.site-nav a.active {
-  background: var(--forest); color: #fff;
-  box-shadow: 0 3px 0 var(--forest-deep);
-}
-
-/* ------------------------------------------------------- mission band */
-
-.page-hero {
-  position: relative; overflow: hidden;
-  padding: 46px 0 14px;
-  text-align: center;
-}
-.page-hero .hero-leaf { z-index: 0; }
-.page-hero h1,
-.page-hero h2 {
-  font-size: clamp(2rem, 4.5vw, 2.9rem); font-weight: 800;
-  color: var(--forest); line-height: 1.1; margin: 0 0 10px;
-  position: relative;
-}
-.page-hero .lead { position: relative; }
-
-/* The log-in band lives at the bottom of the challenge page; keep the
-   sticky header from covering it on anchor jumps. */
-#log-in { scroll-margin-top: 90px; }
-
-/* --------------------------------------------------------- day cards */
-
-.missions { padding-top: 42px; }
-.day-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 30px;
-}
-.day-card {
-  position: relative;
-  background: var(--paper);
-  border: 2px solid var(--line);
-  border-radius: 20px;
-  padding: 24px 16px 18px;
-  text-align: center;
-  box-shadow: var(--shadow);
-  transition: rotate 0.2s ease, translate 0.2s ease, scale 0.2s ease, box-shadow 0.2s ease;
-}
-.day-card:nth-child(odd) { rotate: -1.3deg; }
-.day-card:nth-child(even) { rotate: 1.3deg; }
-.day-card:hover {
-  rotate: 0deg; translate: 0 -7px; scale: 1.02;
-  box-shadow: var(--shadow-lift); z-index: 2;
-}
-/* pop-in stagger on reveal */
-.js .day-card.reveal { transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.34, 1.45, 0.45, 1), rotate 0.2s ease, translate 0.2s ease, scale 0.2s ease, box-shadow 0.2s ease; }
-.js .day-card.reveal:nth-child(2) { transition-delay: 0.07s; }
-.js .day-card.reveal:nth-child(3) { transition-delay: 0.14s; }
-.js .day-card.reveal:nth-child(4) { transition-delay: 0.21s; }
-.js .day-card.reveal:nth-child(5) { transition-delay: 0.28s; }
-
-.day-card h3 { font-size: 1.12rem; margin-bottom: 6px; }
-.day-card p { font-size: 0.93rem; color: var(--ink-soft); margin: 0 0 8px; }
-.day-card .tip {
-  font-size: 0.82rem; color: #7d8f72; margin: 0;
-  border-top: 2px dashed var(--line); padding-top: 8px;
-}
-.day-card .tip b { color: var(--gold-deep); }
-
-.day-tag {
-  position: absolute; top: -12px; left: 14px;
-  background: var(--forest); color: #fff;
-  font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em;
-  padding: 4px 12px; border-radius: 999px;
-  box-shadow: 0 3px 0 var(--forest-deep);
-  rotate: -4deg;
-}
-.accent-sky .day-tag { background: var(--sky); box-shadow: 0 3px 0 #0288d1; }
-.accent-gold .day-tag { background: var(--gold); color: #4a3300; box-shadow: 0 3px 0 var(--gold-shadow); }
-.accent-pink .day-tag { background: var(--pink); box-shadow: 0 3px 0 #c2185b; }
-
-.day-icon {
-  width: 62px; height: 62px; margin: 6px auto 12px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--tint, #eaf5e9); color: var(--acc, var(--green));
-}
-.day-icon svg { width: 34px; height: 34px; }
-.accent-green { --acc: #2e7d32; --tint: #eaf5e9; }
-.accent-sky { --acc: #0288d1; --tint: #e3f4fd; }
-.accent-gold { --acc: #c79100; --tint: #fff3d6; }
-.accent-pink { --acc: #c2185b; --tint: #fde7ef; }
-.accent-forest { --acc: #1b5e20; --tint: #e8f0e2; }
-
-/* -------------------------------------------------- board game corner */
-
-.game-section {
-  background: linear-gradient(180deg, var(--cream), #f0f6e6 18%, #f0f6e6 82%, var(--cream));
-}
-.game-cols {
-  display: grid; grid-template-columns: 0.8fr 1.2fr;
-  gap: 36px; align-items: center; margin-top: 30px;
-}
-.game-shot {
-  margin: 0; text-align: center;
-  background: var(--paper);
-  border: 2px solid var(--line); border-radius: 16px;
-  padding: 16px 16px 12px;
-  box-shadow: var(--shadow);
-  rotate: -2deg;
-  transition: rotate 0.25s ease, translate 0.25s ease;
-}
-.game-shot:hover { rotate: 0deg; translate: 0 -4px; }
-.game-shot img {
-  border-radius: 10px;
-  max-height: 460px; width: auto; margin: 0 auto;
-}
-.game-shot figcaption {
-  font-family: var(--font-script); font-size: 1.15rem;
-  color: var(--ink-soft); padding-top: 8px;
-}
-
-.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
-.chips li {
-  font-weight: 800; font-size: 0.88rem; color: var(--forest);
-  background: var(--paper); border: 2px solid var(--line);
-  border-radius: 999px; padding: 5px 14px;
-}
-
-.flow { list-style: none; margin: 18px 0 0; padding: 0; }
-.flow li {
-  position: relative; padding: 0 0 14px 46px;
-  font-size: 0.98rem; color: var(--ink);
-}
-.flow li:last-child { padding-bottom: 0; }
-.flow .n {
-  position: absolute; left: 0; top: -2px;
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--forest); color: #fff;
-  font-weight: 800; font-size: 0.92rem;
-  display: grid; place-items: center;
-  box-shadow: 0 3px 0 var(--forest-deep);
-}
-
-.quiz {
-  margin-top: 22px;
-  background: var(--paper);
-  border: 2.5px dashed var(--leaf);
-  border-radius: 18px;
-  padding: 18px 22px;
-}
-.quiz summary {
-  cursor: pointer; list-style: none;
-  font-weight: 800; color: var(--forest); font-size: 1.05rem;
-  display: flex; align-items: center; gap: 10px;
-}
-.quiz summary::-webkit-details-marker { display: none; }
-.quiz summary::after {
-  content: "+"; margin-left: auto;
-  font-size: 1.6rem; color: var(--gold-deep); line-height: 1;
-  transition: rotate 0.25s ease;
-}
-.quiz[open] summary::after { rotate: 45deg; }
-.q-list {
-  columns: 2; column-gap: 34px;
-  margin: 14px 0 4px; padding-left: 20px;
-  font-size: 0.94rem; color: var(--ink-soft);
-}
-.q-list li { margin-bottom: 6px; break-inside: avoid; }
-
-/* ------------------------------------------------------ rules + cta */
-
-.cta-section { padding-top: 10px; }
-.rules-strip {
-  list-style: none; display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 14px; margin: 0 0 34px; padding: 0;
-}
-.rules-strip li {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--paper); border: 2px solid var(--line);
-  border-radius: 16px; padding: 14px 18px;
-  font-weight: 700; font-size: 0.94rem; color: var(--ink);
-  box-shadow: var(--shadow);
-}
-.r-icon {
-  flex: none; width: 40px; height: 40px; border-radius: 12px;
-  display: grid; place-items: center;
-  background: var(--mint); color: var(--green);
-}
-.r-icon svg { width: 24px; height: 24px; }
-
-.cta-band {
-  position: relative; overflow: hidden;
-  background: linear-gradient(180deg, #eaf5e9, #f3f9ec);
-  border: 2px solid var(--line);
-  border-radius: 26px;
-  padding: 40px 30px;
-  text-align: center;
-}
-.cta-band h2 { margin-bottom: 6px; }
-.cta-band p { color: var(--ink-soft); margin: 0 0 20px; font-size: 1.05rem; }
-.cta-band .starburst { color: var(--gold); }
-
-/* ------------------------------------------------------------- doors */
-
-.doors-section { position: relative; }
-.doors {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
-  margin: 34px 0 30px;
-}
-.door {
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  text-align: center; text-decoration: none;
-  border: 2px solid var(--line);
-  border-radius: 26px;
-  padding: 36px 30px 34px;
-  box-shadow: var(--shadow);
-  transition: translate 0.2s ease, box-shadow 0.2s ease, scale 0.2s ease;
-}
-.door:hover { translate: 0 -8px; scale: 1.015; box-shadow: var(--shadow-lift); }
-.door-mint { background: linear-gradient(180deg, #f0f7e6, var(--paper)); }
-.door-gold { background: linear-gradient(180deg, #fff4d6, var(--paper)); }
-.door h3 { font-size: 1.5rem; margin: 8px 0 2px; }
-.door p { color: var(--ink-soft); margin: 0 0 14px; font-size: 1rem; }
-.door .btn { margin-top: 10px; }
-
-.door-icon {
-  width: 74px; height: 74px; border-radius: 50%;
-  display: grid; place-items: center;
-  background: var(--mint); color: var(--green);
-  animation: doorBob 3.4s ease-in-out infinite;
-}
-.door-icon svg { width: 40px; height: 40px; }
-.door-badge {
-  display: block; width: 132px; margin: -14px auto 0;
-  rotate: -4deg;
-  filter: drop-shadow(0 10px 16px rgba(27, 94, 32, 0.28));
-  animation: badgeFloat 5.5s ease-in-out infinite;
-}
-.door-badge img { width: 100%; height: auto; }
-.door-pills { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 4px; }
-.door-pills b {
-  font-size: 0.78rem; font-weight: 800; color: var(--forest);
-  background: var(--mint); border-radius: 999px; padding: 4px 10px;
-}
-
-@keyframes doorBob {
-  0%, 100% { translate: 0 0; rotate: -2deg; }
-  50% { translate: 0 -6px; rotate: 2deg; }
-}
-
-/* -------------------------------------------------------- starbursts */
-
-.starburst {
-  position: absolute; pointer-events: none;
-  color: var(--gold); opacity: 0.85;
-  animation: spinSlow 22s linear infinite;
-}
-.starburst svg { width: 100%; height: auto; display: block; }
-.starburst.s1 { width: 84px; top: 46px; left: 4%; }
-.starburst.s2 { width: 52px; right: 5%; bottom: 130px; color: var(--leaf); animation-direction: reverse; }
-.cta-band .starburst.s1 { width: 70px; top: 12px; left: 3%; }
-.cta-band .starburst.s2 { width: 44px; right: 4%; bottom: 14px; top: auto; }
-
-@keyframes spinSlow { to { rotate: 360deg; } }
-
-/* -------------------------------------------------- washi tape cards */
-
-.form-card, .badge-panel { position: relative; }
-.form-card::before {
-  content: ""; position: absolute; top: -13px; left: 50%;
-  translate: -50% 0; rotate: -2.5deg;
-  width: 138px; height: 26px;
-  background: rgba(255, 193, 7, 0.78);
-  border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-.badge-panel::before {
-  content: ""; position: absolute; top: -13px; left: 26px;
-  rotate: 3deg;
-  width: 96px; height: 24px;
-  background: rgba(240, 98, 146, 0.7);
-  border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* ------------------------------------------------- page-specific tune */
-
-.log-section {
-  padding-top: 12px;
-  background-image: radial-gradient(rgba(27, 94, 32, 0.08) 1.6px, transparent 1.6px);
-  background-size: 26px 26px;
-}
-
-/* ---------------------------------------------------- responsive (3pg) */
-
-@media (max-width: 1020px) {
-  .day-grid { grid-template-columns: repeat(3, 1fr); }
-  .game-cols { grid-template-columns: 1fr; }
-  .game-shot { max-width: 360px; margin: 0 auto; }
-}
-
-@media (max-width: 760px) {
-  .site-nav a { padding: 10px 10px; font-size: 0.9rem; }
-  .btn-nav { display: none; }
-  .day-grid { grid-template-columns: repeat(2, 1fr); }
-  .doors { grid-template-columns: 1fr; }
-  .q-list { columns: 1; }
-  .rules-strip { grid-template-columns: 1fr; }
-  .page-hero { padding-top: 34px; }
-  .starburst { display: none; }
-}
-
-@media (max-width: 480px) {
-  .day-grid { grid-template-columns: 1fr; }
-  .site-nav { gap: 2px; }
-  .site-nav a { padding: 9px 8px; font-size: 0.85rem; }
-  .cta-band { padding: 30px 18px; }
-}
-
-/* -------------------------------------------- reduced motion (3-page) */
-
-@media (prefers-reduced-motion: reduce) {
-  .starburst, .door-icon, .door-badge, .day-card, .door, .game-shot,
-  .quiz summary::after, .site-nav a, .form-card::before, .badge-panel::before {
-    animation: none !important;
-    transition: none !important;
-  }
-  .quiz[open] summary::after { rotate: 45deg; }
-}
-
-/* ==========================================================================
-   Fun pass: treasure trail, logbook paper, swinging badge, sparkles,
-   photo sticker, bouncy stepper. Same rotate/translate/scale property
-   style as above, so it composes with the reveal transforms.
-   ========================================================================== */
-
-/* --- treasure trail behind the five day cards (5-across only) --- */
-
-.day-grid { position: relative; }
-.day-card { z-index: 1; }
-.trail-path {
-  position: absolute; top: 18%; left: -34px;
-  width: calc(100% + 68px); height: auto;
-  z-index: 0; pointer-events: none;
-}
-
-/* --- logbook paper for the whole log-in band --- */
-
-#log-in {
-  border-top: 3px dashed rgba(199, 145, 0, 0.4);
-  background-image: radial-gradient(rgba(27, 94, 32, 0.08) 1.6px, transparent 1.6px);
-  background-size: 26px 26px;
-}
-
-/* sticker doodles in the log-in hero (kept before .wrap so text wins) */
-.log-doodle { position: absolute; z-index: 0; pointer-events: none; }
-.log-doodle svg { width: 100%; height: auto; display: block; }
-.log-doodle.d1 {
-  width: 86px; top: 15%; left: 2.5%;
-  color: var(--green); opacity: 0.42;
-  animation: spinSlow 26s linear infinite;
-}
-.log-doodle.d2 {
-  width: 52px; bottom: 11%; right: 3%;
-  color: var(--gold-deep); opacity: 0.6;
-  animation: doorBob 4.6s ease-in-out infinite;
-}
-
-/* hand-drawn gold swash under the badge phrase */
-.swash {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M3 10 Q 13 3 23 9 T 43 9 T 63 9 T 83 9 T 103 9 T 117 8' fill='none' stroke='%23f9a825' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E") left bottom / 100% 0.3em no-repeat;
-  padding-bottom: 0.14em;
-}
-
-/* --- badge panel: sparkles + stamp-in + ready pulse --- */
-
-.badge-holder::before,
-.badge-holder::after {
-  content: "✦"; position: absolute; z-index: 2;
-  color: var(--gold-deep); font-size: 1.35rem; line-height: 1;
-  pointer-events: none;
-  animation: twinkle 2.4s ease-in-out infinite;
-}
-.badge-holder::before { top: 1%; right: -10%; }
-.badge-holder::after {
-  bottom: 15%; left: -12%;
-  font-size: 0.95rem; color: var(--pink);
-  animation-delay: 1.2s;
-}
-
-/* the personalised badge lands with a stamp, then swings from its ribbon */
-.badge-holder.stamped {
-  animation: stampIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both,
-             badgeSwing 5.5s ease-in-out 0.65s infinite;
-}
-
-/* gentle live pulse on the gold PNG button once downloads are ready */
-.badge-panel.ready #dl-png:not(:disabled) { animation: btnPulse 2.4s ease-in-out infinite; }
-
-/* icon-in-button layout (download + submit buttons) */
-.badge-actions .btn, .btn-submit {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-}
-.badge-actions .btn svg { width: 17px; height: 17px; }
-.btn-submit svg { width: 18px; height: 18px; }
-
-/* the two log cards sit like a slightly scattered paper pile */
-.form-card { rotate: -0.35deg; }
-.badge-panel { rotate: 0.45deg; }
-
-/* --- photo drop: camera icon + "Nice shot!" sticker --- */
-
-.photo-drop { position: relative; }
-.photo-icon {
-  width: 36px; height: 36px; margin: 0 auto 7px; display: block;
-  color: var(--green);
-}
-.photo-drop:hover .photo-icon,
-.photo-drop:focus-within .photo-icon { animation: quickWiggle 0.45s ease; }
-.photo-drop.got-it::after {
-  content: "Nice shot!";
-  position: absolute; top: -13px; right: 14px; z-index: 2;
-  font-family: var(--font-script); font-weight: 700; font-size: 1.1rem;
-  color: #fff; background: var(--green);
-  padding: 1px 14px; border-radius: 999px;
-  rotate: 5deg;
-  box-shadow: 0 4px 10px rgba(27, 94, 32, 0.35);
-  animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* --- bouncy stepper + happy submit --- */
-
-.stepper.bump input { animation: numBump 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.btn-submit.yay { animation: quickWiggle 0.6s ease; }
-
-/* --- little hover delights --- */
-
-.brand:hover img { animation: quickWiggle 0.5s ease; }
-.rules-strip li { transition: translate 0.2s ease, box-shadow 0.2s ease; }
-.rules-strip li:hover { translate: 0 -4px; box-shadow: var(--shadow-lift); }
-.rules-strip li:hover .r-icon { animation: quickWiggle 0.45s ease; }
-
-/* --- keyframes (fun pass) --- */
 
 @keyframes badgeSwing {
   0%, 100% { transform: rotate(-2.6deg) translateY(0); }
@@ -1117,6 +957,11 @@ input::placeholder { color: #b3bfa6; }
   50% { opacity: 1; scale: 1.18; rotate: 22deg; }
 }
 
+@keyframes tagWiggle {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(-2deg) translateY(-2px); }
+}
+
 @keyframes btnPulse {
   0%, 100% { scale: 1; }
   50% { scale: 1.045; }
@@ -1132,41 +977,338 @@ input::placeholder { color: #b3bfa6; }
   to { scale: 1; opacity: 1; }
 }
 
-@keyframes quickWiggle {
-  0%, 100% { rotate: 0deg; }
-  25% { rotate: -7deg; }
-  55% { rotate: 6deg; }
-  80% { rotate: -3deg; }
+@keyframes waveRoll {
+  to { background-position-x: 1440px; }
 }
 
-/* --- responsive (fun pass) --- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+}
 
-@media (max-width: 1020px) {
-  .trail-path { display: none; }  /* the trail only reads on the 5-across grid */
+/* ------------------------------------------------------------- reveals */
+
+.js .reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1.15, 0.36, 1);
+}
+.js .reveal.in { opacity: 1; transform: none; }
+.js .friend-grid .reveal:nth-child(2) { transition-delay: 0.08s; }
+.js .friend-grid .reveal:nth-child(3) { transition-delay: 0.16s; }
+.js .friend-grid .reveal:nth-child(4) { transition-delay: 0.24s; }
+.js .log-layout .reveal:nth-child(2) { transition-delay: 0.1s; }
+
+/* ------------------------------------------------------------- responsive */
+
+@media (max-width: 1080px) {
+  .log-layout { grid-template-columns: 1fr; }
+
+  /* phone log section: the five steps become a vertical journey — a dotted
+     path marches down the middle while the bubbles zigzag left and right,
+     ending on the gold "Snap it" bubble right above the form */
+  .trail-path { display: none; }   /* the wave needs desktop width */
+  .bubble-trail { margin-top: 22px; padding: 0 4px 8px; }
+  .steps-trail {
+    flex-direction: column; align-items: center;
+    gap: 15px; padding: 6px 0 4px;
+  }
+  .steps-trail::before {
+    content: ""; position: absolute; left: 50%; top: 30px; bottom: 14px;
+    width: 6px; margin-left: -3px;
+    background: radial-gradient(circle at 50% 50%, var(--leaf) 46%, transparent 52%);
+    background-size: 6px 17px;
+    background-repeat: repeat-y;
+    animation: dotSlide 1.1s linear infinite;
+  }
+  .bub:nth-child(odd)  { align-self: flex-start; margin-left: 7%; }
+  .bub:nth-child(even) { align-self: flex-end; margin-right: 7%; }
+  .bub { padding: 7px 18px 7px 8px; }
+  .bub::after { display: none; }   /* balloon knots are a desktop motif */
+  .bub.now {
+    align-self: center; margin-top: 4px;
+    justify-content: center; text-align: center;
+    padding: 9px 20px 9px 10px;
+  }
+  .mascot-sticker { width: 96px; top: -38px; }
+  .mascot-sticker img { width: 96px; height: 96px; }
+  .friend-grid { grid-template-columns: repeat(2, 1fr); }
+  .game-cols { grid-template-columns: 1fr; }
+  .game-shot { max-width: 360px; margin: 0 auto; }
+  .stop { grid-template-columns: 64px 210px 1fr; gap: 20px; }
 }
 
 @media (max-width: 760px) {
-  .log-doodle { display: none; }
+  .section { padding: 52px 0 58px; }
+  /* no floating layers on phones — the whole poster is shown instead */
+  .hero-stage { display: none; }
+  .friend-grid { grid-template-columns: 1fr; }
+  .friend-card img { max-width: 320px; margin: 0 auto; }
+  .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 26px; }
+  .footer-logo { margin-left: auto; margin-right: auto; }
+  .footer-links { align-items: center; }
+  .footer-links a { padding: 12px 4px; }
+  .scroll-cue { display: none; }
+
+  /* the trail becomes compact rows: number, small art, words beside it —
+     one mission per glance, no full-screen pictures */
+  .stop {
+    grid-template-columns: 44px 88px 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    align-items: center;
+  }
+  .stop-num { width: 44px; height: 44px; font-size: 1.25rem; border-width: 4px; }
+  .stop-art { width: 88px; border-radius: 16px; border-bottom-width: 5px; }
+  .stop-body h3 { font-size: 1.18rem; }
+  .stop-body > p:first-of-type { font-size: 0.98rem; margin: 2px 0 8px; }
+  .tip-pill { font-size: 0.85rem; padding: 4px 12px; }
+  .trail::before { left: 21px; top: 20px; bottom: 20px; }
+  .stop:hover { translate: 0 0; }
+
+  /* mobile hero: the portrait artwork goes full-bleed and the logo + tagline
+     float over the calm sky — the same layered depth as desktop, curated
+     for the phone canvas. Hills + scrim seat the buttons at the bottom. */
+  .hero {
+    min-height: 100vh; min-height: 100svh;
+    flex-direction: column;
+    align-items: stretch; justify-content: flex-end;
+    background: var(--forest);
+    padding-top: 0;
+  }
+  .hero-bg { display: none; }
+  .hero-mobile {
+    position: absolute; inset: 0;
+    display: block;
+    overflow: hidden;
+  }
+  .hm-art {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 50% 38%;   /* favor the sky + keep the tree visible */
+  }
+  .hm-layers {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center;
+    /* logo block starts low enough to clear the notch, tagline lands in
+       the calm sky glow — no dead band between words and tree */
+    padding: clamp(58px, 9vh, 92px) 20px 34vh;
+    pointer-events: none;                          /* buttons stay tappable */
+  }
+  .hm-logo {
+    width: min(76vw, 320px); height: auto;
+    filter: drop-shadow(0 12px 22px rgba(9, 38, 15, 0.45));
+  }
+  .hm-tagline {
+    font-size: clamp(1.4rem, 6.2vw, 1.9rem);
+    text-align: center;
+    margin-top: clamp(8px, 1.6vh, 18px);
+  }
+  /* a soft rounded seat for the buttons, so the CTA reads as one unit
+     instead of pasted over the trash bag */
+  .hero-bottom::before {
+    content: ""; position: absolute;
+    inset: -10px 16px calc(-4px + env(safe-area-inset-bottom, 0px) * -0.6);
+    background: rgba(9, 38, 15, 0.42);
+    border-radius: 28px;
+    z-index: -1;
+  }
+  .hero-bottom { padding: 0 20px calc(22px + env(safe-area-inset-bottom, 0px)); }
+  .mascot-sticker { width: 84px; top: -32px; right: 14px; }
+  .mascot-sticker img { width: 84px; height: 84px; }
 }
 
 @media (max-width: 480px) {
-  /* stacked day cards get dotted trail markers between them instead */
-  .day-card + .day-card::before {
-    content: "✦";
-    position: absolute; top: -22px; left: 50%;
-    translate: -50% 0; z-index: 1;
-    color: var(--gold-deep); font-size: 0.95rem; line-height: 1;
-  }
+  .card { padding: 30px 20px 22px; }
+  .btn-lg { font-size: 1.15rem; padding: 15px 30px; }
+  .bub { padding: 6px 14px 6px 7px; font-size: 1rem; gap: 8px; }
+  .bub .n { width: 32px; height: 32px; font-size: 1rem; }
+  .bub.now { font-size: 1.05rem; }
+  .live-chip { padding: 9px 16px; font-size: 0.95rem; }
+  .live-num { font-size: 1.3rem; }
 }
 
-/* --- reduced motion (fun pass) --- */
+/* ------------------------------------------------------- reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
-  .trail-path, .log-doodle, .badge-holder, .badge-holder::before, .badge-holder::after,
-  .badge-holder.stamped, .badge-panel.ready #dl-png, .photo-icon, .photo-drop.got-it::after,
-  .stepper.bump input, .btn-submit, .btn-submit.yay, .brand img, .rules-strip li,
-  .rules-strip li:hover .r-icon, .badge-actions .btn {
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .hero-bg, .btn-play, .btn-play:hover, .scroll-cue, .stop, .stop:hover,
+  .stop:hover .stop-num, .stop:hover .stop-art, .stop-art, .friend-card,
+  .friend-card:hover, .friend-card img, .mascot-sticker, .game-shot,
+  .steps-trail li.now, .live-dot, .badge-holder, .badge-holder.stamped,
+  .badge-holder::before, .badge-holder::after, .sample-tag, .site-footer::before,
+  .btn-gold::after, .photo-drop.got-it::after, .stepper.bump input,
+  .bub, .bub.now::before, .trail-line, .steps-trail::before, .doodle, .toss-bottle, .toss-bin,
+  .bin-lid, .spark, .toss-check,
+  .form-status.ok, .form-status.error, .btn, .btn-primary,
+  .btn-gold, .btn-ghost, .hero-logo, .hero-tagline .w,
+  .footer-links a, .badge-panel.ready #dl-png {
     animation: none !important;
     transition: none !important;
   }
+  .confetti-piece { display: none; }
 }
+
+/* ======================================================================
+   Floating tune button — the synthesized theme song (see js/tune.js).
+   Off by default (the slash says so); a tap starts the loop and the
+   button turns gold, pulses, and the note dances.
+   ====================================================================== */
+.tune-btn {
+  position: fixed;
+  left: 18px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: var(--green);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(9, 38, 15, 0.35);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.tune-btn:hover { transform: scale(1.08) rotate(-6deg); }
+.tune-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.tune-btn svg { width: 24px; height: 24px; }
+/* the slash reads "music is off" until a ranger taps it */
+.tune-btn::after {
+  content: ""; position: absolute; left: 13px; right: 13px; top: 50%;
+  height: 3px; border-radius: 2px; background: currentColor;
+  transform: rotate(-45deg);
+}
+.tune-btn.on { background: var(--gold); color: var(--forest-deep); animation: tunePulse 2.2s ease-in-out infinite; }
+.tune-btn.on::after { display: none; }
+.tune-btn.on svg { animation: noteWiggle 0.9s ease-in-out infinite; }
+@keyframes tunePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+@keyframes noteWiggle { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+@media (max-width: 760px) {
+  /* top-right sky corner on phones: bottom-left would graze the hero's
+     button seat, and the page header is gone so the top edge is free */
+  .tune-btn {
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    right: 14px; bottom: auto; left: auto;
+    width: 48px; height: 48px;
+  }
+  .tune-btn svg { width: 21px; height: 21px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tune-btn, .tune-btn.on, .tune-btn.on svg { animation: none !important; }
+}
+
+/* ======================================================================
+   Easter egg — hover (or tap) the hero logo: the rangers step aside, a
+   bottle arcs into their bin, and they pop right back. Pure delight.
+   ====================================================================== */
+.logo-egg {
+  position: relative;
+  display: inline-block;
+  pointer-events: auto;          /* the hero layers above stay click-through */
+  cursor: pointer;
+}
+.logo-egg .hero-logo { display: block; }
+.egg-stage {
+  position: absolute; inset: 4% 8%;
+  pointer-events: none; opacity: 0;
+}
+.egg-bin {
+  position: absolute; right: 8%; bottom: 6%;
+  width: 34%; max-width: 150px;
+}
+.egg-lid {
+  transform-box: view-box; transform-origin: 5.5px 9.5px;
+}
+.egg-bottle {
+  position: absolute; left: 3%; top: 5%;
+  width: 17%; max-width: 84px; opacity: 0;
+}
+.egg-spark {
+  position: absolute; right: 16%; bottom: 40%;
+  width: 4%; min-width: 10px; aspect-ratio: 1; border-radius: 50%; opacity: 0;
+}
+.egg-spark.s1 { background: #ffd54f; } .egg-spark.s2 { background: #ff7043; }
+.egg-spark.s3 { background: #9ccc65; } .egg-spark.s4 { background: #29b6f6; }
+.egg-spark.s5 { background: #f06292; } .egg-spark.s6 { background: #fffdf6; }
+.egg-check {
+  position: absolute; right: 2%; bottom: 40%;   /* floats above the bin mouth */
+  width: 17%; max-width: 84px; opacity: 0;
+}
+
+/* the whole gag, one timeline: out (0.4s) → toss (0.15–0.95s) → hop &
+   check (1.1–1.55s) → scene exits (1.6–1.9s) → back in (2.0–2.5s) */
+.logo-egg.playing .hero-logo {
+  animation: eggLogoOut 0.4s cubic-bezier(0.4, 0, 0.6, 1) both,
+             eggLogoIn 0.5s 2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.logo-egg.playing .egg-stage { animation: eggStage 2.5s linear both; }
+.logo-egg.playing .egg-bottle { animation: eggToss 0.8s 0.15s cubic-bezier(0.35, 0, 0.65, 1) both; }
+.logo-egg.playing .egg-lid { animation: eggLid 0.8s 0.15s ease-in-out both; }
+.logo-egg.playing .egg-bin {
+  animation: eggChomp 0.3s 0.82s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             eggHop 0.55s 1.12s ease-in-out;
+}
+.logo-egg.playing .egg-spark { animation: sparkPop 0.55s ease-out both; }
+.logo-egg.playing .egg-spark.s1 { animation-delay: 0.86s; --sx: -130%; --sy: -170%; }
+.logo-egg.playing .egg-spark.s2 { animation-delay: 0.91s; --sx: 35%;   --sy: -240%; }
+.logo-egg.playing .egg-spark.s3 { animation-delay: 0.96s; --sx: 170%;  --sy: -110%; }
+.logo-egg.playing .egg-spark.s4 { animation-delay: 1.01s; --sx: -55%;  --sy: -60%; }
+.logo-egg.playing .egg-spark.s5 { animation-delay: 1.06s; --sx: 150%;  --sy: 30%; }
+.logo-egg.playing .egg-spark.s6 { animation-delay: 1.11s; --sx: 230%;  --sy: -160%; }
+.logo-egg.playing .egg-check { animation: checkPop 0.45s 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+@keyframes eggLogoOut {
+  0% { transform: scale(1) translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0.68) translate(-10%, 8%) rotate(-8deg); opacity: 0; }
+}
+@keyframes eggLogoIn {
+  0% { transform: scale(0.68) translate(-10%, 8%) rotate(-8deg); opacity: 0; }
+  100% { transform: scale(1) translate(0, 0) rotate(0deg); opacity: 1; }
+}
+@keyframes eggStage {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  64% { opacity: 1; }
+  76% { opacity: 0; }   /* the scene is gone before the logo returns */
+  100% { opacity: 0; }
+}
+@keyframes eggToss {
+  0% { transform: translate(0, 0) rotate(10deg) scale(1); opacity: 1; }
+  18% { transform: translate(-35%, 8%) rotate(-28deg) scale(1.03); opacity: 1; }
+  55% { transform: translate(200%, -50%) rotate(340deg) scale(0.92); } /* peak stays in frame */
+  85% { transform: translate(390%, 210%) rotate(540deg) scale(0.5); }
+  100% { transform: translate(420%, 295%) rotate(615deg) scale(0.1); opacity: 0; }
+}
+@keyframes eggLid {
+  0%, 28% { transform: rotate(0deg); }
+  42%, 76% { transform: rotate(-50deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes eggChomp {
+  0% { transform: scale(1, 1); }
+  35% { transform: scale(1.12, 0.8); }
+  65% { transform: scale(0.94, 1.12); }
+  100% { transform: scale(1, 1); }
+}
+@keyframes eggHop {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  30% { translate: 0 -5%; rotate: -5deg; }
+  60% { translate: 0 -2%; rotate: 4deg; }
+  85% { rotate: -2deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-egg .hero-logo, .egg-stage, .egg-bottle, .egg-bin, .egg-lid,
+  .egg-spark, .egg-check { animation: none !important; opacity: 1; }
+  .egg-bottle, .egg-stage, .egg-check { opacity: 0; }
+}
+
+/* footer contact line */
+.footer-contact { color: rgba(244, 249, 239, 0.82); font-size: 0.95rem; margin: 0 0 10px; }
+.footer-contact a {
+  color: var(--gold); font-weight: 700; text-decoration: none;
+  border-bottom: 2px dotted rgba(255, 193, 7, 0.5);
+}
+.footer-contact a:hover { border-bottom-style: solid; }

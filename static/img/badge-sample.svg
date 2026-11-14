@@ -7,21 +7,27 @@
     <path id="arcBottom" d="M 100 250 A 115 115 0 0 0 320 250" fill="none"/>
   </defs>
   <polygon points="150,360 118,505 160,494 180,520 205,392" fill="#1B5E20"/>
-  <polygon points="270,360 302,505 260,494 240,520 215,392" fill="#1B5E20"/>
-  <circle cx="386.0" cy="210.0" r="9" fill="#F9A825"/><circle cx="381.6" cy="249.2" r="9" fill="#F9A825"/><circle cx="368.6" cy="286.4" r="9" fill="#F9A825"/><circle cx="347.6" cy="319.7" r="9" fill="#F9A825"/><circle cx="319.7" cy="347.6" r="9" fill="#F9A825"/><circle cx="286.4" cy="368.6" r="9" fill="#F9A825"/><circle cx="249.2" cy="381.6" r="9" fill="#F9A825"/><circle cx="210.0" cy="386.0" r="9" fill="#F9A825"/><circle cx="170.8" cy="381.6" r="9" fill="#F9A825"/><circle cx="133.6" cy="368.6" r="9" fill="#F9A825"/><circle cx="100.3" cy="347.6" r="9" fill="#F9A825"/><circle cx="72.4" cy="319.7" r="9" fill="#F9A825"/><circle cx="51.4" cy="286.4" r="9" fill="#F9A825"/><circle cx="38.4" cy="249.2" r="9" fill="#F9A825"/><circle cx="34.0" cy="210.0" r="9" fill="#F9A825"/><circle cx="38.4" cy="170.8" r="9" fill="#F9A825"/><circle cx="51.4" cy="133.6" r="9" fill="#F9A825"/><circle cx="72.4" cy="100.3" r="9" fill="#F9A825"/><circle cx="100.3" cy="72.4" r="9" fill="#F9A825"/><circle cx="133.6" cy="51.4" r="9" fill="#F9A825"/><circle cx="170.8" cy="38.4" r="9" fill="#F9A825"/><circle cx="210.0" cy="34.0" r="9" fill="#F9A825"/><circle cx="249.2" cy="38.4" r="9" fill="#F9A825"/><circle cx="286.4" cy="51.4" r="9" fill="#F9A825"/><circle cx="319.7" cy="72.4" r="9" fill="#F9A825"/><circle cx="347.6" cy="100.3" r="9" fill="#F9A825"/><circle cx="368.6" cy="133.6" r="9" fill="#F9A825"/><circle cx="381.6" cy="170.8" r="9" fill="#F9A825"/>
+  <polygon points="270,360 302,505 260,494 240,520 215,392" fill="#0277BD"/>
+  <circle cx="210" cy="210" r="184" fill="#FFFDF6"/>
+  <circle cx="386.0" cy="210.0" r="11" fill="#FFC107"/><circle cx="381.6" cy="249.2" r="11" fill="#9CCC65"/><circle cx="368.6" cy="286.4" r="11" fill="#29B6F6"/><circle cx="347.6" cy="319.7" r="11" fill="#F06292"/><circle cx="319.7" cy="347.6" r="11" fill="#FFC107"/><circle cx="286.4" cy="368.6" r="11" fill="#9CCC65"/><circle cx="249.2" cy="381.6" r="11" fill="#29B6F6"/><circle cx="210.0" cy="386.0" r="11" fill="#F06292"/><circle cx="170.8" cy="381.6" r="11" fill="#FFC107"/><circle cx="133.6" cy="368.6" r="11" fill="#9CCC65"/><circle cx="100.3" cy="347.6" r="11" fill="#29B6F6"/><circle cx="72.4" cy="319.7" r="11" fill="#F06292"/><circle cx="51.4" cy="286.4" r="11" fill="#FFC107"/><circle cx="38.4" cy="249.2" r="11" fill="#9CCC65"/><circle cx="34.0" cy="210.0" r="11" fill="#29B6F6"/><circle cx="38.4" cy="170.8" r="11" fill="#F06292"/><circle cx="51.4" cy="133.6" r="11" fill="#FFC107"/><circle cx="72.4" cy="100.3" r="11" fill="#9CCC65"/><circle cx="100.3" cy="72.4" r="11" fill="#29B6F6"/><circle cx="133.6" cy="51.4" r="11" fill="#F06292"/><circle cx="170.8" cy="38.4" r="11" fill="#FFC107"/><circle cx="210.0" cy="34.0" r="11" fill="#9CCC65"/><circle cx="249.2" cy="38.4" r="11" fill="#29B6F6"/><circle cx="286.4" cy="51.4" r="11" fill="#F06292"/><circle cx="319.7" cy="72.4" r="11" fill="#FFC107"/><circle cx="347.6" cy="100.3" r="11" fill="#9CCC65"/><circle cx="368.6" cy="133.6" r="11" fill="#29B6F6"/><circle cx="381.6" cy="170.8" r="11" fill="#F06292"/>
   <circle cx="210" cy="210" r="172" fill="url(#gold)" stroke="#F57F17" stroke-width="3"/>
-  <circle cx="210" cy="210" r="150" fill="#1B5E20"/>
+  <circle cx="210" cy="210" r="150" fill="#2E7D32"/>
   <circle cx="210" cy="210" r="140" fill="none" stroke="#FFF8E1" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round"/>
-  <text font-family="Verdana, sans-serif" font-size="22" font-weight="bold" fill="#F9A825" letter-spacing="3">
+  <path d="M62 96 l7 13 13 7 -13 7 -7 13 -13 -7 13 -7 z" fill="#FFD54F"/>
+  <path d="M352 110 l6 11 11 6 -11 6 -6 11 -11 -6 11 -6 z" fill="#F06292"/>
+  <text font-family="Verdana, sans-serif" font-size="22" font-weight="bold" fill="#FFFDF6" letter-spacing="3">
     <textPath href="#arcTop" startOffset="50%" text-anchor="middle">&#9733; ECO RANGERS &#9733;</textPath>
   </text>
   <text font-family="Verdana, sans-serif" font-size="13" font-weight="bold" fill="#FFF8E1" letter-spacing="1">
     <textPath href="#arcBottom" startOffset="50%" text-anchor="middle">13 Nov 2026 &#8226; ER-2026-0001</textPath>
   </text>
-  <path d="M210 112 C 194 121, 185 136, 185 152 C 185 165, 196 172, 210 172 C 224 172, 235 165, 235 152 C 235 136, 226 121, 210 112 Z" fill="#8BC34A"/>
-  <path d="M210 122 V 163" stroke="#1B5E20" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M210 108 C 192 118, 182 135, 182 152 C 182 166, 194 174, 210 174 C 226 174, 238 166, 238 152 C 238 135, 228 118, 210 108 Z" fill="#8BC34A" stroke="#1B5E20" stroke-width="3"/>
+  <path d="M210 122 V 160" stroke="#1B5E20" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="200" cy="140" r="3.2" fill="#1B5E20"/>
+  <circle cx="220" cy="140" r="3.2" fill="#1B5E20"/>
+  <path d="M202 150 Q 210 157 218 150" fill="none" stroke="#1B5E20" stroke-width="3" stroke-linecap="round"/>
   <text x="210" y="197" text-anchor="middle" font-family="Verdana, sans-serif" font-size="23" font-weight="bold" fill="#FFF8E1">Your Name</text>
   <text x="210" y="223" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" font-weight="bold" fill="#FFD54F" letter-spacing="1">CLIMATE CHAMPION</text>
   <text x="210" y="265" text-anchor="middle" font-family="Verdana, sans-serif" font-size="42" font-weight="bold" fill="#FFF8E1">25</text>
-  <text x="210" y="285" text-anchor="middle" font-family="Verdana, sans-serif" font-size="11" letter-spacing="2" fill="#A5D6A7">PLASTIC ITEMS</text>
+  <text x="210" y="285" text-anchor="middle" font-family="Verdana, sans-serif" font-size="11" letter-spacing="2" fill="#C5E1A5">PLASTIC ITEMS</text>
 </svg>
