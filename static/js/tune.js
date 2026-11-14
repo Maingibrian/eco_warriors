@@ -195,6 +195,18 @@
     return true;
   }
 
+  // The easter egg's landing sound: a little "boop-beep… plop!" as the
+  // bottle drops into the bin. Hover isn't a user gesture, so this stays
+  // silent until the visitor has unlocked audio by tapping something.
+  function egg() {
+    if (!ctx || ctx.state !== "running") return false;
+    var t = ctx.currentTime + 0.02;
+    pluck(sfxBus, 69, t, 0.12, 0.10);         // A4 boop
+    pluck(sfxBus, 81, t + 0.09, 0.22, 0.12);  // A5 beep
+    noise(t + 0.16, 0.06, 900, 0.12);         // the soft plop
+    return true;
+  }
+
   // Called from the submit handler (a user gesture): opens the audio
   // context right away so the fanfare can ring the moment the badge lands.
   function arm() {
@@ -263,6 +275,7 @@
     start: start,
     stop: stop,
     success: success,
+    egg: egg,
     arm: arm,
     playing: function () { return playing; },
     scheduled: function () { return scheduled; },
