@@ -139,7 +139,7 @@
         </div>
       </div>
       <div class="hero-bottom">
-        <a class="btn btn-gold btn-lg btn-play reveal in" href="#missions">Start the Challenge!&nbsp;▶</a>
+        <a class="btn btn-gold btn-lg btn-play reveal in" data-voice="start" href="#missions">Start the Challenge!&nbsp;▶</a>
         <a class="hero-alt reveal in" href="#log-in">Already finished? Log your win&nbsp;↓</a>
       </div>
       <span class="scroll-cue" aria-hidden="true">▼</span>
@@ -255,7 +255,7 @@
                 </div>
               </div>
 
-              <button class="btn btn-gold btn-submit" id="submit-btn" type="submit">
+              <button class="btn btn-gold btn-submit" id="submit-btn" data-voice="done" type="submit">
               <span class="submit-txt">Send It!</span>
               <span class="toss-stage" aria-hidden="true">
                 <!-- the report is a bottle: rest → toss → the blue bin eats it.
@@ -324,8 +324,56 @@
           One small mission every day. By Friday you are a recycling hero!
         </p>
 
+        <!-- phones: the deck-stage is the full-screen card player — three
+             chat cards open the story (Ranger Kid the girl introduces the
+             team, Deputy Eco the helper continues, then both invite you),
+             then the five mission cards continue it. desktop: the stage
+             collapses (display: contents) into normal rows down the trail. -->
+        <div class="deck-stage">
         <ol class="trail">
-          <li class="stop c1 reveal">
+          <li class="stop intro i1 reveal">
+            <span class="stop-num" aria-hidden="true">👋</span>
+            <div class="intro-frame">
+              <img class="stop-art" src="/img/girl-hello.webp" width="640" height="640"
+                   alt="Ranger Kid — a girl in a green bucket hat and backpack, waving hello on a mint background" loading="lazy"/>
+            </div>
+            <div class="stop-body">
+              <span class="speaker s-kid">Ranger Kid</span>
+              <h3>Hi, Ranger!</h3>
+              <p>I'm Ranger Kid, the boss of this adventure. Welcome to the Eco Rangers — the team that keeps Planet Earth clean and green!</p>
+            </div>
+          </li>
+
+          <li class="stop intro i2 reveal">
+            <span class="stop-num" aria-hidden="true">🌍</span>
+            <div class="intro-frame">
+              <img class="stop-art" src="/img/mascot-look.webp" width="640" height="640"
+                   alt="Deputy Eco — a boy ranger in a green bucket hat leaning in with wide curious eyes on a mint background" loading="lazy"/>
+            </div>
+            <div class="stop-body">
+              <span class="speaker s-dep">Deputy Eco</span>
+              <h3>The Planet Needs You!</h3>
+              <p>Our parks and rivers are filling up with plastic! But we have a plan — and we need a hero just like YOU!</p>
+            </div>
+          </li>
+
+          <li class="stop intro i3 reveal">
+            <span class="stop-num" aria-hidden="true">⭐</span>
+            <div class="intro-frame duo">
+              <img class="stop-art" src="/img/girl-invite.webp" width="640" height="640"
+                   alt="Ranger Kid on a golden background, inviting you to join the team" loading="lazy"/>
+              <img class="pal" src="/img/mascot-thumbs.webp" width="640" height="640"
+                   alt="Deputy Eco giving a big thumbs up" loading="lazy"/>
+            </div>
+            <div class="stop-body">
+              <span class="speaker s-team">The Eco Rangers</span>
+              <h3>Join the Team!</h3>
+              <p>Say YES and we'll show you your five missions. Finish them all to earn your Climate Champion badge!</p>
+              <p class="intro-cta-row"><a class="btn btn-gold btn-lg intro-cta" data-voice="yes" href="#mission-1">YES! I'm in!&nbsp;▶</a></p>
+            </div>
+          </li>
+
+          <li class="stop c1 reveal" id="mission-1">
             <span class="stop-num" aria-hidden="true">1</span>
             <img class="stop-art" src="/img/day1-build.webp" width="640" height="640"
                  alt="A happy cardboard box being decorated into a recycling bin with stickers and paint" loading="lazy"/>
@@ -360,8 +408,8 @@
 
           <li class="stop c4 reveal">
             <span class="stop-num" aria-hidden="true">4</span>
-            <img class="stop-art" src="/img/day4-check.webp" width="640" height="640"
-                 alt="A happy child giving a thumbs up beside a blue recycling bin, with a grown-up hand also giving a thumbs up" loading="lazy"/>
+            <img class="stop-art" src="/img/day4-girl.webp" width="640" height="640"
+                 alt="A happy ranger girl in a green bucket hat and khaki shirt giving a thumbs up beside a smiling blue recycling bin" loading="lazy"/>
             <div class="stop-body">
               <h3>Grown-Up Check!</h3>
               <p>Show a grown-up. Make sure they use it right!</p>
@@ -377,9 +425,19 @@
               <h3>Snap Your Proof!</h3>
               <p>Take a photo of your bin — then log your win!</p>
               <p class="tip-pill"><b>Ranger tip:</b> big smile, big bin!</p>
+              <p class="stop-ctas">
+                <a class="btn btn-gold btn-lg join-cta" data-voice="join" href="#log-in">Join the Team!&nbsp;⭐</a>
+                <a class="cta-alt" href="#log-in">or log your win&nbsp;↓</a>
+              </p>
             </div>
           </li>
         </ol>
+
+        <!-- phones only: hint + arrows live inside the full-screen stage;
+             the deck script unhides them and wires the dots -->
+        <p class="deck-hint">Swipe the cards! 👉</p>
+        <div class="deck-nav" hidden></div>
+        </div>
       </div>
     </section>
 
@@ -392,8 +450,8 @@
 
         <div class="friend-grid">
           <article class="friend-card reveal">
-            <img src="/img/mascot.webp" width="640" height="640"
-                 alt="The Eco Rangers kid mascot in a green bucket hat and backpack, waving hello" loading="lazy"/>
+            <img src="/img/girl-hello.webp" width="640" height="640"
+                 alt="Ranger Kid — a girl in a green bucket hat and backpack waving hello" loading="lazy"/>
             <h3>Ranger Kid</h3>
             <p>“Hi! I am the boss of this adventure. Join me!”</p>
           </article>
@@ -451,6 +509,12 @@
               <li><span class="n">2</span>Race to grab the card that answers it!</li>
               <li><span class="n">3</span>Right? Jump to the matching bin. Most cards wins!</li>
             </ol>
+            <p class="game-cta reveal">
+              <a class="btn btn-primary btn-lg" data-voice="game"
+                 href="/pdf/eco-rangers-board-game.pdf"
+                 download="Eco Rangers Board Game.pdf">Download the game PDF&nbsp;⬇</a><br/>
+              <span class="game-cta-note">Rules + question cards — print them and play!</span>
+            </p>
           </div>
         </div>
       </div>

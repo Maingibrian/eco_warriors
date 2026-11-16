@@ -5,6 +5,17 @@
    Section order: hero → log your win → how to play → friends → board game.
    ========================================================================== */
 
+/* The fun children's font, self-hosted: one variable woff2 covers every
+   weight used on the page (400–800), so headings and body stay round and
+   friendly with zero build step and no external requests. */
+@font-face {
+  font-family: "Baloo 2";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/baloo2-var.woff2") format("woff2");
+}
+
 :root {
   --cream: #f7f1e1;
   --paper: #fffdf6;
@@ -463,6 +474,9 @@ a { color: var(--green); }
   width: 22px; height: 22px; border-radius: 50%;
   background: #fff; border: 2px solid #d9d2ba; font-size: 0.8rem;
 }
+/* Baloo 2 runs wider than the old system fallback — keep tab names on
+   one line so the pills stay round instead of growing a second storey */
+.wt-name { white-space: nowrap; }
 .wt.current { background: var(--gold); border-color: #e59c00; color: var(--ink); }
 .wt.current .wt-dot { border-color: var(--ink); }
 .wt.done { background: #e7f3df; border-color: var(--green); color: var(--forest); }
@@ -855,6 +869,13 @@ input::placeholder { color: #a9b598; }
   font-weight: 800; font-size: 1rem;
   display: grid; place-items: center;
   box-shadow: 0 3px 0 var(--forest-deep);
+}
+
+/* the print-and-play download under the game rules */
+.game-cta { margin: 28px 0 0; text-align: center; }
+.game-cta-note {
+  display: inline-block; margin-top: 10px;
+  font-size: 0.95rem; font-weight: 700; color: var(--green);
 }
 
 /* -------------------------------------------------------------- footer */
@@ -1521,3 +1542,384 @@ input::placeholder { color: #a9b598; }
   border-bottom: 2px dotted rgba(255, 193, 7, 0.5);
 }
 .footer-contact a:hover { border-bottom-style: solid; }
+
+/* ==========================================================================
+   How to Play — the Duolingo-style card experience.
+   Desktop: the deck-stage collapses (display: contents); the trail reads as
+   rows, with the mascot "hello" rows as tinted chat cards above the days.
+   Phones (html.js, <=760px): the stage becomes a FULL-SCREEN card player —
+   edge-to-edge, one screen tall. Three mascot intro cards open the story,
+   then the five mission cards continue it; swipe or tap and the card flips
+   away in 3D while the next flips in.
+   ========================================================================== */
+.deck-stage { display: contents; }
+.deck-hint { display: none; }
+.deck-nav[hidden] { display: none; }
+
+/* intro rows + end-of-trail CTAs (desktop look): the chat cards get a
+   framed portrait (matching the day-photo frames), a speaker chip, and on
+   the invite card a second polaroid of Deputy Eco overlapping the frame */
+.stop.intro { --c: #43a047; }
+.stop.intro.i2 { --c: #0288d1; }
+.stop.intro.i3 { --c: #f9a825; }
+.stop.intro {
+  background: color-mix(in srgb, var(--c) 9%, transparent);
+  border-radius: 26px;
+  padding: 12px 18px;
+}
+.intro-frame {
+  position: relative;
+  background: #fff;
+  border: 6px solid #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 22px rgba(16, 64, 26, 0.16), 0 5px 0 rgba(16, 64, 26, 0.08);
+  transition: translate 0.2s ease;
+}
+.stop.intro:hover .intro-frame { translate: 0 -4px; }
+.stop.intro:nth-child(odd) .intro-frame { rotate: -1.2deg; }
+.stop.intro:nth-child(even) .intro-frame { rotate: 1.2deg; }
+.stop.intro .stop-art {
+  rotate: none;
+  transform: none;
+  border: 0;
+  border-radius: 18px;
+  box-shadow: none;
+}
+.stop.intro:hover .stop-art { transform: none; }   /* the frame lifts, not the photo */
+/* Deputy Eco's polaroid, overlapping the bottom-right of Ranger Kid's frame.
+   Own class, own styles — it must never inherit the deck's .stop-art rules.
+   Pinned via top/left + a self-relative translate: for abspos REPLACED
+   elements `top:auto` falls back to the static position and `bottom` is
+   then dropped as over-constrained, so bottom/right offsets are unsafe. */
+.stop.intro .intro-frame .pal {
+  position: absolute;
+  top: 100%;
+  left: 100%;
+  right: auto;
+  bottom: auto;
+  width: 52%;
+  height: auto;                   /* let aspect-ratio square it (img height attr would win) */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  translate: calc(-100% + 14px) calc(-100% + 14px);
+  border: 5px solid #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 18px rgba(16, 64, 26, 0.22);
+  rotate: 7deg;
+  pointer-events: none;
+}
+.speaker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 8px;
+  padding: 5px 14px;
+  background: #fff;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 10px rgba(16, 64, 26, 0.14);
+}
+.speaker::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--spk, var(--green));
+  flex: none;
+}
+.s-kid { --spk: #43a047; color: #1b5e20; }
+.s-dep { --spk: #ef6c00; color: #bf360c; }
+.s-team { --spk: #f9a825; color: #8d6e00; }
+.intro-cta-row { margin: 10px 0 0; }
+.stop-ctas {
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.cta-alt {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px dotted currentColor;
+}
+.cta-alt:hover { border-bottom-style: solid; }
+
+/* a quick "here it is!" bump when the intro CTA lands on mission 1 */
+@keyframes stopPop {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.045); }
+}
+.stop.pop { animation: stopPop 0.9s cubic-bezier(0.3, 1.4, 0.4, 1); }
+
+/* a warm glow when the last card sends you to the log-in form */
+@keyframes formPulse {
+  0%, 100% { box-shadow: var(--shadow); }
+  40% { box-shadow: 0 0 0 9px rgba(255, 193, 7, 0.5), var(--shadow-lift); }
+}
+.form-card.form-pulse { animation: formPulse 1.1s ease 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stop.pop, .form-card.form-pulse { animation: none; }
+}
+
+@media (max-width: 760px) {
+  /* the swipe hint floats over the card in a dark pill, above the nav */
+  .js .deck-hint {
+    display: block;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    bottom: 92px;
+    margin: 0;
+    padding: 7px 20px;
+    max-width: calc(100vw - 24px);
+    border-radius: 999px;
+    background: rgba(16, 64, 26, 0.6);
+    color: #fff;
+    font-weight: 700;
+    white-space: nowrap;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  /* the full-screen player: edge-to-edge, exactly one screen tall */
+  .js .deck-stage {
+    position: relative;
+    display: block;
+    width: 100vw;
+    margin: 26px calc(50% - 50vw) 0;
+    height: 100vh;
+    height: 100svh;
+    perspective: 1400px;
+    touch-action: pan-y;          /* horizontal swipes ours, page scroll yours */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .js .deck-stage .trail {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+  .js .deck-stage .trail::before { display: none; }  /* no dashed path here */
+
+  .js .deck-stage .stop {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: var(--paper);
+    opacity: 1;                   /* deck mode is always revealed */
+    transform: none;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+  }
+  .js .deck-stage .stop.is-hidden { visibility: hidden; }
+
+  /* mission cards: the photo fills the screen, words ride on top */
+  .js .deck-stage .stop-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    rotate: none;
+    transform: none;
+    pointer-events: none;         /* the card owns every touch */
+  }
+  .js .deck-stage .stop::after {  /* scrim so white words stay readable */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      rgba(16, 64, 26, 0.22) 0%,
+      rgba(16, 64, 26, 0) 22%,
+      rgba(16, 64, 26, 0) 40%,
+      rgba(16, 64, 26, 0.74) 78%,
+      rgba(16, 64, 26, 0.94) 100%);
+  }
+  .js .deck-stage .stop-num {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 3;
+    width: 54px;
+    height: 54px;
+    font-size: 1.5rem;
+    border-width: 4px;
+    box-shadow: 0 4px 0 rgba(16, 64, 26, 0.35);
+  }
+  .js .deck-stage .stop-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    padding: 16px 22px 128px;     /* keeps the words clear of the nav */
+  }
+  .js .deck-stage .stop-body h3 {
+    color: #fff;
+    font-size: clamp(1.45rem, 6.4vw, 1.9rem);
+    margin: 0 0 5px;
+    padding: 0;
+    border: 0;
+    text-shadow: 0 2px 0 rgba(16, 64, 26, 0.55), 0 0 16px rgba(16, 64, 26, 0.45);
+  }
+  .js .deck-stage .stop-body > p:first-of-type {
+    color: #fff;
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+    text-shadow: 0 1px 0 rgba(16, 64, 26, 0.6);
+  }
+  .js .deck-stage .tip-pill {
+    background: rgba(255, 255, 255, 0.94);
+    border-color: transparent;
+    font-size: 0.86rem;
+    padding: 4px 14px;
+  }
+  .js .deck-stage .stop-ctas { margin: 14px 0 0; }
+  .js .deck-stage .stop-ctas .cta-alt {
+    color: #fff;
+    border-bottom: 2px dotted rgba(255, 255, 255, 0.8);
+  }
+
+  /* intro cards: the chat — framed portrait + speaker chip + speech bubble
+     on a soft polka-dot face (no photo scrim) */
+  .js .deck-stage .stop.intro.i1 { background-color: #e8f3e3; }
+  .js .deck-stage .stop.intro.i2 { background-color: #ddeefb; }
+  .js .deck-stage .stop.intro.i3 { background-color: #fdf1d6; }
+  .js .deck-stage .stop.intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 84px 26px 136px;      /* clear the badge above, the nav below */
+    background-image: radial-gradient(rgba(27, 94, 32, 0.055) 2.5px, transparent 2.6px);
+    background-size: 26px 26px;
+  }
+  .js .deck-stage .stop.intro::after { display: none; }  /* no scrim */
+  .js .deck-stage .intro-frame { width: min(64vw, 300px, 36svh); }
+  .js .deck-stage .stop.intro .stop-art {
+    position: static;
+    inset: auto;
+    translate: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+    border-radius: 18px;
+    box-shadow: none;
+    rotate: none;
+    transform: none;
+    pointer-events: none;
+  }
+  .js .deck-stage .stop.intro .stop-body {
+    position: static;
+    width: min(92vw, 420px);
+    padding: 18px 22px 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    box-shadow: 0 10px 24px rgba(16, 64, 26, 0.14);
+  }
+  .js .deck-stage .stop.intro .speaker {
+    position: relative;
+    display: flex;
+    width: max-content;
+    margin: -36px auto 8px;        /* straddles the top of the bubble */
+    z-index: 2;
+  }
+  .js .deck-stage .stop.intro .stop-body h3 {
+    color: var(--forest);
+    font-size: clamp(1.55rem, 7vw, 2rem);
+    text-shadow: none;
+    margin: 0 0 6px;
+  }
+  .js .deck-stage .stop.intro .stop-body > p:first-of-type {
+    color: var(--ink);
+    font-size: 1.06rem;
+    text-shadow: none;
+    margin: 0 0 4px;
+  }
+  .js .deck-stage .intro-cta-row { margin: 10px 0 0; }
+
+  /* arrows + dots float over the bottom of the card */
+  .js .deck-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 0;
+    z-index: 4;
+  }
+  .deck-btn {
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--forest);
+    color: #fff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 5px 0 rgba(16, 64, 26, 0.3), var(--shadow);
+    transition: translate 0.1s ease, box-shadow 0.1s ease, opacity 0.15s ease;
+  }
+  .deck-btn:active { translate: 0 3px; box-shadow: 0 2px 0 rgba(16, 64, 26, 0.3); }
+  .deck-btn[disabled] { opacity: 0.35; cursor: default; }
+  .deck-btn svg { width: 22px; height: 22px; display: block; }
+  .deck-dots { display: flex; gap: 9px; }
+  .deck-dot {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: inset 0 0 0 2.5px var(--green);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+  }
+  .deck-dot[aria-current="true"] {
+    background: var(--green);
+    opacity: 1;
+    transform: scale(1.3);
+  }
+
+  /* a friendly "no more cards" wiggle when swiping past the ends */
+  @keyframes deckBounceNext {
+    0%, 100% { transform: none; }
+    35% { transform: rotateY(-14deg) translateX(-14px); }
+    70% { transform: rotateY(8deg) translateX(6px); }
+  }
+  @keyframes deckBouncePrev {
+    0%, 100% { transform: none; }
+    35% { transform: rotateY(14deg) translateX(14px); }
+    70% { transform: rotateY(-8deg) translateX(-6px); }
+  }
+  .js .deck-stage .stop.bounce-next { animation: deckBounceNext 0.45s ease; }
+  .js .deck-stage .stop.bounce-prev { animation: deckBouncePrev 0.45s ease; }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+  .js .deck-stage .stop.bounce-next,
+  .js .deck-stage .stop.bounce-prev { animation: none; }
+}

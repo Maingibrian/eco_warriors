@@ -220,7 +220,7 @@
         else li.removeAttribute("aria-current");
       });
       watch(false);
-      if (n === 1) { setPose("hi"); say("Hi, Ranger! I'm Eco! 👋"); }
+      if (n === 1) { setPose("hi"); say("Hi, Ranger! I'm Deputy Eco! 👋"); }
       if (n === 2) {
         setPose("snap");
         say(photoData ? "KACHUNK! Got it! ⭐" : "Say cheese! I'll snap one too! 📸");
@@ -606,6 +606,360 @@
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  // ------------------------------------------------------------- mission deck
+  // On phones the How to Play trail becomes a FULL-SCREEN card player, one
+  // screen tall: three mascot "hello" cards open the story, then the five
+  // mission cards continue it. Swiping (or tapping the arrows / dots) flips
+  // the current card away in 3D while the next flips in; a sideways trackpad
+  // scroll counts as a swipe too. "Start the Challenge!" in the hero rewinds
+  // to the ranger girl's welcome card; the last card links to the log-in
+  // form. Wider screens keep the numbered rows, so all of it is gated.
+  function missionDeck() {
+    var trail = $("#missions .trail");
+    if (!trail) return;
+    var stops = $$("#missions .trail > .stop");
+    if (stops.length < 2) return;
+    var stage = trail.closest(".deck-stage") || trail;
+    var nav = $("#missions .deck-nav");
+    var hint = $("#missions .deck-hint");
+    var introCount = stops.filter(function (s) {
+      return s.classList.contains("intro");
+    }).length;
+    var mq = window.matchMedia("(max-width: 760px)");
+    // --- button voices: short generated clips give the big CTAs a voice ---
+    // One delegated listener: any element with data-voice="yes|join|game|…"
+    // speaks on click, whatever else its own handler does.
+    var VOICE_URLS = {
+      yes: "/audio/voice-yes.mp3",
+      join: "/audio/voice-join.mp3",
+      game: "/audio/voice-game.mp3",
+      start: "/audio/voice-start.mp3",
+      done: "/audio/voice-done.mp3"
+    };
+    var voiceCache = {};
+    function say(name) {
+      var url = VOICE_URLS[name];
+      if (!url) return;
+      try {
+        if (!voiceCache[name]) {
+          voiceCache[name] = new Audio(url);
+          voiceCache[name].preload = "auto";
+        }
+        voiceCache[name].currentTime = 0;
+        var p = voiceCache[name].play();
+        if (p && p.catch) p.catch(function () { /* autoplay rules: stay quiet */ });
+      } catch (err) { /* a voice is garnish — never block the button */ }
+    }
+    document.addEventListener("click", function (e) {
+      var el = e.target.closest && e.target.closest("[data-voice]");
+      if (el) say(el.getAttribute("data-voice"));
+    }, true);
+
+    // --- a soft synth pop for the deck controls (no audio file needed) ---
+    var popCtx = null;
+    function pop(up) {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        popCtx = popCtx || new AC();
+        if (popCtx.state === "suspended") popCtx.resume();
+        var t = popCtx.currentTime;
+        var o = popCtx.createOscillator(), g = popCtx.createGain();
+        o.type = "sine";
+        o.frequency.setValueAtTime(up ? 620 : 460, t);
+        o.frequency.exponentialRampToValueAtTime(up ? 920 : 330, t + 0.09);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.07, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+        o.connect(g);
+        g.connect(popCtx.destination);
+        o.start(t);
+        o.stop(t + 0.15);
+      } catch (err) { /* silence is fine */ }
+    }
+
+    var calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var idx = 0, busy = false, cleanupTimer = null, bounceTimer = null;
+    var prevBtn = null, nextBtn = null, dots = [];
+
+    var CHEV_L = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var CHEV_R = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    function buildNav() {
+      if (!nav || nav.childNodes.length) return;
+      prevBtn = document.createElement("button");
+      prevBtn.type = "button";
+      prevBtn.className = "deck-btn deck-prev";
+      prevBtn.setAttribute("aria-label", "Previous card");
+      prevBtn.innerHTML = CHEV_L;
+      nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "deck-btn deck-next";
+      nextBtn.setAttribute("aria-label", "Next card");
+      nextBtn.innerHTML = CHEV_R;
+      var dotsBox = document.createElement("div");
+      dotsBox.className = "deck-dots";
+      stops.forEach(function (stop, i) {
+        var isIntro = i < introCount;
+        var dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "deck-dot";
+        dot.setAttribute("aria-label",
+          (isIntro ? "Hello card " + (i + 1) + " of " + introCount
+                   : "Mission " + (i - introCount + 1) + " of " + (stops.length - introCount)));
+        dot.addEventListener("click", function () { jump(i); });
+        dotsBox.appendChild(dot);
+        dots.push(dot);
+      });
+      prevBtn.addEventListener("click", function () { go(-1); });
+      nextBtn.addEventListener("click", function () { go(1); });
+      nav.appendChild(prevBtn);
+      nav.appendChild(dotsBox);
+      nav.appendChild(nextBtn);
+    }
+
+    function renderNav() {
+      dots.forEach(function (dot, i) {
+        if (i === idx) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+      if (prevBtn) prevBtn.disabled = idx === 0;
+      if (nextBtn) nextBtn.disabled = idx === stops.length - 1;
+      if (hint) hint.hidden = idx !== 0;   // the swipe hint is a first-card thing
+    }
+
+    function bounce(dir) {
+      if (busy || calm.matches) return;
+      var card = stops[idx];
+      card.style.transition = "";
+      card.style.transform = "";      // let go of any drag pose first
+      var cls = dir > 0 ? "bounce-next" : "bounce-prev";
+      card.classList.remove("bounce-next", "bounce-prev");
+      void card.offsetWidth;
+      card.classList.add(cls);
+      clearTimeout(bounceTimer);
+      bounceTimer = setTimeout(function () { card.classList.remove(cls); }, 500);
+    }
+
+    function flipTo(to, dir) {
+      busy = true;
+      var out = stops[idx], inn = stops[to];
+      var fast = calm.matches;
+      var tOut = fast ? "none" : "transform .5s cubic-bezier(.3,1.25,.4,1), opacity .4s ease";
+      var tIn = fast ? "none" : "transform .55s cubic-bezier(.25,1.35,.4,1), opacity .46s ease .06s";
+      // the old card flips away — from wherever the finger left it
+      out.style.transition = tOut;
+      out.style.transform = dir > 0 ? "rotateY(-108deg) translateZ(-40px)" : "rotateY(108deg) translateZ(-40px)";
+      out.style.opacity = "0";
+      out.style.zIndex = "1";
+      // the new card starts edge-on, then flips upright into place
+      inn.classList.remove("is-hidden");
+      inn.setAttribute("aria-hidden", "false");
+      inn.style.transition = "none";
+      inn.style.transform = dir > 0 ? "rotateY(104deg)" : "rotateY(-104deg)";
+      inn.style.opacity = "0";
+      inn.style.zIndex = "2";
+      void inn.offsetWidth;            // commit the start pose…
+      inn.style.transition = tIn;      // …then glide to the resting pose
+      inn.style.transform = "";
+      inn.style.opacity = "";
+      idx = to;
+      renderNav();
+      clearTimeout(cleanupTimer);
+      cleanupTimer = setTimeout(function () {
+        out.style.cssText = "";
+        inn.style.cssText = "";
+        out.classList.add("is-hidden");
+        out.setAttribute("aria-hidden", "true");
+        busy = false;
+      }, fast ? 60 : 650);
+    }
+
+    function go(dir) {
+      if (busy) return;
+      var to = idx + dir;
+      if (to < 0 || to >= stops.length) { bounce(dir); return; }
+      pop(dir > 0);
+      flipTo(to, dir);
+    }
+
+    function jump(to) {
+      if (busy || to === idx) return;
+      if (to < 0 || to >= stops.length) return;
+      pop(to > idx);
+      flipTo(to, to > idx ? 1 : -1);
+    }
+
+    // --- swipe (pointer events cover touch and mouse drags alike) ---
+    var drag = null;
+    trail.addEventListener("pointerdown", function (e) {
+      if (!mq.matches || busy) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      // never steal taps from links and buttons: capturing the pointer here
+      // retargets the click to the trail, so on touch screens the link the
+      // finger tapped never fires at all
+      if (e.target.closest && e.target.closest("a, button")) return;
+      drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, moved: false };
+      try { trail.setPointerCapture(e.pointerId); } catch (err) { /* keep going */ }
+    });
+    trail.addEventListener("pointermove", function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      var dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+      if (!drag.moved) {
+        if (Math.abs(dx) > 9 && Math.abs(dx) > Math.abs(dy) * 1.2) drag.moved = true;
+        else if (Math.abs(dy) > 12) { drag = null; return; }  // a scroll, let it go
+        else return;
+      }
+      drag.dx = Math.max(-140, Math.min(140, dx));
+      var card = stops[idx];
+      card.style.transition = "none";
+      card.style.transform = "translateX(" + (drag.dx * 0.38).toFixed(1) + "px) rotateY(" + (drag.dx * 0.09).toFixed(1) + "deg)";
+    });
+    function endDrag(e, cancelled) {
+      if (!drag || e.pointerId !== drag.id) return;
+      var dx = drag.dx, moved = drag.moved;
+      drag = null;
+      if (!moved) return;
+      var card = stops[idx];
+      if (!cancelled && Math.abs(dx) > 46) {
+        go(dx < 0 ? 1 : -1);            // hand the drag pose to the flip
+      } else {
+        card.style.transition = "transform .3s cubic-bezier(.3,1.4,.4,1)";
+        card.style.transform = "";      // spring back home
+      }
+    }
+    trail.addEventListener("pointerup", function (e) { endDrag(e, false); });
+    trail.addEventListener("pointercancel", function (e) { endDrag(e, true); });
+
+    // --- sideways trackpad scroll counts as a swipe; vertical stays page scroll ---
+    var wheelAcc = 0, wheelTimer = null, wheelCool = 0;
+    trail.addEventListener("wheel", function (e) {
+      if (!mq.matches || busy) return;
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) + 4) return;
+      e.preventDefault();
+      var now = Date.now();
+      if (now < wheelCool) return;
+      wheelAcc += e.deltaX;
+      clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(function () { wheelAcc = 0; }, 220);
+      if (Math.abs(wheelAcc) > 60) {
+        var dir = wheelAcc > 0 ? 1 : -1;
+        wheelAcc = 0;
+        wheelCool = now + 700;
+        go(dir);
+      }
+    }, { passive: false });
+
+    // --- the story's buttons ---
+    // "YES! I'm in!" on the third hello card runs straight into mission 1
+    $$("#missions .intro-cta").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        var m1 = stops[introCount];
+        if (!m1) return;
+        e.preventDefault();               // the anchor is the no-JS fallback
+        if (mq.matches) {
+          jump(introCount);
+        } else {
+          m1.scrollIntoView({ behavior: calm.matches ? "auto" : "smooth", block: "center" });
+          m1.classList.remove("pop");
+          void m1.offsetWidth;
+          m1.classList.add("pop");
+          setTimeout(function () { m1.classList.remove("pop"); }, 1000);
+        }
+      });
+    });
+
+    // "Start the Challenge!" rewinds to the ranger girl's welcome and puts
+    // the full-screen player right at the top of the screen
+    // The page grows while it scrolls (lazy pictures above the player wake
+    // up and push it down), so keep easing the player to the top until it
+    // truly lands — and give up the moment the user scrolls for themselves.
+    var landTimer = null;
+    function landStage() {
+      clearInterval(landTimer);
+      var t0 = Date.now();
+      landTimer = setInterval(function () {
+        if (!mq.matches || Date.now() - t0 > 2500) { clearInterval(landTimer); return; }
+        if (Math.abs(stage.getBoundingClientRect().top) < 4) { clearInterval(landTimer); return; }
+        stage.scrollIntoView({ behavior: calm.matches ? "auto" : "smooth" });
+      }, 150);
+    }
+    ["pointerdown", "wheel", "touchstart", "keydown"].forEach(function (evt) {
+      window.addEventListener(evt, function () { clearInterval(landTimer); },
+        { passive: true, capture: true });
+    });
+    function rewind() {
+      if (idx === 0) { renderNav(); return; }
+      if (busy) {                        // mid-flip: snap straight home
+        clearTimeout(cleanupTimer);
+        busy = false;
+        stops.forEach(function (stop, i) {
+          stop.style.cssText = "";
+          stop.classList.toggle("is-hidden", i !== 0);
+          stop.setAttribute("aria-hidden", i === 0 ? "false" : "true");
+        });
+        idx = 0;
+        renderNav();
+      } else {
+        flipTo(0, -1);
+      }
+    }
+    var startBtn = $(".btn-play");
+    if (startBtn) startBtn.addEventListener("click", function (e) {
+      if (!mq.matches) return;           // desktop: the plain anchor jump is right
+      e.preventDefault();
+      rewind();
+      stage.scrollIntoView({ behavior: calm.matches ? "auto" : "smooth" });
+      landStage();
+    });
+
+    // the last card's "Join the Team!" / "or log your win" links land on the
+    // form with a warm glow so young rangers see exactly where to type
+    $$("#missions .join-cta, #missions .cta-alt").forEach(function (a) {
+      a.addEventListener("click", function () {
+        var card = $(".form-card");
+        if (!card) return;
+        card.classList.remove("form-pulse");
+        void card.offsetWidth;
+        card.classList.add("form-pulse");
+        setTimeout(function () { card.classList.remove("form-pulse"); }, 2400);
+      });
+    });
+
+    // --- switch the layout when the viewport crosses the phone breakpoint ---
+    function enter() {
+      buildNav();
+      if (nav) nav.hidden = false;
+      trail.setAttribute("role", "region");
+      trail.setAttribute("aria-roledescription", "carousel");
+      trail.setAttribute("aria-label", "How to play — the ranger hello and the five missions");
+      stops.forEach(function (stop, i) {
+        stop.classList.toggle("is-hidden", i !== idx);
+        stop.setAttribute("aria-hidden", i === idx ? "false" : "true");
+        stop.style.cssText = "";
+      });
+      renderNav();
+    }
+    function leave() {
+      clearTimeout(cleanupTimer);
+      busy = false;
+      if (nav) nav.hidden = true;
+      trail.removeAttribute("role");
+      trail.removeAttribute("aria-roledescription");
+      trail.removeAttribute("aria-label");
+      stops.forEach(function (stop) {
+        stop.classList.remove("is-hidden", "bounce-next", "bounce-prev");
+        stop.removeAttribute("aria-hidden");
+        stop.style.cssText = "";
+      });
+    }
+    function apply() { if (mq.matches) enter(); else leave(); }
+    if (mq.addEventListener) mq.addEventListener("change", apply);
+    else if (mq.addListener) mq.addListener(apply);   // old Safari
+    apply();
+  }
+  missionDeck();
 
   // ------------------------------------------------------------- go
 
